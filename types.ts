@@ -28,9 +28,6 @@ export interface Program {
   imageUrl: string;
   collaborators: number[]; // Array of member IDs
   sponsors: Sponsor[];
-  participants: number;
-  hours: number;
-  rating: number;
   status: 'upcoming' | 'past';
   registrationLink?: string; // Kept for potential external links
   gallery?: {

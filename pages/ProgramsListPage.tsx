@@ -12,16 +12,17 @@ return (
     className="flex flex-col group bg-white/30 backdrop-blur-lg rounded-xl shadow-md overflow-hidden transition-all duration-300 ease-in-out hover:shadow-xl hover:-translate-y-1.5 border border-white/40"
   >
     {/* قسمت تصویر بزرگ‌تر */}
-    <div className="relative h-64 overflow-hidden"> {/* قبلاً h-48 بود */}
-      <img 
-        className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" 
-        src={program.imageUrl} 
-        alt={program.title} 
-      />
-      <div className={`absolute top-3 right-3 text-xs font-bold px-3 py-1.5 rounded-full text-white shadow-lg ${isUpcoming ? 'bg-green-500' : 'bg-gray-500'}`}>
-        {isUpcoming ? 'در پیش رو' : 'پایان یافته'}
-      </div>
-    </div>
+  <div className="relative aspect-[4/3] overflow-hidden bg-gray-50 flex items-center justify-center">
+  <img 
+    className="w-full h-full object-contain transition-transform duration-500 group-hover:scale-105" 
+    src={program.imageUrl} 
+    alt={program.title} 
+  />
+  <div className={`absolute top-3 right-3 text-xs font-bold px-3 py-1.5 rounded-full text-white shadow-lg ${isUpcoming ? 'bg-green-500' : 'bg-gray-500'}`}>
+    {isUpcoming ? 'در پیش رو' : 'پایان یافته'}
+  </div>
+</div>
+
     
     <div className="p-6 flex flex-col flex-grow"> {/* کمی padding بیشتر */}
       <h3 className="text-lg font-bold text-gray-800 leading-tight mb-2 h-14 line-clamp-2" title={program.title}>{program.title}</h3>

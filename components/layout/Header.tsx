@@ -5,48 +5,102 @@ import { NavLink } from 'react-router-dom';
 const AnimatedLogo: React.FC = () => {
   return (
     <>
-      <style>{`
-        .logo-container {
-          position: relative;
-          width: 48px;
-          height: 48px;
-          transform: scale(0.22); /* Scale down the 200px container to fit */
-          transform-origin: center center;
-        }
-        .logo-container svg {
-          position: absolute;
-          top: -75px; /* Adjust positioning */
-          left: -75px; /* Adjust positioning */
-          width: 200px;
-          height: 200px;
-        }
-        .cir-big {
-          animation: spin 2s linear infinite;
-        }
-        .cir-mid {
-          animation: spin 1.5s linear infinite;
-        }
-        .cir-small {
-          animation: spin 1s linear infinite;
-        }
-        @keyframes spin {
-          0% { transform: rotate(0deg); }
-          100% { transform: rotate(360deg); }
-        }
-      `}</style>
-      <div className="logo-container">
-          <svg className="cir-big" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <circle cx="50" cy="50" r="48" stroke="#3B82F6" strokeWidth="4" stroke-dasharray="10 5"/>
-          </svg>
-          <svg className="cir-mid" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <circle cx="50" cy="50" r="38" stroke="#60A5FA" strokeWidth="4"/>
-          </svg>
-          <svg className="cir-small" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
-             <circle cx="50" cy="50" r="28" stroke="#93C5FD" strokeWidth="4" stroke-dasharray="1 5"/>
-          </svg>
-           <svg viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <path d="M45 45 L60 60 L52 68 L70 70 L68 52 L60 60" stroke="#1E3A8A" strokeWidth="5" fill="none" strokeLinejoin="round" strokeLinecap="round" />
-          </svg>
+    <style>{`
+  /* responsive logo sizing via a CSS variable */
+  .custom-logo-root {
+    --logo-size: 48px; /* default */
+    position: relative;
+    width: var(--logo-size);
+    height: var(--logo-size);
+    display: inline-block;
+  }
+
+  /* container covers the root and centers images */
+  .custom-logo-root .img-container {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+  }
+
+  /* each image is centered; scale is controlled by --s for each img */
+  .custom-logo-root .img-container img {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform-origin: center center;
+    transform: translate(-50%, -50%) scale(var(--s, 1));
+    max-width: none;
+    width: calc(var(--logo-size) * var(--scaleFactor, 1)); /* fallback if needed */
+    height: auto;
+    user-select: none;
+    -webkit-user-drag: none;
+  }
+
+  /* sizes / stacking / animations for each ring */
+  .custom-logo-root .cir-big   { --s: 1.6; z-index: 10; animation: spin 3s linear infinite; }
+  .custom-logo-root .cir-mid   { --s: 1.2; z-index: 20; animation: spin 2s linear infinite; }
+  .custom-logo-root .cir-small { --s: 0.75; z-index: 30; animation: spin 1.25s linear infinite; }
+  .custom-logo-root .cursor    { --s: 0.45; z-index: 40; /* static (no rotate) by default */ }
+
+  /* spin uses translate center so scaling + rotation keep center aligned */
+  @keyframes spin {
+    0% { transform: translate(-50%, -50%) rotate(0deg); }
+    100% { transform: translate(-50%, -50%) rotate(360deg); }
+  }
+
+  /* small screens -> smaller logo */
+  @media (max-width: 640px) {
+    .custom-logo-root { --logo-size: 34px; }
+    .custom-logo-root .cir-big   { --s: 1.4; }
+    .custom-logo-root .cir-mid   { --s: 1.0; }
+    .custom-logo-root .cir-small { --s: 0.65; }
+    .custom-logo-root .cursor    { --s: 0.4; }
+  }
+
+  /* large screens -> a bit bigger */
+  @media (min-width: 1024px) {
+    .custom-logo-root { --logo-size: 64px; }
+    .custom-logo-root .cir-big   { --s: 1.8; }
+    .custom-logo-root .cir-mid   { --s: 1.3; }
+    .custom-logo-root .cir-small { --s: 0.9; }
+    .custom-logo-root .cursor    { --s: 0.55; }
+  }
+
+  /* accessibility: احترام به reduced motion */
+  @media (prefers-reduced-motion: reduce) {
+    .custom-logo-root .cir-big,
+    .custom-logo-root .cir-mid,
+    .custom-logo-root .cir-small {
+      animation: none;
+      transform: translate(-50%, -50%); /* keep them centered but not rotating */
+    }
+  }
+    .custom-logo-root .img-container {
+  transform: translateX(var(--logo-shift-x, 10px));
+}
+  .custom-logo-root { overflow: visible; } /* مطمئن می‌شویم چیزی برش نشود */
+.custom-logo-root { position: relative; overflow: visible; }
+
+/* موقعیت کرسر نسبت به روت (نه نسبت به img-container) */
+.custom-logo-root > .cursor {
+  position: absolute;
+  left: 100%;
+  top: 100%;
+  transform: translate(-50%, -50%) scale(var(--s,0.45));
+  z-index: 9999;
+  pointer-events: none;
+}
+
+`}</style>
+
+      <div className="custom-logo-root" aria-hidden="false">
+        <div className="img-container" aria-hidden="true">
+          <img className="cir-big" src="https://charset99.storage.c2.liara.space/programs_gallery/big.png" alt="big" />
+          <img className="cir-mid" src="https://charset99.storage.c2.liara.space/programs_gallery/mid.png" alt="mid" />
+          <img className="cir-small" src="https://charset99.storage.c2.liara.space/programs_gallery/small.png" alt="small" />
+                <img className="cursor" src="https://charset99.storage.c2.liara.space/programs_gallery/cursor.png" alt="cursor" />
+
+        </div>
       </div>
     </>
   );
@@ -88,7 +142,7 @@ const Header: React.FC = () => {
               type="button"
               className="bg-gray-100 inline-flex items-center justify-center p-2 rounded-md text-gray-500 hover:text-gray-700 hover:bg-gray-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-100 focus:ring-blue-500"
               aria-controls="mobile-menu"
-              aria-expanded="false"
+              aria-expanded={isMenuOpen}
             >
               <span className="sr-only">باز کردن منو</span>
               {isMenuOpen ? (
