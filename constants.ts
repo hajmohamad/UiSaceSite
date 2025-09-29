@@ -40,7 +40,11 @@ export const MEMBERS: Member[] = [
       },
       {
         "year": 1403,
-        "position": "مشاور"
+        "position": "مشاور انجمن"
+      },
+      {
+        "year": 1404,
+        "position": "مشاور انجمن"
       }
     ],
     "imageUrl": "https://storage.c2.liara.space/charset99/members/24-10-18_10-53-30-603.jpg",
@@ -57,6 +61,10 @@ export const MEMBERS: Member[] = [
       {
         "year": 1403,
         "position": "عضو افتخاری"
+      },
+      {
+        "year": 1404,
+        "position": "عضو افتخاري"
       }
     ],
     "imageUrl": "https://storage.c2.liara.space/charset99/members/2025-09-27 04.19.08.jpg",
@@ -105,6 +113,10 @@ export const MEMBERS: Member[] = [
       {
         "year": 1403,
         "position": "عضو افتخاری"
+      },
+      {
+        "year": 1404,
+        "position": "عضو افتخاري"
       }
     ],
     "imageUrl": "https://storage.c2.liara.space/charset99/members/2025-09-27 04.22.15.jpg",
@@ -209,7 +221,15 @@ export const PROGRAMS: Program[] =[
     "fullDescription": "شنبـه ۲۳ فروردین، ساعت ۱۶ تا ۱۹ \n       پذیرش از ساعت ۱۵\n🏛  دانشگاه اصفهان، ساختمان مرکزی، تالار پیامبر اعظم\n\n☄️  همایشی متفاوت در راستای انتقال تجربه از صاحب‎نظران درباره مسیر شغلی و پژوهشی رشته‎های علوم و مهندسی کامپیوتر!\n\n☄️  هر گوشه‎ای از تجربه تمنای سخن دارد و هر نگاه، داستان موفقیتی را روایت می‌کند و این تنها بخشی از داستان بزرگ ماست...\n\n📍  شــامــل:\n   •  تاک انتقال تجربه\n   •  ارتباط با صنعت\n   •  پرسش و پاسخ\n   •  مسابقه‌های هیجان‌انگیز\n   •  جوایز ارزنده\n   •  موسیقی سنتی!\n\n👥  سخنرانان:\n   •  لیدا تیموری\n   •  صدرا حکیم\n   •  سمانه حیدری\n   •  امین شاه‌نظری\n   •  امیر مشایخی\n   •  آرمان ابراهیمی",
     "imageUrl": "https://storage.c2.liara.space/charset99/programs/2025-09-27 04.28.56.jpg",
     "collaborators": [
-      2
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      9,
+      10,
+      13
     ],
     "sponsors": [
       {
@@ -220,7 +240,16 @@ export const PROGRAMS: Program[] =[
     ],
     "status": "past",
     "gallery": {
-      "images": [],
+      "images": [
+        "https://storage.c2.liara.space/charset99/photos/AgACAgQAAxkBAAOUaNjy--4nJhyilARf9aENF5ULYEEAAt3PMRslI8lSPXurSYERxj4BAAMCAAN5AAM2BA.jpg",
+        "https://storage.c2.liara.space/charset99/photos/AgACAgQAAxkBAAOVaNjy-5iIqTQDnqJbYLwziZ3WynwAAt7PMRslI8lSTB74tuHB6r8BAAMCAAN5AAM2BA.jpg",
+        "https://storage.c2.liara.space/charset99/photos/AgACAgQAAxkBAAOWaNjy-w8mXgO0mTA4V1zdf20umDEAAt_PMRslI8lSnHvI0S_m6hkBAAMCAAN5AAM2BA.jpg",
+        "https://storage.c2.liara.space/charset99/photos/AgACAgQAAxkBAAOXaNjy-0BpbiBfBkIMCbOxTUITuQoAAuDPMRslI8lSHPqTZFua-nMBAAMCAAN5AAM2BA.jpg",
+        "https://storage.c2.liara.space/charset99/photos/AgACAgQAAxkBAAOYaNjy-59a9WrYMCBwU1WTa09-x4sAAuHPMRslI8lS5bAO-ondgLwBAAMCAAN5AAM2BA.jpg",
+        "https://storage.c2.liara.space/charset99/photos/AgACAgQAAxkBAAOZaNjy-yYJ3oxt3wvPg5LrNxFOjr8AAuLPMRslI8lSa7KX2xd7kWIBAAMCAAN5AAM2BA.jpg",
+        "https://storage.c2.liara.space/charset99/photos/AgACAgQAAxkBAAOaaNjy-88G0V633wuteUXkf9nXP9IAAuPPMRslI8lS7DTL2Fmq-dwBAAMCAAN5AAM2BA.jpg",
+        "https://storage.c2.liara.space/charset99/photos/AgACAgIAAxkBAAObaNjzE9VZBnXdR2upZ5sP5FCz7gUAAhfzMRtOTMhKKoKkL5887B8BAAMCAAN5AAM2BA.jpg"
+      ],
       "videos": [
         "https://storage.c2.liara.space/charset99/programs_gallery/2025-09-27 04.28.24.mp4"
       ]
@@ -471,7 +500,19 @@ export const PROGRAMS: Program[] =[
         "https://storage.c2.liara.space/charset99/programs_gallery/2025-09-27 04.40.40.jpg",
         "https://storage.c2.liara.space/charset99/programs_gallery/2025-09-27 04.40.45.jpg",
         "https://storage.c2.liara.space/charset99/programs_gallery/2025-09-27 04.41.15.jpg",
-        "https://storage.c2.liara.space/charset99/programs_gallery/2025-09-27 04.41.09.jpg"
+        "https://storage.c2.liara.space/charset99/programs_gallery/2025-09-27 04.41.09.jpg",
+        "https://storage.c2.liara.space/charset99/photos/AgACAgQAAxkBAAOkaNjzyXPerL8yJrS0e1S68aMGbc8AAubPMRslI8lSKosMQfgJpwIBAAMCAAN5AAM2BA.jpg",
+        "https://storage.c2.liara.space/charset99/photos/AgACAgQAAxkBAAOlaNjzyWuLVN0Y-tC3xYKEj2jp45gAAufPMRslI8lSHcnDN4R3Bd8BAAMCAAN5AAM2BA.jpg",
+        "https://storage.c2.liara.space/charset99/photos/AgACAgQAAxkBAAOmaNjzyYCcCGBKGLgSteAhOqdFp5sAAujPMRslI8lSfAw6bm62b30BAAMCAAN5AAM2BA.jpg",
+        "https://storage.c2.liara.space/charset99/photos/AgACAgQAAxkBAAOqaNjzyW2jZ0Nv1kbwae1B_VtSu1YAAuzPMRslI8lSwAU06mnqL2ABAAMCAAN5AAM2BA.jpg",
+        "https://storage.c2.liara.space/charset99/photos/AgACAgQAAxkBAAOqaNjzyW2jZ0Nv1kbwae1B_VtSu1YAAuzPMRslI8lSwAU06mnqL2ABAAMCAAN5AAM2BA.jpg",
+        "https://storage.c2.liara.space/charset99/photos/AgACAgQAAxkBAAOraNjzyS_ZJL_Ec-oCy6__LYXhdxkAAu3PMRslI8lS0jigWc0SR7ABAAMCAAN5AAM2BA.jpg",
+        "https://storage.c2.liara.space/charset99/photos/AgACAgQAAxkBAAOsaNjzyZV-4xX-bHpUFl85Cfqm0QsAAu7PMRslI8lS_2hWttrznC0BAAMCAAN5AAM2BA.jpg",
+        "https://storage.c2.liara.space/charset99/photos/AgACAgQAAxkBAAOtaNjzyYmmezCwfPk02LDbVCBrJ8IAAu_PMRslI8lS80XlLKQz2nIBAAMCAAN5AAM2BA.jpg",
+        "https://storage.c2.liara.space/charset99/photos/AgACAgQAAxkBAAOuaNjzyZkjpxWHBxuxJH34OJRAvjsAAvDPMRslI8lStxdD2EhHQTYBAAMCAAN5AAM2BA.jpg",
+        "https://storage.c2.liara.space/charset99/photos/AgACAgQAAxkBAAOvaNjzyRYNHhyY2yax6Bb7nz5I3-gAAvHPMRslI8lSHK2B-LQV_rQBAAMCAAN5AAM2BA.jpg",
+        "https://storage.c2.liara.space/charset99/photos/AgACAgQAAxkBAAOwaNjzyVxguGTQ4tth8beW8Iu9jCUAAvLPMRslI8lS2jjwCLJ866IBAAMCAAN4AAM2BA.jpg",
+        "https://storage.c2.liara.space/charset99/photos/AgACAgQAAxkBAAOjaNjzyTySKtdHzf0avPznVO2BwekAAuXPMRslI8lS3F_WrKIqs44BAAMCAAN5AAM2BA.jpg"
       ],
       "videos": []
     }
@@ -543,7 +584,9 @@ export const PROGRAMS: Program[] =[
     "sponsors": [],
     "status": "past",
     "gallery": {
-      "images": [],
+      "images": [
+        "https://storage.c2.liara.space/charset99/photos/AgACAgQAAxkBAAOxaNj0LEoO3i3VIePxOMkGKZ2qDcwAAonEMRv1P7FS7j0CqawQuVQBAAMCAAN5AAM2BA.jpg"
+      ],
       "videos": []
     }
   },
@@ -570,4 +613,4 @@ export const PROGRAMS: Program[] =[
       "videos": []
     }
   }
-];
+]

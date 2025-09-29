@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { PROGRAMS, MEMBERS } from '../constants';
@@ -153,12 +152,35 @@ const ProgramDetailPage: React.FC = () => {
           </div>
           {isUpcoming && (
               <div className="p-4">
-                  <Link to={`/programs/${program.id}/register`} className="w-full block text-center bg-green-600 text-white font-bold text-lg py-3 px-6 rounded-lg hover:bg-green-700 transition-transform transform hover:scale-105 duration-300 shadow-lg">
+                  <a href={`/programs/${program.id}/register`} className="w-full block text-center bg-green-600 text-white font-bold text-lg py-3 px-6 rounded-lg hover:bg-green-700 transition-transform transform hover:scale-105 duration-300 shadow-lg">
                       هم‌اکنون ثبت‌نام کنید
-                  </Link>
+                  </a>
               </div>
           )}
         </div>
+
+        {/* Added Stats Boxes */}
+        <div className="grid grid-cols-2 gap-4">
+            <div className="bg-white rounded-xl shadow-lg border border-gray-200/75 p-4 flex flex-col items-center justify-center text-center">
+                <div className="p-3 bg-blue-100 rounded-full mb-2">
+                    <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 text-blue-600" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
+                        <path strokeLinecap="round" strokeLinejoin="round" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M15 21v-1a6 6 0 00-1.78-4.125a4 4 0 11-6.44-6.44" />
+                    </svg>
+                </div>
+                <p className="text-2xl font-extrabold text-gray-800">{program.registeredCount || 100}</p>
+                <p className="text-sm font-medium text-gray-500">نفرات ثبت نامی</p>
+            </div>
+            <div className="bg-white rounded-xl shadow-lg border border-gray-200/75 p-4 flex flex-col items-center justify-center text-center">
+                <div className="p-3 bg-indigo-100 rounded-full mb-2">
+                    <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 text-indigo-600" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
+                         <path strokeLinecap="round" strokeLinejoin="round" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                    </svg>
+                </div>
+                <p className="text-2xl font-extrabold text-gray-800">{program.durationHours || 45}</p>
+                <p className="text-sm font-medium text-gray-500">ساعت جلسه</p>
+            </div>
+        </div>
+
         <div className="text-center">
             <Link to="/programs" className="inline-block bg-white text-blue-600 font-semibold py-2 px-6 rounded-lg hover:bg-blue-50 transition-colors duration-300 border-2 border-blue-500 shadow-sm">
             &larr; بازگشت به همه برنامه‌ها

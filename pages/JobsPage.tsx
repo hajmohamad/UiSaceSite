@@ -3,7 +3,7 @@ import React, { useState } from 'react';
 
 import JobCard from './JobCard';
 import JobDetailModal from './JobDetailModal';
-import { useJobs } from '../hooks/usejobs';
+import { useJobs } from '../hooks/useJobs';
 import type { Job } from './../types';
 
 const JobsPage: React.FC = () => {

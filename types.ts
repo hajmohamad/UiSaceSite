@@ -35,15 +35,17 @@ export interface Program {
     images: string[];
     videos: string[]; // URLs for video embeds
   };
+  registeredCount?: number; // New property for number of registered participants
+  durationHours?: number; // New property for program duration in hours
 }
 
 export interface Job {
-  id: number;
+  id: string;
   title: string;
   company: string;
   logo: string;
   location: string;
-  type: 'تمام وقت' | 'پاره وقت' | 'قراردادی' | 'کارآموزی';
+  type: string
   salary?: string;
   description: string;
   responsibilities: string[];
