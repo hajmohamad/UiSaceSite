@@ -16,8 +16,11 @@ interface CourseCardProps {
             </span>
         )}
         <Link to={`/course/${course.id}`} className="block flex flex-col flex-grow">
-            <img className="w-full h-48 object-cover" src={course.imageUrl} alt={course.title} />
-            <div className="p-6 flex flex-col flex-grow">
+<img
+  className="w-full h-48 object-contain bg-gray-100"
+  src={course.imageUrl}
+  alt={course.title}
+/>            <div className="p-6 flex flex-col flex-grow">
             <h3 className="text-xl font-bold text-gray-900 mb-2">{course.title}</h3>
             <div className="flex justify-between items-center text-sm mb-4">
                 <p className="text-gray-600">مدرس: {course.instructor}</p>
