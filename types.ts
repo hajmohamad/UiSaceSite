@@ -57,7 +57,8 @@ export interface Job {
 export interface CourseVideo {
   id: number;
   title: string;
-  url: string; // e.g., YouTube embed URL
+  type: 'direct' | 'aparat' | 'google-drive';
+  url: string; // For 'direct', it's a direct URL. For 'aparat', it's the video hash.
 }
 
 export interface CourseFile {
@@ -67,6 +68,13 @@ export interface CourseFile {
   type: 'PDF' | 'ZIP' | 'Image';
 }
 
+export interface CourseSection {
+  id: number;
+  title: string;
+  videos: CourseVideo[];
+  files: CourseFile[];
+}
+
 export interface Course {
   id: string;
   title: string;
@@ -74,8 +82,7 @@ export interface Course {
   shortDescription: string;
   longDescription: string;
   imageUrl: string;
-  videos: CourseVideo[];
-  files: CourseFile[];
+  sections: CourseSection[];
   isPaid: boolean;
   price?: number;
 }

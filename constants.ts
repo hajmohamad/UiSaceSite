@@ -1,4 +1,4 @@
-import type { Member, Program } from './types';
+import type { Member, Program , Course} from './types';
 
 
 export const MEMBERS: Member[] = [
@@ -614,3 +614,127 @@ export const PROGRAMS: Program[] =[
     }
   }
 ]
+
+
+
+
+export const courses: Course[] = 
+[
+  {
+    "id": "معماری",
+    "title": "آموزش معماری",
+    "instructor": "دکتر رضایی",
+    "shortDescription": "آموزش کامل معماری کامپیوتر دکتر رضایی",
+    "longDescription": "این دوره «آموزش معماری کامپیوتر» با تدریس دکتر رضایی، مباحث کلیدی مثل معماری مجموعه دستورالعمل‌ها، طراحی پردازنده، پایپ‌لاین، کارایی، سلسله‌مراتب حافظه، محاسبات حسابی و حتی آشنایی مقدماتی با VHDL را پوشش می‌دهد. در کنار ویدیوهای آموزشی، جزوات و اسلایدهای تکمیلی هم قرار داده شده تا یادگیری کامل‌تر و عملی‌تر باشد.",
+    "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/0/08/Computer_architecture_block_diagram.png",
+    "isPaid": false,
+    "sections": [
+      {
+        "id": 1,
+        "title": "بخش ۱: مقدمه دوره",
+        "videos": [],
+        "files": [
+          { "id": 1, "name": "جلسه ۱: معرفی دوره.pdf", "url": "Introduction", "type": "PDF" }
+        ]
+      },
+      {
+        "id": 2,
+        "title": "بخش ۲: معماری مجموعه دستورالعمل‌ها (فصل ۲)",
+        "videos": [
+          { "id": 1, "title": "جلسه ۱ - چرخه اجرای دستور", "type": "aparat", "url": "WPVu6" },
+          { "id": 2, "title": "جلسه ۲ - قالب دستور، مراحل F - D - X - M - W", "type": "aparat", "url": "53Qma" },
+          { "id": 3, "title": "جلسه ۳ - دستورهای حسابی", "type": "aparat", "url": "IvkQS" },
+          { "id": 4, "title": "جلسه ۴ - نام‌گذاری ثبات‌ها، Load/Store", "type": "aparat", "url": "0V7Hi" },
+          { "id": 5, "title": "جلسه ۱ - شیفت، addi و lui", "type": "aparat", "url": "0akU3" },
+          { "id": 6, "title": "جلسه ۲ - تعامل انسان/کامپیوتر، bne و beq", "type": "aparat", "url": "nb7NJ" },
+          { "id": 7, "title": "جلسه ۳ - آدرس‌دهی نسبی PC، slt و jr", "type": "aparat", "url": "n6PTu" },
+          { "id": 8, "title": "جلسه ۱ - دستورهای jal و jr و کاربردشان", "type": "aparat", "url": "HsfVj" },
+          { "id": 9, "title": "جلسه ۲ - دموی SPIM", "type": "aparat", "url": "vizaY" },
+          { "id": 10, "title": "جلسه ۳ - فراخوانی بازگشتی", "type": "aparat", "url": "slu0F" }
+        ],
+        "files": [
+          { "id": 2, "name": "فصل ۲ - معماری مجموعه دستورالعمل‌ها.pdf", "url": "Instruction", "type": "PDF" }
+        ]
+      },
+      {
+        "id": 3,
+        "title": "بخش ۳: پردازنده (فصل ۴)",
+        "videos": [
+          { "id": 11, "title": "جلسه ۱ - طراحی مسیر داده، Fetch", "type": "aparat", "url": "M0RNJ" },
+          { "id": 12, "title": "جلسه ۲ - مسیر داده: ADD، ORI و Load", "type": "aparat", "url": "0xTcf" },
+          { "id": 13, "title": "جلسه ۳ - مسیر داده: Store و BEQ", "type": "aparat", "url": "vaM7z" },
+          { "id": 14, "title": "جلسه ۴ - پیاده‌سازی واحد کنترل (مفاهیم)", "type": "aparat", "url": "LDElz" },
+          { "id": 15, "title": "جلسه ۵ - پیاده‌سازی واحد کنترل اصلی", "type": "aparat", "url": "nX2Z6" },
+          { "id": 16, "title": "جلسه ۶ - پیاده‌سازی واحد کنترل ALU", "type": "aparat", "url": "uLdoG" },
+          { "id": 17, "title": "جلسه ۱ - مقدمه: مرور و مفاهیم پایپ‌لاین", "type": "aparat", "url": "jKT9e" },
+          { "id": 18, "title": "جلسه ۲ - جزئیات پایپ‌لاین", "type": "aparat", "url": "nB1Yv" },
+          { "id": 19, "title": "جلسه ۳ - مقدمه‌ای بر خطرات داده", "type": "aparat", "url": "lGU2d" },
+          { "id": 20, "title": "جلسه ۴ - خطرات داده، طراحی دقیق‌تر", "type": "aparat", "url": "fHvZW" },
+          { "id": 21, "title": "جلسه ۵ - خطرات کنترلی", "type": "aparat", "url": "xWSsO" }
+        ],
+        "files": [
+          { "id": 3, "name": "پیش‌نیاز طراحی CPU.pdf", "url": "PreCPU", "type": "PDF" },
+          { "id": 4, "name": "Lecture 5 - پردازنده تک‌چرخه‌ای.pdf", "url": "Lecture5", "type": "PDF" },
+          { "id": 5, "name": "Lecture 6 - پردازنده پایپ‌لاین.pdf", "url": "Lecture7", "type": "PDF" }
+        ]
+      },
+      {
+        "id": 4,
+        "title": "بخش ۴: کارایی (فصل ۱)",
+        "videos": [
+          { "id": 22, "title": "جلسه ۱ - مقدمه", "type": "aparat", "url": "xMfbi" },
+          { "id": 23, "title": "جلسه ۲ - زمان اجرا، MIPS، قانون آمدال", "type": "aparat", "url": "pAJQd" },
+          { "id": 24, "title": "جلسه ۳ - محدودیت توان و برنامه‌نویسی کارا", "type": "aparat", "url": "dOXno" }
+        ],
+        "files": [
+          { "id": 6, "name": "Lecture 7 - کارایی و توان.pdf", "url": "Lecture8", "type": "PDF" }
+        ]
+      },
+      {
+        "id": 5,
+        "title": "بخش ۵: سلسله‌مراتب حافظه (فصل ۵)",
+        "videos": [
+          { "id": 25, "title": "جلسه ۱ - مقدمه", "type": "aparat", "url": "TF4eo" },
+          { "id": 26, "title": "جلسه ۲ - مسائل کارایی", "type": "aparat", "url": "LYQna" },
+          { "id": 27, "title": "جلسه ۳ - بررسی بیشتر و جزئیات", "type": "aparat", "url": "ofy3w" },
+          { "id": 28, "title": "جلسه ۴ - هم‌پوشانی در طراحی کش", "type": "aparat", "url": "E6fZt" },
+          { "id": 29, "title": "جلسه ۵ - مقدمه‌ای بر حافظه مجازی", "type": "aparat", "url": "pHUvB" },
+          { "id": 30, "title": "جلسه ۶ - جزئیات و پیاده‌سازی حافظه مجازی", "type": "aparat", "url": "ADWnL" }
+        ],
+        "files": [
+          { "id": 7, "name": "Lecture 9 - کش.pdf", "url": "Lecture9-cache", "type": "PDF" },
+          { "id": 8, "name": "Lecture 9 - حافظه مجازی.pdf", "url": "Lecture9-VirtualMem", "type": "PDF" }
+        ]
+      },
+      {
+        "id": 6,
+        "title": "بخش ۶: محاسبات حسابی (فصل ۳)",
+        "videos": [
+          { "id": 31, "title": "جلسه ۱ - جمع‌کننده‌ها", "type": "aparat", "url": "mH7Na" },
+          { "id": 32, "title": "جلسه ۲ - ضرب‌کننده‌ها", "type": "aparat", "url": "Vedyz" },
+          { "id": 33, "title": "جلسه ۳ - ضرب علامت‌دار و الگوریتم بوث", "type": "aparat", "url": "zpSX7" }
+        ],
+        "files": [
+          { "id": 9, "name": "Lecture 9 - محاسبات حسابی.pdf", "url": "Lecture10-arithmetics", "type": "PDF" }
+        ]
+      },
+      {
+        "id": 7,
+        "title": "بخش ۷: ضمیمه - VHDL به اختصار",
+        "videos": [
+          { "id": 34, "title": "جلسه ۱ - مقدمه و مرور کلی", "type": "aparat", "url": "qLHje" },
+          { "id": 35, "title": "جلسه ۲ - موجودیت و معماری", "type": "aparat", "url": "Gy3zK" },
+          { "id": 36, "title": "جلسه ۳ - مثال‌ها و توضیحات بیشتر", "type": "aparat", "url": "sCerx" },
+          { "id": 37, "title": "جلسه ۴ - انواع داده", "type": "aparat", "url": "2LmKJ" },
+          { "id": 38, "title": "جلسه ۵ - شناسه‌ها و ثابت‌ها", "type": "aparat", "url": "yHCcz" },
+          { "id": 39, "title": "جلسه ۶ - انتساب ساده سیگنال", "type": "aparat", "url": "ku02T" },
+          { "id": 40, "title": "جلسه ۷ - انتساب شرطی سیگنال", "type": "aparat", "url": "gbEp3" },
+          { "id": 41, "title": "جلسه ۸ - جمع‌کننده کامل", "type": "aparat", "url": "JCX7c" }
+        ],
+        "files": [
+          { "id": 10, "name": "ضمیمه: VHDL به اختصار.pdf", "url": "Lecture6", "type": "PDF" }
+        ]
+      }
+    ]
+  },
+  ];
