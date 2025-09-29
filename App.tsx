@@ -9,6 +9,7 @@ import ProgramDetailPage from './pages/ProgramDetailPage';
 import MembersPage from './pages/MembersPage';
 import RegistrationPage from './pages/RegistrationPage';
 import MemberDetailPage from './pages/MemberDetailPage';
+import JobsPage from './pages/JobsPage'; // Import the JobsPage component
 import ContactPage from './pages/ContactPage'; // Import the new ContactPage component
 
 const App: React.FC = () => {
@@ -25,6 +26,8 @@ const App: React.FC = () => {
             <Route path="/members" element={<MembersPage />} />
             <Route path="/members/:id" element={<MemberDetailPage />} />
             <Route path="/contact" element={<ContactPage />} />
+              <Route path="/jobs" element={<JobsPage />} />
+
 
           </Routes>
         </main>

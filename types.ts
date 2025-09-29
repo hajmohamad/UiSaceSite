@@ -19,6 +19,7 @@ export interface Sponsor {
 }
 
 export interface Program {
+   price?: number;  
   id: number;
   title: string;
   date: string;
@@ -35,20 +36,18 @@ export interface Program {
     videos: string[]; // URLs for video embeds
   };
 }
+
 export interface Job {
   id: number;
   title: string;
   company: string;
-  location: string;
-  type: 'تمام وقت' | 'پاره وقت' | 'پروژه‌ای';
   logo: string;
+  location: string;
+  type: 'تمام وقت' | 'پاره وقت' | 'قراردادی' | 'کارآموزی';
+  salary?: string;
   description: string;
-  tags: string[];
-  postedDate: string;
-  isExpired?: boolean;
+  responsibilities: string[];
+  qualifications: string[];
+  expiryDate: string; // ISO string format
 }
 
-export interface ChatMessage {
-  sender: 'user' | 'bot';
-  text: string;
-}

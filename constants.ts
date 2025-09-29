@@ -1,4 +1,4 @@
-import type { Member, Program ,Job} from './types';
+import type { Member, Program } from './types';
 
 
 export const MEMBERS: Member[] = [
@@ -67,10 +67,6 @@ export const MEMBERS: Member[] = [
     "name": "زهرا مهدوی",
     "memberships": [
       {
-        "year": 1402,
-        "position": "عضو انجمن"
-      },
-      {
         "year": 1403,
         "position": "عضو انجمن"
       },
@@ -86,10 +82,6 @@ export const MEMBERS: Member[] = [
     "id": 5,
     "name": "محدثه روح الهی",
     "memberships": [
-      {
-        "year": 1402,
-        "position": "عضو انجمن"
-      },
       {
         "year": 1403,
         "position": "عضو انجمن"
@@ -207,8 +199,7 @@ export const MEMBERS: Member[] = [
     "bio": ""
   }
 ];
-
-export const PROGRAMS: Program[] = [
+export const PROGRAMS: Program[] =[
   {
     "id": 1,
     "title": "رویداد xpcon",
@@ -230,7 +221,9 @@ export const PROGRAMS: Program[] = [
     "status": "past",
     "gallery": {
       "images": [],
-      "videos": []
+      "videos": [
+        "https://storage.c2.liara.space/charset99/programs_gallery/2025-09-27 04.28.24.mp4"
+      ]
     }
   },
   {
@@ -446,8 +439,7 @@ export const PROGRAMS: Program[] = [
       "images": [],
       "videos": []
     }
-  }
-  ,
+  },
   {
     "id": 15,
     "title": "رویداد کارآموز",
@@ -462,7 +454,12 @@ export const PROGRAMS: Program[] = [
       3,
       4,
       5,
-      6
+      6,
+      7,
+      10,
+      11,
+      12,
+      13
     ],
     "sponsors": [],
     "status": "past",
@@ -478,8 +475,7 @@ export const PROGRAMS: Program[] = [
       ],
       "videos": []
     }
-  }
-  ,
+  },
   {
     "id": 16,
     "title": "طرح عيد براي همه، شادي براي دل ها",
@@ -488,11 +484,24 @@ export const PROGRAMS: Program[] = [
     "shortDescription": "جمع آوري کمک هاي مردمي در جهت تامين بسته هاي غذايي براي نيازمندان",
     "fullDescription": "مجموع خرید برنامه تهیه مواد غذایی\n11532300\n\nبودجه\n10000000\n\nاضافه هزینه توسط اعضای خیر انجمن در هنگام خرید پرداخت شد.\n\nمجموعا ۱۰ بسته غذایی\n هرکدام شامل :\nیک گونی برنج ۱۰کیلویی، ۱ عدد روغن خوراکی، ۱ عدد مرغ، ۱ عدد رب، ۱ بسته عدس، ۱ بسته شکر، ۱ بسته سویا، ۲ بسته ماکارانی\n\nپ‌ن: باتوجه به جمع نشدن مبلغ قابل توجه در ابتدای سال، برنامه خرید تا این زمان طول کشید.",
     "imageUrl": "https://storage.c2.liara.space/charset99/photos/AgACAgQAAxkBAANJaNhMEP4o1ae-3kM1_MMNj4PhW-0AApLJMRtBV8FSSu0cFF4drFoBAAMCAAN5AAM2BA.jpg",
-    "collaborators": [],
+    "collaborators": [
+      1,
+      2,
+      4,
+      7,
+      12,
+      13
+    ],
     "sponsors": [],
     "status": "past",
     "gallery": {
-      "images": [],
+      "images": [
+        "https://storage.c2.liara.space/charset99/photos/AgACAgQAAxkBAANxaNhN55P9HLnTS7iD2DKdaxqfnowAAuPJMRuz_clTFGWWQw0U7CcBAAMCAAN5AAM2BA.jpg",
+        "https://storage.c2.liara.space/charset99/photos/AgACAgQAAxkBAANyaNhN55JGxkK7W4PHdaMGqXB38DkAAuTJMRuz_clTZOwkOu3FIp8BAAMCAAN5AAM2BA.jpg",
+        "https://storage.c2.liara.space/charset99/photos/AgACAgQAAxkBAANzaNhN5-Dry7ALcd12MzmGK00BIoUAAuXJMRuz_clTMNFqHsZS3VkBAAMCAAN5AAM2BA.jpg",
+        "https://storage.c2.liara.space/charset99/photos/AgACAgQAAxkBAAN0aNhN57ZUxwaGhpBPSCMVU54nZkoAAubJMRuz_clTDhQoEFfqJzoBAAMCAAN5AAM2BA.jpg",
+        "https://storage.c2.liara.space/charset99/photos/AgACAgQAAxkBAAN2aNhN59mBvgUWgeVg1UmTxUb2kFAAAuvJMRuz_clTLeEWvf-TGLUBAAMCAAN5AAM2BA.jpg"
+      ],
       "videos": []
     }
   },
@@ -508,8 +517,57 @@ export const PROGRAMS: Program[] = [
     "sponsors": [],
     "status": "past",
     "gallery": {
+      "images": [
+        "https://storage.c2.liara.space/charset99/photos/AgACAgQAAxkBAAN6aNhN9Zlptli6qL3lKFsmTEbahecAAk7CMRtD9hhTFkCSkHFL2poBAAMCAAN5AAM2BA.jpg",
+        "https://storage.c2.liara.space/charset99/photos/AgACAgQAAxkBAAN7aNhN9cMJvIzszZorsk0FtAY5br0AAk_CMRtD9hhT_xzWmzauxtwBAAMCAAN5AAM2BA.jpg",
+        "https://storage.c2.liara.space/charset99/photos/AgACAgQAAxkBAAN8aNhN9Q4SVQpJY6bI_BPKkxFyjnQAAlHCMRtD9hhTq4Aerj_9R7EBAAMCAAN5AAM2BA.jpg",
+        "https://storage.c2.liara.space/charset99/photos/AgACAgQAAxkBAAN9aNhN9UWphjfLIp_f2Gic60Cp3vIAAlPCMRtD9hhTR1jyBVntE9IBAAMCAAN5AAM2BA.jpg",
+        "https://storage.c2.liara.space/charset99/photos/AgACAgQAAxkBAAN-aNhN9d2LMZdi0Osi5eQyMylwuc0AAlTCMRtD9hhT1OZ3Sw013FwBAAMCAAN5AAM2BA.jpg",
+        "https://storage.c2.liara.space/charset99/photos/AgACAgQAAxkBAAN_aNhN9X_1rZTLew2YEYVj70vJ6twAAlXCMRtD9hhTrNyQnFBVZjgBAAMCAAN5AAM2BA.jpg",
+        "https://storage.c2.liara.space/charset99/photos/AgACAgQAAxkBAAOAaNhN9YsenRscbW2eUfEqDSt7ZKAAAlbCMRtD9hhTXduhs1FBw88BAAMCAAN5AAM2BA.jpg",
+        "https://storage.c2.liara.space/charset99/photos/AgACAgQAAxkBAAOBaNhN9aHYfAVuqihA3qLjgBr6AAExAAPEMRs4c-hSlrgxRSvXJ_YBAAMCAAN5AAM2BA.jpg",
+        "https://storage.c2.liara.space/charset99/photos/AgACAgQAAxkBAAOCaNhN9ZBARopZhNUO6zwwBMOQr20AAlfCMRtD9hhTRU7HWwAB-_H6AQADAgADeQADNgQ.jpg"
+      ],
+      "videos": []
+    }
+  },
+  {
+    "id": 18,
+    "title": "دورهمی دانشجویان نوورود مهندسی کامپیوتر",
+    "date": "1403-09-17",
+    "dateISO": "2024-12-07",
+    "shortDescription": "خوشامدگويي به دانشجويان نوورود دانشکده مهندسي کامپيوتر",
+    "fullDescription": "شامل:\n- گپ‌وگفت دانشگاهی و دانشجویی\n- چطور این ۴ سال را بگذرانیم؟\n- نوشیدنی داغ ☕️\n- موسیقی 🎵\n- عصرانه 🍪\n- جایزه 🎁\n- بازی 🎯\n- انتقال تجربه از ترم‌بالایی‌هاتون درباره درس‌هاتون (چطور نمره بیاریم، در دانشگاه فعالیت داشته باشیم یا درس‌هامون رو برداریم و…)\nمکان: تالار آوینی",
+    "imageUrl": "https://storage.c2.liara.space/charset99/photos/AgACAgQAAxkBAANLaNhMQm8zato1S-oKNrc1oUtzRbUAApTJMRtBV8FSOL-zh5AzlLMBAAMCAAN5AAM2BA.jpg",
+    "collaborators": [],
+    "sponsors": [],
+    "status": "past",
+    "gallery": {
       "images": [],
       "videos": []
     }
+  },
+  {
+    "id": 19,
+    "title": "گپی صمیمی با پرهام کاظمی، دانش‌آموخته دانشگاه اصفهان و محقق حال حاضر در کانادا",
+    "date": "1404-01-19",
+    "dateISO": "2025-04-07",
+    "shortDescription": "گفت و گو با مهندس پرهام کاظمي درباره ي تحصيل، مهاجرت و ...",
+    "fullDescription": "زمان: سه‌شنبه ۱۹ فروردین ماه ساعت ۱۶ الی ۱۸\nمکان: ساختمان انصاری، سالن دکتر براآنی",
+    "imageUrl": "https://storage.c2.liara.space/charset99/photos/AgACAgQAAxkBAANNaNhMVqc08wN9ZNguKyb8OnaxzxgAApbJMRtBV8FSQptmoN5d0-4BAAMCAAN5AAM2BA.jpg",
+    "collaborators": [],
+    "sponsors": [],
+    "status": "past",
+    "gallery": {
+      "images": [
+        "https://storage.c2.liara.space/charset99/photos/AgACAgQAAxkBAANjaNhNvJag8OIQekjGlJUC7iafE44AAmLJMRuaz7hS8BMlFJOo0GkBAAMCAAN5AAM2BA.jpg",
+        "https://storage.c2.liara.space/charset99/photos/AgACAgQAAxkBAAMJaNeSYdhEFEbboov0lhj1dUh1u_kAAsfGMRsEfOlTuXEgFwAB9Nw2AQADAgADeQADNgQ.jpg",
+        "https://storage.c2.liara.space/charset99/photos/AgACAgQAAxkBAAMLaNeSbhEjCqKpLRCO6BmPe69dC-sAAsjGMRsEfOlT3iX_U2QTZc4BAAMCAAN5AAM2BA.jpg",
+        "https://storage.c2.liara.space/charset99/photos/AgACAgQAAxkBAAMMaNeSbklPxoaVx5ogoYJl4kjVRLoAAsnGMRsEfOlT_6Wiuytk4wcBAAMCAAN5AAM2BA.jpg",
+        "https://storage.c2.liara.space/charset99/photos/AgACAgQAAxkBAAMOaNeSbgWmm6CQpGVtkdUsoEZ8kb4AAsvGMRsEfOlTutIjbpHeyqUBAAMCAAN5AAM2BA.jpg",
+        "https://storage.c2.liara.space/charset99/photos/AgACAgQAAxkBAAMPaNeSbljDvY5JxjKiaNZQCcslfSsAAszGMRsEfOlT7XAbqSEAAc9cAQADAgADeQADNgQ.jpg"
+      ],
+      "videos": []
+    }
   }
-]
+];
