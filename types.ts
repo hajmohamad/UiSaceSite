@@ -53,3 +53,29 @@ export interface Job {
   expiryDate: string; // ISO string format
 }
 
+
+export interface CourseVideo {
+  id: number;
+  title: string;
+  url: string; // e.g., YouTube embed URL
+}
+
+export interface CourseFile {
+  id: number;
+  name: string;
+  url: string; // Direct download link
+  type: 'PDF' | 'ZIP' | 'Image';
+}
+
+export interface Course {
+  id: string;
+  title: string;
+  instructor: string;
+  shortDescription: string;
+  longDescription: string;
+  imageUrl: string;
+  videos: CourseVideo[];
+  files: CourseFile[];
+  isPaid: boolean;
+  price?: number;
+}

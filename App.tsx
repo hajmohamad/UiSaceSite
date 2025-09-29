@@ -1,6 +1,6 @@
 
 import React from 'react';
-import { HashRouter, Routes, Route } from 'react-router-dom';
+import { HashRouter, Routes, Route, BrowserRouter } from 'react-router-dom';
 import Header from './components/layout/Header';
 import Footer from './components/layout/Footer';
 import HomePage from './pages/HomePage';
@@ -11,10 +11,12 @@ import RegistrationPage from './pages/RegistrationPage';
 import MemberDetailPage from './pages/MemberDetailPage';
 import JobsPage from './pages/JobsPage'; // Import the JobsPage component
 import ContactPage from './pages/ContactPage'; // Import the new ContactPage component
+import CoursesPage from './pages/CoursesPage';
+import CourseDetailPage from './pages/CourseDetailPage';
 
 const App: React.FC = () => {
   return (
-    <HashRouter>
+    <BrowserRouter>
       <div className="flex flex-col min-h-screen text-gray-800 bg-slate-50">
         <Header />
         <main className="flex-grow container mx-auto px-4 sm:px-6 lg:px-8 py-10">
@@ -26,14 +28,16 @@ const App: React.FC = () => {
             <Route path="/members" element={<MembersPage />} />
             <Route path="/members/:id" element={<MemberDetailPage />} />
             <Route path="/contact" element={<ContactPage />} />
-              <Route path="/jobs" element={<JobsPage />} />
+            <Route path="/jobs" element={<JobsPage />} />
+            <Route path="/courses" element={<CoursesPage />} />
+            <Route path="/course/:id" element={<CourseDetailPage />} />
 
 
           </Routes>
         </main>
         <Footer />
       </div>
-    </HashRouter>
+    </BrowserRouter>
   );
 };
 
