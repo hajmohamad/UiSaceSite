@@ -313,7 +313,7 @@ export const PROGRAMS: Program[] =[
     "imageUrl": "https://storage.c2.liara.space/charset99/photos/AgACAgQAAxkBAAM-aNhLlYZO393Z4G2Fb9VRblTY67wAAofJMRtBV8FSrhs-0X3cdCQBAAMCAAN5AAM2BA.jpg",
     "collaborators": [],
     "sponsors": [],
-    "status": "past",
+    "status": "upcoming",
     "gallery": {
       "images": [],
       "videos": []
@@ -621,7 +621,7 @@ export const PROGRAMS: Program[] =[
 export const courses: Course[] = 
 [
   {
-    "id": "معماری",
+    "id": "1",
     "title": "آموزش معماری",
     "instructor": "دکتر رضایی",
     "shortDescription": "آموزش کامل معماری کامپیوتر دکتر رضایی",
@@ -737,4 +737,408 @@ export const courses: Course[] =
       }
     ]
   },
+  {
+    "id": "2",
+    "title": "آموزش مبانی برنامه نویسی",
+    "instructor": "دکتر رمضانی",
+    "shortDescription": "آموزش کامل مبانی برنامه نویسی کامپیوتر دکتر رمضانی",
+    "longDescription": "این دوره «آموزش مبانی برنامه نویسی کامپیوتر» با تدریس دکتر رمضانی، مباحث کلیدی مثل متغیرها و انواع داده، ساختارهای کنترلی، توابع، آرایه‌ها و رشته‌ها، ساختارهای داده، ورودی/خروجی فایل و حتی مفاهیم شی‌گرایی را پوشش می‌دهد. در کنار ویدیوهای آموزشی، جزوات و اسلایدهای تکمیلی هم قرار داده شده تا یادگیری کامل‌تر و عملی‌تر باشد.",
+    "isPaid": false,
+    imageUrl: 'https://upload.wikimedia.org/wikipedia/commons/1/18/ISO_C%2B%2B_Logo.svg',
+    "sections": [
+  {
+    "id": 1,
+    "title": "بخش اول: مفاهیم پایه",
+    "files": [
+      {
+        "id": 1,
+        "name": "فصل اول: آشنایی با کامپیوتر (مفاهیم - معماری).ZIP",
+        "url": "https://drive.google.com/file/d/1gor-alnxfl_YuoUePvrF7PpbbLgnzlz-/view?usp=drive_link",
+        "type": "ZIP"
+      },
+      {
+        "id": 2,
+        "name": "فصل دوم: مبنای اعداد (صحیح - اعشاری - کاراکتری).ZIP",
+        "url": "https://drive.google.com/file/d/1jIk2S7ho1GJTZNGFtazcCnT_EeTxwLNe/view?usp=drive_link",
+        "type": "ZIP"
+      },
+      {
+        "id": 3,
+        "name": "فصل سوم: الگوریتم و فلوچارت.ZIP",
+        "url": "https://drive.google.com/file/d/1MTgVg2DJcpr8dAFWKbCu7HnMc8psHjxD/view?usp=drive_link",
+        "type": "ZIP"
+      }
+    ],
+    "videos": []
+  },
+  {
+    "id": 2,
+    "title": "بخش دوم: برنامه‌نویسی",
+    "files": [
+      {
+        "id": 4,
+        "name": "فصل اول: مقدمه‌ای بر زبان C.ZIP",
+        "url": "https://drive.google.com/file/d/1zR1GIVoxe4UxFe-EyqSbZJ9B4vm5YMDk/view?usp=drive_link",
+        "type": "ZIP"
+      },
+      {
+        "id": 5,
+        "name": "فصل دوم: نوع داده‌ها و عملگرهای محاسباتی.ZIP",
+        "url": "https://drive.google.com/file/d/1ILw8WsMjvgW-K9jHNزwdz3ktZIdJSPqM/view?usp=drive_link",
+        "type": "ZIP"
+      },
+      {
+        "id": 6,
+        "name": "فصل سوم: دستورات شرطی و عملگرهای منطقی.ZIP",
+        "url": "https://drive.google.com/file/d/1aDLtlbRrLAzxf4iv82iM8V4chVsoiMlG/view?usp=drive_link",
+        "type": "ZIP"
+      },
+      {
+        "id": 7,
+        "name": "فصل چهارم: حلقه‌های تکرار.ZIP",
+        "url": "https://drive.google.com/file/d/1UrEwWsl98d8f41YkiWyzbvqEgzW6_OwL/view?usp=drive_link",
+        "type": "ZIP"
+      },
+      {
+        "id": 8,
+        "name": "فصل پنجم: آرایه‌ها.ZIP",
+        "url": "https://drive.google.com/file/d/1gs-4EGnQZfPy7f_UorFC309G_67IgQSP/view?usp=drive_link",
+        "type": "ZIP"
+      },
+      {
+        "id": 9,
+        "name": "فصل ششم: توابع.ZIP",
+        "url": "https://drive.google.com/file/d/1qKmTQ4GVM3WrAXlCug0WxyG0HSg3Pn_m/view?usp=drive_link",
+        "type": "ZIP"
+      },
+      {
+        "id": 10,
+        "name": "فصل هفتم: اشاره‌گرها.ZIP",
+        "url": "https://drive.google.com/file/d/1jQb-g7sxsTUY9znEfNBeT-mLQuiiesB_/view?usp=drive_link",
+        "type": "ZIP"
+      },
+      {
+        "id": 11,
+        "name": "فصل هشتم: ساختارها و نوع داده شمارشی.ZIP",
+        "url": "https://drive.google.com/file/d/1BVE80rNUfQZaXXxCJxiM5f0gDTPF7lZw/view?usp=drive_link",
+        "type": "ZIP"
+      },
+      {
+        "id": 12,
+        "name": "فصل نهم: فایل‌ها.ZIP",
+        "url": "https://drive.google.com/file/d/1wQiJmIj0aekR6zcUKB0Qo6R6D9hqx31_/view?usp=drive_link",
+        "type": "ZIP"
+      }
+    ],
+    "videos": []
+  }
+]
+
+  },
+  {
+  "id": "3",
+  "title": "برنامه‌نویسی پیشرفته (زبان جاوا)",
+  "instructor": "نام استاد",
+  "shortDescription": "آموزش کامل برنامه‌نویسی پیشرفته جاوا (مقطع کارشناسی)",
+  "longDescription": "این دوره شامل مباحث پایه و پیشرفته‌ی زبان جاوا از مفاهیم اولیه تا موضوعات حرفه‌ای مثل واسط‌های گرافیکی، برنامه‌نویسی سوکت، چندنخی و پایگاه داده‌ها است. در این دوره مثال‌ها و سورس‌کدها همراه فایل‌های ZIP قرار داده شده‌اند تا دانشجویان با رویکردی عملی مباحث را یاد بگیرند.",
+  "isPaid": false,
+  "imageUrl": "https://upload.wikimedia.org/wikipedia/en/3/30/Java_programming_language_logo.svg",
+  "sections": [
+    {
+      "id": 1,
+      "title": "فصل اول: مباحث مقدماتی",
+      "files": [
+        {
+          "id": 1,
+          "name": "فصل اول: مباحث مقدماتی.ZIP",
+          "url": "https://drive.google.com/file/d/1n0og3graZ39Wd706eRnaZOuhqu_5-T00/view?usp=drive_link",
+          "type": "ZIP"
+        }
+      ],
+      "videos": []
+    },
+    {
+      "id": 2,
+      "title": "فصل دوم: آغاز کار با جاوا",
+      "files": [
+        {
+          "id": 2,
+          "name": "فصل دوم: آغاز کار با جاوا.ZIP",
+          "url": "https://drive.google.com/file/d/1ENLxTZjV3UKq9BUNhLcZbvtUHiz3y2wA/view?usp=sharing",
+          "type": "ZIP"
+        }
+      ],
+      "videos": []
+    },
+    {
+      "id": 3,
+      "title": "فصل سوم: کلاس، شیء، تابع",
+      "files": [
+        {
+          "id": 3,
+          "name": "فصل سوم: کلاس، شیء، تابع.ZIP",
+          "url": "https://drive.google.com/file/d/1QCcBOBGeGo8EkoSgLucnSlgUKC04UyQM/view?usp=sharing",
+          "type": "ZIP"
+        }
+      ],
+      "videos": []
+    },
+    {
+      "id": 4,
+      "title": "فصل چهارم: آرایه‌ها",
+      "files": [
+        {
+          "id": 4,
+          "name": "فصل چهارم: آرایه‌ها.ZIP",
+          "url": "https://drive.google.com/file/d/12IjNc1dn65CAdofPsS5XJ5cKxLeOZp-6/view?usp=sharing",
+          "type": "ZIP"
+        }
+      ],
+      "videos": []
+    },
+    {
+      "id": 5,
+      "title": "فصل پنجم: وراثت",
+      "files": [
+        {
+          "id": 5,
+          "name": "فصل پنجم: وراثت.ZIP",
+          "url": "https://drive.google.com/file/d/1FZLxl0LbiA5zvI0ITP9m5iugqGkFoA0o/view?usp=sharing",
+          "type": "ZIP"
+        }
+      ],
+      "videos": []
+    },
+    {
+      "id": 6,
+      "title": "فصل ششم: چندریختی",
+      "files": [
+        {
+          "id": 6,
+          "name": "فصل ششم: چندریختی.ZIP",
+          "url": "https://drive.google.com/file/d/1X_2rLkvdKuvWJg4ZxIpyvF7B6kt5RXcK/view?usp=sharing",
+          "type": "ZIP"
+        }
+      ],
+      "videos": []
+    },
+    {
+      "id": 7,
+      "title": "فصل هفتم: کلاس‌های انتزاعی و واسط‌ها",
+      "files": [
+        {
+          "id": 7,
+          "name": "فصل هفتم: کلاس‌های انتزاعی و واسط‌ها.ZIP",
+          "url": "https://drive.google.com/file/d/1E9gx-1P4kt0U1P6aJ4rK-fnvbB24RCBp/view?usp=sharing",
+          "type": "ZIP"
+        }
+      ],
+      "videos": []
+    },
+    {
+      "id": 8,
+      "title": "فصل هشتم: بسته‌ها و مدیریت استثناها",
+      "files": [
+        {
+          "id": 8,
+          "name": "فصل هشتم: بسته‌ها و مدیریت استثناها.ZIP",
+          "url": "https://drive.google.com/file/d/1m9Ce0fjQ1yUpD-NPfiJYk2fV7TYkK5dD/view?usp=sharing",
+          "type": "ZIP"
+        }
+      ],
+      "videos": []
+    },
+    {
+      "id": 9,
+      "title": "فصل نهم: کلاس‌های Wrapper و کلاس String",
+      "files": [
+        {
+          "id": 9,
+          "name": "فصل نهم: کلاس‌های Wrapper و کلاس String.ZIP",
+          "url": "https://drive.google.com/file/d/1LZz6pPR6tL7lZBGKjA05VfxDItZpS3Jf/view?usp=sharing",
+          "type": "ZIP"
+        }
+      ],
+      "videos": []
+    },
+    {
+      "id": 10,
+      "title": "فصل دهم: مجموعه‌ها (Collections)",
+      "files": [
+        {
+          "id": 10,
+          "name": "فصل دهم: مجموعه‌ها (Collections).ZIP",
+          "url": "https://drive.google.com/file/d/1HkEcjV-dXZmJpXbXvYjMDbC3VvY-3vno/view?usp=sharing",
+          "type": "ZIP"
+        }
+      ],
+      "videos": []
+    },
+    {
+      "id": 11,
+      "title": "فصل یازدهم: واسط‌های گرافیکی کاربر (GUI)",
+      "files": [
+        {
+          "id": 11,
+          "name": "فصل یازدهم: واسط‌های گرافیکی کاربر (GUI).ZIP",
+          "url": "https://drive.google.com/file/d/1nEcb6exP36cRBHYr0cW2soD3BSsPbMy1/view?usp=sharing",
+          "type": "ZIP"
+        }
+      ],
+      "videos": []
+    },
+    {
+      "id": 12,
+      "title": "فصل دوازدهم: برنامه‌نویسی سوکت",
+      "files": [
+        {
+          "id": 12,
+          "name": "فصل دوازدهم: برنامه‌نویسی سوکت.ZIP",
+          "url": "https://drive.google.com/file/d/1q6thjWlHt2zH3NhFZtgw2hu4mI8QElb0/view?usp=sharing",
+          "type": "ZIP"
+        }
+      ],
+      "videos": []
+    },
+    {
+      "id": 13,
+      "title": "فصل سیزدهم: برنامه‌نویسی چندنخی",
+      "files": [
+        {
+          "id": 13,
+          "name": "فصل سیزدهم: برنامه‌نویسی چندنخی.ZIP",
+          "url": "https://drive.google.com/file/d/1XqgQdOReeyRtfQfW5El0hSxAKl1ZgkSN/view?usp=sharing",
+          "type": "ZIP"
+        }
+      ],
+      "videos": []
+    },
+    {
+      "id": 14,
+      "title": "فصل چهاردهم: پایگاه داده‌ها",
+      "files": [
+        {
+          "id": 14,
+          "name": "فصل چهاردهم: پایگاه داده‌ها.ZIP",
+          "url": "https://drive.google.com/file/d/1hKpYqk6hyQ-8lOVzGVmEo4bFkLhOaYkU/view?usp=sharing",
+          "type": "ZIP"
+        }
+      ],
+      "videos": []
+    },
+    {
+      "id": 15,
+      "title": "فصل پانزدهم: فایل‌ها",
+      "files": [
+        {
+          "id": 15,
+          "name": "فصل پانزدهم: فایل‌ها.ZIP",
+          "url": "https://drive.google.com/file/d/1X4jV_Rt3f9o6s0t5Z2bZ6ugE6bxC0h3u/view?usp=sharing",
+          "type": "ZIP"
+        }
+      ],
+      "videos": []
+    },
+    {
+      "id": 16,
+      "title": "فصل شانزدهم: پروژه نهایی",
+      "files": [
+        {
+          "id": 16,
+          "name": "فصل شانزدهم: پروژه نهایی.ZIP",
+          "url": "https://drive.google.com/file/d/1L0O-7sk7Kj4BBu9fN_8fYTVe-9j3Pv3J/view?usp=sharing",
+          "type": "ZIP"
+        }
+      ],
+      "videos": []
+    }
+  ]
+},
+{
+  "id": "4",
+  "title": "ساختمان داده‌ها (مقطع کارشناسی)",
+  "instructor": "نامشخص",
+  "shortDescription": "آموزش کامل ساختمان داده‌ها به همراه مثال‌ها و پیاده‌سازی‌ها",
+  "longDescription": "این دوره شامل مفاهیم اصلی ساختمان داده‌ها از آرایه‌ها، لیست‌های پیوندی، بازگشت، پشته و صف گرفته تا درخت‌ها، گراف‌ها، جدول درهم‌سازی و ساختارهای پیشرفته است. هر فصل شامل فایل‌های آموزشی و اسلایدهای کمکی می‌باشد.",
+  "isPaid": false,
+  "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/7/7d/Hash_table_3_1_1_0_1_0_0_SP.svg",
+  "sections": [
+    {
+      "id": 1,
+      "title": "بخش اول: مباحث ساختمان داده",
+      "files": [
+        {
+          "id": 1,
+          "name": "فصل اول: آرایه.ZIP",
+          "url": "https://drive.google.com/file/d/1PyAx5HKD1QbKWN4UvfKpt3TNbmKN8eBD/view?usp=drive_link",
+          "type": "ZIP"
+        },
+        {
+          "id": 2,
+          "name": "فصل دوم: لیست پیوندی.ZIP",
+          "url": "https://drive.google.com/file/d/1diNI4in9tuIw7jTAH6vBibo-beU66rJC/view?usp=drive_link",
+          "type": "ZIP"
+        },
+        {
+          "id": 3,
+          "name": "فصل سوم: تحلیل الگوریتم.ZIP",
+          "url": "https://drive.google.com/file/d/11_DUjC20-C5LyYLgNeW2KRcNxkv3ijyr/view?usp=drive_link",
+          "type": "ZIP"
+        },
+        {
+          "id": 4,
+          "name": "فصل چهارم: بازگشتی.ZIP",
+          "url": "https://drive.google.com/file/d/1pTVqKWpTUrkLcIcxNrgMoPxLXp9Aeoif/view?usp=drive_link",
+          "type": "ZIP"
+        },
+        {
+          "id": 5,
+          "name": "فصل پنجم: پشته، صف، صف دوطرفه، لیست.ZIP",
+          "url": "https://drive.google.com/file/d/1Uscx1S0-JxdDYWHOxQaD0Qcgc6jythUH/view?usp=drive_link",
+          "type": "ZIP"
+        },
+        {
+          "id": 6,
+          "name": "فصل ششم: درخت.ZIP",
+          "url": "https://drive.google.com/file/d/11FqpiyWkHw4y5Sp3pbuP77J_H4CuECno/view?usp=drive_link",
+          "type": "ZIP"
+        },
+        {
+          "id": 7,
+          "name": "فصل هفتم: صف اولویت.ZIP",
+          "url": "https://drive.google.com/file/d/17Za83mGlt8Kx-Zd90OQuAci2RLWm6ton/view?usp=drive_link",
+          "type": "ZIP"
+        },
+        {
+          "id": 8,
+          "name": "فصل هشتم: نگاشت، جدول درهم‌سازی، لیست‌های پرشی.ZIP",
+          "url": "https://drive.google.com/file/d/1mus-_bQrS7HmrC7QY_ZgYnnslJLq1REk/view?usp=drive_link",
+          "type": "ZIP"
+        },
+        {
+          "id": 9,
+          "name": "فصل نهم: درخت جستجو.ZIP",
+          "url": "https://drive.google.com/file/d/1Snx2vJGaFPtPIQ5iicLOFn-5f6ojwspn/view?usp=drive_link",
+          "type": "ZIP"
+        },
+        {
+          "id": 10,
+          "name": "فصل دهم: گراف.ZIP",
+          "url": "https://drive.google.com/file/d/19OmfHKFLR3f5cX9rjF5q8Sq1-g6AgjoY/view?usp=drive_link",
+          "type": "ZIP"
+        },
+        {
+          "id": 11,
+          "name": "دانلود اسلایدهای درس.ZIP",
+          "url": "https://drive.google.com/file/d/1ZkJAhebDbKWmc8v8DxSRm6dyyX5Z9sW7/view?usp=sharing",
+          "type": "ZIP"
+        }
+      ],
+      "videos": []
+    }
+  ]
+}
+
+
   ];
+  

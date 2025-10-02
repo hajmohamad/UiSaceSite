@@ -100,7 +100,7 @@ const RegistrationPage: React.FC = () => {
     }
 
     if (program.price && Number(program.price) > 0 && !receiptFile) {
-      setError('این دوره پولی است؛ لطفاً عکس رسید تراکنش را آپلود کنید.');
+      setError('این دوره نیازمند پرداخت هزینس است؛ لطفاً عکس رسید تراکنش را آپلود کنید.');
       return;
     }
 
