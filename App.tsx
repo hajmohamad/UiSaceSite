@@ -13,6 +13,7 @@ import JobsPage from './pages/JobsPage'; // Import the JobsPage component
 import ContactPage from './pages/ContactPage'; // Import the new ContactPage component
 import CoursesPage from './pages/CoursesPage';
 import CourseDetailPage from './pages/CourseDetailPage';
+import FloatingActionCard from './components/CourseCompnents/FloatingActionCard';
 
 const App: React.FC = () => {
   return (
@@ -36,8 +37,10 @@ const App: React.FC = () => {
           </Routes>
         </main>
         <Footer />
+        <FloatingActionCard />
       </div>
     </BrowserRouter>
+
   );
 };
 
