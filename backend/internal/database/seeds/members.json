@@ -1,0 +1,210 @@
+[
+  {
+    "id": 1,
+    "name": "محمد رهی",
+    "memberships": [
+      {
+        "year": 1401,
+        "position": "عضو افتخاری"
+      },
+      {
+        "year": 1402,
+        "position": "دبیر انجمن"
+      },
+      {
+        "year": 1403,
+        "position": "دبیر"
+      },
+      {
+        "year": 1404,
+        "position": "دبير"
+      }
+    ],
+    "imageUrl": "http://storage.ghavishomard.ir/members/photo_2025-09-27 04.15.21.jpeg",
+    "bio": "یک ادم علاقمند به کار تیمی \nدوس داره همجا باشه و تاجایی که میتونه به همه کمک کنه"
+  },
+  {
+    "id": 2,
+    "name": "امیر علی گلی",
+    "memberships": [
+      {
+        "year": 1401,
+        "position": "دبیر انجمن"
+      },
+      {
+        "year": 1402,
+        "position": "مشاور انجمن"
+      },
+      {
+        "year": 1403,
+        "position": "مشاور انجمن"
+      },
+      {
+        "year": 1404,
+        "position": "مشاور انجمن"
+      }
+    ],
+    "imageUrl": "http://storage.ghavishomard.ir/members/24-10-18_10-53-30-603.jpg",
+    "bio": "همراه همیشه پایدار انجمن"
+  },
+  {
+    "id": 3,
+    "name": "محمد احمدی",
+    "memberships": [
+      {
+        "year": 1402,
+        "position": "نایب دبیر انجمن"
+      },
+      {
+        "year": 1403,
+        "position": "عضو افتخاری"
+      },
+      {
+        "year": 1404,
+        "position": "عضو افتخاري"
+      }
+    ],
+    "imageUrl": "http://storage.ghavishomard.ir/members/2025-09-27 04.19.08.jpg",
+    "bio": "اچار فرانسه انجمن"
+  },
+  {
+    "id": 4,
+    "name": "زهرا مهدوی",
+    "memberships": [
+      {
+        "year": 1403,
+        "position": "عضو انجمن"
+      },
+      {
+        "year": 1404,
+        "position": "عضو انجمن"
+      }
+    ],
+    "imageUrl": "http://storage.ghavishomard.ir/members/2025-09-27 04.20.32.jpg",
+    "bio": ""
+  },
+  {
+    "id": 5,
+    "name": "محدثه روح الهی",
+    "memberships": [
+      {
+        "year": 1403,
+        "position": "عضو انجمن"
+      },
+      {
+        "year": 1404,
+        "position": "نايب دبير"
+      }
+    ],
+    "imageUrl": "http://storage.ghavishomard.ir/members/photo_2025-09-27 03.11.38.jpeg",
+    "bio": ""
+  },
+  {
+    "id": 6,
+    "name": "آنیتا قاسمی",
+    "memberships": [
+      {
+        "year": 1402,
+        "position": "عضو افتخاری"
+      },
+      {
+        "year": 1403,
+        "position": "عضو افتخاری"
+      },
+      {
+        "year": 1404,
+        "position": "عضو افتخاري"
+      }
+    ],
+    "imageUrl": "http://storage.ghavishomard.ir/members/2025-09-27 04.22.15.jpg",
+    "bio": ""
+  },
+  {
+    "id": 7,
+    "name": "ايليا ماهوش",
+    "memberships": [
+      {
+        "year": 1404,
+        "position": "عضو انجمن"
+      }
+    ],
+    "imageUrl": "http://storage.ghavishomard.ir/photos/AgACAgQAAxkBAAMzaNhBqJm6LKpQgKOm3hScNpC6_a0AAm7JMRtBV8FSVW95KPHywiIBAAMCAAN4AAM2BA.jpg",
+    "bio": "با اينکه تازه کاره اما سعي مي کنه هرجايي که مي تونه کاري بکنه حضور داشته باشه"
+  },
+  {
+    "id": 8,
+    "name": "دينا مشهدي",
+    "memberships": [
+      {
+        "year": 1404,
+        "position": "عضو انجمن"
+      }
+    ],
+    "imageUrl": "http://storage.ghavishomard.ir/photos/AgACAgQAAxkBAAMwaNhBdQYo65TXmyiBAeQ9-BodDpUAA8gxG9PswFL_F8NXVAV1fAEAAwIAA3kAAzYE.jpg",
+    "bio": ""
+  },
+  {
+    "id": 9,
+    "name": "مهدي سمسارزاده",
+    "memberships": [
+      {
+        "year": 1403,
+        "position": "عضو انجمن"
+      }
+    ],
+    "imageUrl": "http://storage.ghavishomard.ir/photos/AgACAgQAAxkBAAOSaNhV8suLn53K70v9RTwgxIic2NgAAg7MMRtDDsBSx5jUPpO7v-EBAAMCAAN5AAM2BA.jpg",
+    "bio": ""
+  },
+  {
+    "id": 10,
+    "name": "عرفان حاج حيدري",
+    "memberships": [
+      {
+        "year": 1403,
+        "position": "عضو انجمن"
+      },
+      {
+        "year": 1404,
+        "position": "عضو انجمن"
+      }
+    ],
+    "imageUrl": "http://storage.ghavishomard.ir/photos/AgACAgQAAxkBAAMdaNg6suJH4ekXyL8oBfOiwOuvJJEAAkDMMRuiVMBSl4__8uywwLoBAAMCAAN4AAM2BA.jpg",
+    "bio": ""
+  },
+  {
+    "id": 11,
+    "name": "آتوسا مسعودي",
+    "memberships": [
+      {
+        "year": 1404,
+        "position": "عضو انجمن"
+      }
+    ],
+    "imageUrl": "http://storage.ghavishomard.ir/photos/AgACAgQAAxkBAAMbaNg4gnDK1UTFVv40A8wq6LHTqYYAAi7HMRuB-ohR_lWK-EWjLSYBAAMCAAN5AAM2BA.jpg",
+    "bio": ""
+  },
+  {
+    "id": 12,
+    "name": "نگار فريدوني",
+    "memberships": [
+      {
+        "year": 1404,
+        "position": "عضو انجمن"
+      }
+    ],
+    "imageUrl": "http://storage.ghavishomard.ir/photos/AgACAgQAAxkBAAMxaNhBdaPrs6sVNgRnZoi9vJuma1cAAufIMRsG48BS49-bRvTagcwBAAMCAAN4AAM2BA.jpg",
+    "bio": ""
+  },
+  {
+    "id": 13,
+    "name": "اميررضا رادفر",
+    "memberships": [
+      {
+        "year": 1404,
+        "position": "عضو انجمن"
+      }
+    ],
+    "imageUrl": "http://storage.ghavishomard.ir/photos/AgACAgQAAxkBAAMyaNhBdbonvboZ_AFfPTs7hzIuRj0AAobMMRufBdFQ3kv0ky1keAsBAAMCAAN5AAM2BA.jpg",
+    "bio": ""
+  }
+]

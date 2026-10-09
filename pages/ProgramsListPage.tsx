@@ -1,6 +1,6 @@
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { PROGRAMS } from '../constants';
+import { getPrograms } from '../services/api';
 import type { Program } from '../types';
 
 const ProgramCard: React.FC<{ program: Program }> = ({ program }) => {
@@ -44,17 +44,28 @@ return (
 };
 
 const ProgramsListPage: React.FC = () => {
+  const [programsList, setProgramsList] = useState<Program[]>([]);
   const [selectedYear, setSelectedYear] = useState<number | 'all'>('all');
   const [searchQuery, setSearchQuery] = useState('');
+
+  useEffect(() => {
+    let isMounted = true;
+    getPrograms().then(data => {
+      if (isMounted) setProgramsList(data);
+    });
+    return () => {
+      isMounted = false;
+    };
+  }, []);
   
   const sortedPrograms = useMemo(() => 
-    [...PROGRAMS].sort((a, b) => new Date(b.dateISO).getTime() - new Date(a.dateISO).getTime()), 
-  []);
+    [...programsList].sort((a, b) => new Date(b.dateISO).getTime() - new Date(a.dateISO).getTime()), 
+  [programsList]);
 
   const programYears = useMemo(() => {
-    const years = new Set(PROGRAMS.map(p => new Date(p.dateISO).getFullYear()));
+    const years = new Set(programsList.map(p => new Date(p.dateISO).getFullYear()).filter(Boolean));
     return Array.from(years).sort((a, b) => b - a);
-  }, []);
+  }, [programsList]);
 
   const filteredPrograms = useMemo(() => {
     let programs = sortedPrograms;

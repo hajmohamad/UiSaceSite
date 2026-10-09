@@ -1,0 +1,265 @@
+@import "tailwindcss";
+
+@theme {
+  --font-sans: 'Vazirmatn', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+}
+
+@layer base {
+  *,
+  *::before,
+  *::after {
+    box-sizing: border-box;
+  }
+
+  html {
+    scroll-behavior: smooth;
+    direction: rtl;
+  }
+
+  body {
+    font-family: 'Vazirmatn', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    background-color: #f8fafc;
+    color: #1f2937;
+    margin: 0;
+    padding: 0;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  /* اسکرول‌بار شیک */
+  ::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+  }
+
+  ::-webkit-scrollbar-track {
+    background: #f1f5f9;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    background: #cbd5e1;
+    border-radius: 4px;
+  }
+
+  ::-webkit-scrollbar-thumb:hover {
+    background: #94a3b8;
+  }
+}
+
+/* انیمیشن‌های اختصاصی پروژه */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fadeInDown {
+  from {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-fadeIn {
+  animation: fadeIn 0.25s ease-out forwards;
+}
+
+.animate-fade-in-up {
+  animation: fadeInUp 0.3s ease-out forwards;
+}
+
+.animate-fade-in-down {
+  animation: fadeInDown 0.4s ease-out forwards;
+}
+
+/* استایل‌های پایه برای تگ‌های متنی داخل کلاس prose */
+.prose h1, .prose h2, .prose h3, .prose h4 {
+  font-weight: 700;
+  color: #1f2937;
+  margin-top: 1.5em;
+  margin-bottom: 0.5em;
+}
+
+.prose p {
+  margin-bottom: 1em;
+  line-height: 1.8;
+}
+
+.prose ul, .prose ol {
+  margin-top: 0.5em;
+  margin-bottom: 1em;
+  padding-right: 1.5em;
+  list-style-type: disc;
+}
+
+.prose a {
+  color: #2563eb;
+  text-decoration: underline;
+}
+
+.prose a:hover {
+  color: #1d4ed8;
+}
+
+/* ========================================================
+   لوگوی متحرک اختصاصی (Animated Multi-Ring Logo)
+   ======================================================== */
+.custom-logo-root {
+  --logo-size: 50px;
+  position: relative;
+  width: var(--logo-size);
+  height: var(--logo-size);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  overflow: visible;
+  user-select: none;
+}
+
+/* ریسپانسیو بودن اندازه لوگو */
+@media (max-width: 640px) {
+  .custom-logo-root {
+    --logo-size: 36px;
+  }
+}
+
+@media (min-width: 1024px) {
+  .custom-logo-root {
+    --logo-size: 54px;
+  }
+}
+
+/* کانتینر لایه‌ها */
+.custom-logo-root .img-container {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+
+/* تنظیمات مشترک لایه‌های تصویری */
+.custom-logo-root .img-container img {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: var(--logo-size);
+  height: var(--logo-size);
+  max-width: none;
+  max-height: none;
+  object-fit: contain;
+  transform-origin: center center;
+  user-select: none;
+  -webkit-user-drag: none;
+  pointer-events: none;
+}
+
+/* ۱. حلقه بزرگ بیرونی (چرخش ساعت‌گرد) */
+.custom-logo-root .cir-big {
+  z-index: 20;
+  transform: translate(-50%, -50%) scale(1.0);
+  animation: spinBig 4s linear infinite !important;
+  -webkit-animation: spinBig 4s linear infinite !important;
+  will-change: transform;
+}
+
+/* ۲. حلقه میانی (چرخش پادساعت‌گرد جهت جلوه چرخ‌دنده‌ای) */
+.custom-logo-root .cir-mid {
+  z-index: 20;
+  transform: translate(-50%, -50%) scale(1.30);
+  animation: spinMid 3s linear infinite !important;
+  -webkit-animation: spinMid 3s linear infinite !important;
+  will-change: transform;
+}
+
+/* ۳. حلقه کوچک داخلی (چرخش ساعت‌گرد) */
+.custom-logo-root .cir-small {
+  z-index: 30;
+  transform: translate(-50%, -50%) scale(0.99);
+  animation: spinSmall 1.8s linear infinite !important;
+  -webkit-animation: spinSmall 1.8s linear infinite !important;
+  will-change: transform;
+}
+
+/* ۴. کرسر ماوس (کاملاً ثابت، بدون چرخش روی حلقه‌ها) */
+.custom-logo-root .cursor,
+.custom-logo-root .img-container .cursor {
+  z-index: 40;
+  transform: translate(-50%, -50%) scale(0.8);
+  animation: none !important;
+  -webkit-animation: none !important;
+  filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.2));
+}
+
+@keyframes spinBig {
+  from {
+    transform: translate(-50%, -50%) scale(1.00) rotate(0.1deg);
+  }
+  to {
+    transform: translate(-50%, -50%) scale(1.00) rotate(360.1deg);
+  }
+}
+
+@-webkit-keyframes spinBig {
+  from {
+    -webkit-transform: translate(-50%, -50%) scale(1.15) rotate(0.1deg);
+  }
+  to {
+    -webkit-transform: translate(-50%, -50%) scale(1.15) rotate(360.1deg);
+  }
+}
+
+@keyframes spinMid {
+  from {
+    transform: translate(-50%, -50%) scale(1.00) rotate(0.1deg);
+  }
+  to {
+    transform: translate(-50%, -50%) scale(1.00) rotate(-359.9deg);
+  }
+}
+
+@-webkit-keyframes spinMid {
+  from {
+    -webkit-transform: translate(-50%, -50%) scale(1.00) rotate(0.1deg);
+  }
+  to {
+    -webkit-transform: translate(-50%, -50%) scale(1.00) rotate(-359.9deg);
+  }
+}
+
+@keyframes spinSmall {
+  from {
+    transform: translate(-50%, -50%) scale(0.88) rotate(0.1deg);
+  }
+  to {
+    transform: translate(-50%, -50%) scale(0.88) rotate(360.1deg);
+  }
+}
+
+@-webkit-keyframes spinSmall {
+  from {
+    -webkit-transform: translate(-50%, -50%) scale(0.88) rotate(0.1deg);
+  }
+  to {
+    -webkit-transform: translate(-50%, -50%) scale(0.88) rotate(360.1deg);
+  }
+}
