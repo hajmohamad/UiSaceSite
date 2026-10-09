@@ -6,7 +6,10 @@
   "scripts": {
     "dev": "vite",
     "build": "vite build",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "server": "cd backend && ./server",
+    "backend:dev": "cd backend && go run ./cmd/server",
+    "backend:build": "cd backend && go build -o server ./cmd/server"
   },
   "dependencies": {
     "react": "^18.3.1",
@@ -14,6 +17,7 @@
     "react-router-dom": "^7.9.2"
   },
   "devDependencies": {
+    "@tailwindcss/vite": "^4.3.3",
     "@types/node": "^22.14.0",
     "@vitejs/plugin-react": "^5.0.0",
     "autoprefixer": "^10.4.27",

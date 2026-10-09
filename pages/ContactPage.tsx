@@ -1,18 +1,29 @@
 
 import React, { useState } from 'react';
+import { postContact } from '../services/api';
 
 const ContactPage: React.FC = () => {
   const [formState, setFormState] = useState({ name: '', email: '', message: '' });
   const [isSubmitted, setIsSubmitted] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState('');
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     setFormState({ ...formState, [e.target.name]: e.target.value });
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    console.log('Form submitted:', formState);
-    setIsSubmitted(true);
+    setError('');
+    setIsLoading(true);
+    try {
+      await postContact(formState);
+      setIsSubmitted(true);
+    } catch (err: any) {
+      setError(err?.message || 'خطا در ارسال پیام. لطفاً دوباره تلاش کنید.');
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   return (
@@ -46,8 +57,19 @@ const ContactPage: React.FC = () => {
                 <label htmlFor="message" className="block text-sm font-medium text-gray-700 mb-1">پیام شما</label>
                 <textarea name="message" id="message" rows={5} required className="block w-full px-4 py-3 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500" onChange={handleChange}></textarea>
               </div>
+              {error && (
+                <div className="p-3 bg-red-50 border border-red-200 text-red-600 rounded-lg text-sm font-medium">
+                  {error}
+                </div>
+              )}
               <div>
-                <button type="submit" className="w-full bg-blue-600 text-white font-bold py-3 px-6 rounded-lg hover:bg-blue-700 transition-transform transform hover:scale-105 duration-300 shadow-lg">ارسال پیام</button>
+                <button
+                  type="submit"
+                  disabled={isLoading}
+                  className="w-full bg-blue-600 text-white font-bold py-3 px-6 rounded-lg hover:bg-blue-700 transition-transform transform hover:scale-105 duration-300 shadow-lg disabled:opacity-50"
+                >
+                  {isLoading ? 'در حال ارسال...' : 'ارسال پیام'}
+                </button>
               </div>
             </form>
           )}

@@ -1,0 +1,24 @@
+# Binaries
+server
+*.exe
+*.dll
+*.so
+*.dylib
+
+# Database & Data
+data/
+*.db
+*.db-journal
+*.db-wal
+
+# Uploads
+uploads/receipts/*
+!uploads/receipts/.gitkeep
+uploads/general/*
+!uploads/general/.gitkeep
+
+# Environment
+.env
+
+# OS
+.DS_Store

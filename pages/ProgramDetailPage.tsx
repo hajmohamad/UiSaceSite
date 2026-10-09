@@ -1,10 +1,38 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { useParams, Link } from 'react-router-dom';
-import { PROGRAMS, MEMBERS } from '../constants';
+import { getProgramById, getMembers } from '../services/api';
+import type { Program, Member } from '../types';
 
 const ProgramDetailPage: React.FC = () => {
   const { id } = useParams<{ id: string }>();
-  const program = PROGRAMS.find((p) => p.id === Number(id));
+  const [program, setProgram] = useState<Program | null>(null);
+  const [membersList, setMembersList] = useState<Member[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    let isMounted = true;
+    if (id) {
+      Promise.all([getProgramById(id), getMembers()]).then(([prog, members]) => {
+        if (isMounted) {
+          if (prog) setProgram(prog);
+          if (members) setMembersList(members);
+          setLoading(false);
+        }
+      });
+    }
+    return () => {
+      isMounted = false;
+    };
+  }, [id]);
+
+  if (loading) {
+    return (
+      <div className="text-center py-20">
+        <div className="inline-block animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600 mb-4"></div>
+        <p className="text-gray-500">در حال بارگذاری اطلاعات برنامه...</p>
+      </div>
+    );
+  }
 
   if (!program) {
     return (
@@ -19,18 +47,18 @@ const ProgramDetailPage: React.FC = () => {
 
   const programYear = new Date(program.dateISO).getFullYear();
 
-  const collaborators = program.collaborators
-    .map(memberId => MEMBERS.find(m => m.id === memberId))
+  const collaborators = (program.collaborators || [])
+    .map(memberId => membersList.find(m => m.id === memberId))
     .filter((member): member is NonNullable<typeof member> => member !== undefined)
     .map(member => {
-        const membershipForYear = member.memberships.find(m => m.year === programYear);
-        const mostRecentMembership = [...member.memberships].sort((a, b) => b.year - a.year)[0];
+        const membershipForYear = member.memberships?.find(m => m.year === programYear);
+        const mostRecentMembership = member.memberships ? [...member.memberships].sort((a, b) => b.year - a.year)[0] : undefined;
         const displayPosition = membershipForYear ? membershipForYear.position : mostRecentMembership?.position || 'همکار';
         return { ...member, displayPosition };
     });
     
-  const hasImages = program.gallery && program.gallery.images.length > 0;
-  const hasVideos = program.gallery && program.gallery.videos.length > 0;
+  const hasImages = program.gallery && program.gallery.images && program.gallery.images.length > 0;
+  const hasVideos = program.gallery && program.gallery.videos && program.gallery.videos.length > 0;
   const isUpcoming = program.status === 'upcoming';
 
   return (
@@ -73,7 +101,7 @@ const ProgramDetailPage: React.FC = () => {
         )}
 
         {/* Sponsors Section */}
-        {program.sponsors.length > 0 && (
+        {Boolean(program.sponsors && program.sponsors.length > 0) && (
             <div className="bg-white rounded-xl shadow-lg border border-gray-200/75 overflow-hidden">
                 <div className="p-6 md:p-8">
                     <h2 className="text-2xl font-bold text-gray-800 mb-6 flex items-center gap-3 pb-4 border-b border-gray-200">

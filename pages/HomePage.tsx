@@ -1,24 +1,51 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { PROGRAMS, MEMBERS } from '../constants';
+import { getPrograms, getMembers, getStats } from '../services/api';
+import type { Program, Member } from '../types';
 
 const HomePage: React.FC = () => {
-  const upcomingPrograms = PROGRAMS
+  const [programs, setPrograms] = useState<Program[]>([]);
+  const [members, setMembers] = useState<Member[]>([]);
+  const [stats, setStats] = useState({
+    membersCount: 0,
+    programsCount: 0,
+    upcomingProgramsCount: 0,
+    coursesCount: 0,
+    jobsCount: 0,
+  });
+
+  useEffect(() => {
+    let isMounted = true;
+    getPrograms().then(data => {
+      if (isMounted) setPrograms(data);
+    });
+    getMembers().then(data => {
+      if (isMounted) setMembers(data);
+    });
+    getStats().then(data => {
+      if (isMounted) setStats(data);
+    });
+    return () => {
+      isMounted = false;
+    };
+  }, []);
+
+  const upcomingPrograms = programs
     .filter(p => p.status === 'upcoming')
     .sort((a, b) => new Date(a.dateISO).getTime() - new Date(b.dateISO).getTime())
     .slice(0, 3);
 
-  const galleryImages = PROGRAMS
+  const galleryImages = programs
     .filter(p => p.status === 'past' && p.gallery && p.gallery.images.length > 0)
     .flatMap(p => p.gallery!.images)
-    .slice(0, 8); // Increased to show more images
+    .slice(0, 8);
 
   return (
     <div className="space-y-24">
       {/* Hero Section */}
       <div
         className="relative bg-cover bg-center rounded-2xl shadow-xl overflow-hidden"
-        style={{ backgroundImage: `url('https://charset99.storage.c2.liara.space/programs_gallery/2025-09-27%2004.45.46.jpg')`, minHeight: '500px' }}
+        style={{ backgroundImage: `url('http://storage.ghavishomard.ir/programs_gallery/2025-09-27%2004.45.46.jpg')`, minHeight: '500px' }}
       >
         <div className="absolute inset-0 bg-gradient-to-t from-black/80 to-black/30 flex flex-col items-center justify-center text-center p-6">
           <h1 className="text-4xl md:text-5xl lg:text-6xl font-extrabold text-white leading-tight mb-4 animate-fade-in-down">
@@ -44,14 +71,14 @@ const HomePage: React.FC = () => {
             <div className="bg-blue-100 text-blue-600 rounded-full w-16 h-16 flex items-center justify-center mx-auto mb-4">
               <svg xmlns="http://www.w3.org/2000/svg" className="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2"><path strokeLinecap="round" strokeLinejoin="round" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0z" /></svg>
             </div>
-            <p className="text-4xl font-extrabold text-gray-800">{MEMBERS.length}+</p>
+            <p className="text-4xl font-extrabold text-gray-800">{stats.membersCount || members.length || 13}+</p>
             <p className="text-gray-500 mt-2 text-lg">عضو فعال</p>
           </div>
           <div className="bg-white p-6 rounded-xl shadow-lg border border-gray-200/80">
             <div className="bg-green-100 text-green-600 rounded-full w-16 h-16 flex items-center justify-center mx-auto mb-4">
               <svg xmlns="http://www.w3.org/2000/svg" className="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2"><path strokeLinecap="round" strokeLinejoin="round" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" /></svg>
             </div>
-            <p className="text-4xl font-extrabold text-gray-800">{PROGRAMS.length}+</p>
+            <p className="text-4xl font-extrabold text-gray-800">{stats.programsCount || programs.length || 19}+</p>
             <p className="text-gray-500 mt-2 text-lg">برنامه برگزار شده</p>
           </div>
           <div className="bg-white p-6 rounded-xl shadow-lg border border-gray-200/80">
@@ -98,7 +125,7 @@ const HomePage: React.FC = () => {
               <div className="bg-slate-50 p-8 rounded-xl border border-gray-200/80">
                   <p className="text-gray-700 italic mb-6">"عضویت در انجمن علمی یکی از بهترین تصمیمات دوران دانشجویی من بود. اینجا نه تنها مهارت‌های فنی خودم رو تقویت کردم، بلکه یاد گرفتم چطور در یک تیم کار کنم و یک رویداد بزرگ رو از صفر تا صد مدیریت کنم."</p>
                   <div className="flex items-center">
-                      <img className="w-14 h-14 rounded-full object-cover border-2 border-blue-200" src="https://storage.c2.liara.space/charset99/members/photo_2025-09-27 04.15.21.jpeg" alt="محمد"/>
+                      <img className="w-14 h-14 rounded-full object-cover border-2 border-blue-200" src="http://storage.ghavishomard.ir/members/photo_2025-09-27 04.15.21.jpeg" alt="محمد"/>
                       <div className="mr-4">
                           <p className="font-bold text-gray-800">محمد</p>
                           <p className="text-sm text-gray-500">دبیر انجمن - ۱۴۰۳</p>
@@ -108,7 +135,7 @@ const HomePage: React.FC = () => {
               <div className="bg-slate-50 p-8 rounded-xl border border-gray-200/80">
                   <p className="text-gray-700 italic mb-6">"فضای دوستانه و علمی انجمن به من انگیزه داد تا از محدوده‌ی کلاس‌های درس فراتر برم. آشنایی با افراد متخصص و شرکت در پروژه‌های گروهی، دید من رو نسبت به آینده شغلی‌ام کاملا تغییر داد."</p>
                   <div className="flex items-center">
-                      <img className="w-14 h-14 rounded-full object-cover border-2 border-blue-200" src="https://storage.c2.liara.space/charset99/members/24-10-18_10-53-30-603.jpg" alt="سارا احمدی"/>
+                      <img className="w-14 h-14 rounded-full object-cover border-2 border-blue-200" src="http://storage.ghavishomard.ir/members/24-10-18_10-53-30-603.jpg" alt="سارا احمدی"/>
                       <div className="mr-4">
                           <p className="font-bold text-gray-800">امیر  علی گلی</p>
                           <p className="text-sm text-gray-500">عضو سابق</p>

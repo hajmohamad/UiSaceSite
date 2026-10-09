@@ -1,7 +1,7 @@
 
-import React, { useMemo, useState } from 'react';
+import React, { useMemo, useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { MEMBERS } from '../constants';
+import { getMembers } from '../services/api';
 import type { Member } from '../types';
 
 interface MemberCardProps {
@@ -24,11 +24,23 @@ const MemberCard: React.FC<MemberCardProps> = ({ member, position }) => {
 };
 
 const MembersPage: React.FC = () => {
+  const [membersList, setMembersList] = useState<Member[]>([]);
+
+  useEffect(() => {
+    let isMounted = true;
+    getMembers().then(data => {
+      if (isMounted) setMembersList(data);
+    });
+    return () => {
+      isMounted = false;
+    };
+  }, []);
+
   const membersByYear = useMemo(() => {
     const acc: Record<number, { member: Member; position: string }[]> = {};
 
-    MEMBERS.forEach(member => {
-      member.memberships.forEach(membership => {
+    membersList.forEach(member => {
+      (member.memberships || []).forEach(membership => {
         const { year, position } = membership;
         if (!acc[year]) {
           acc[year] = [];
@@ -38,11 +50,11 @@ const MembersPage: React.FC = () => {
     });
     
     for (const year in acc) {
-  acc[year].sort((a, b) => a.member.id - b.member.id);
+      acc[year].sort((a, b) => a.member.id - b.member.id);
     }
 
     return acc;
-  }, []);
+  }, [membersList]);
 
   const sortedYears = Object.keys(membersByYear)
     .map(Number)

@@ -273,11 +273,39 @@ const mockJobs: Job[] =[
 
 export const useJobs = () => {
   const [jobs, setJobs] = useState<Job[]>([]);
+  const [loading, setLoading] = useState<boolean>(true);
 
   useEffect(() => {
-    // In a real app, you would fetch this data from an API
-    setJobs(mockJobs);
+    let isMounted = true;
+    fetch('/api/jobs')
+      .then((res) => {
+        if (!res.ok) throw new Error('API failed');
+        return res.json();
+      })
+      .then((data: Job[]) => {
+        if (isMounted) {
+          if (Array.isArray(data) && data.length > 0) {
+            setJobs(data);
+          } else {
+            setJobs(mockJobs);
+          }
+        }
+      })
+      .catch(() => {
+        if (isMounted) {
+          setJobs(mockJobs);
+        }
+      })
+      .finally(() => {
+        if (isMounted) {
+          setLoading(false);
+        }
+      });
+
+    return () => {
+      isMounted = false;
+    };
   }, []);
 
-  return { jobs };
+  return { jobs, loading };
 };

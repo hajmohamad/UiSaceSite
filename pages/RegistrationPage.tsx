@@ -1,31 +1,36 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, Link } from 'react-router-dom';
-import { PROGRAMS } from '../constants';
-
-// تابع کمکی برای ارسال فرم (POST API)
-export async function postRegistration(formData: FormData) {
-  const res = await fetch('/api/registrations', {
-    method: 'POST',
-    // توجه: برای FormData نباید Content-Type را ست کنیم — مرورگر خودش می‌سازد
-    body: formData,
-  });
-
-  if (!res.ok) {
-    const text = await res.text().catch(() => null);
-    throw new Error(text || `خطا در ارسال اطلاعات: ${res.status}`);
-  }
-
-  return res.json();
-}
+import { getProgramById, postRegistration } from '../services/api';
+import type { Program } from '../types';
 
 const RegistrationPage: React.FC = () => {
   const { id } = useParams<{ id: string }>();
-  const program = PROGRAMS.find((p) => p.id === Number(id));
+  const [program, setProgram] = useState<Program | null>(null);
+  const [isLoadingProgram, setIsLoadingProgram] = useState(true);
 
   const [name, setName] = useState('');
   const [phone, setPhone] = useState('');
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [error, setError] = useState('');
+
+  useEffect(() => {
+    let isMounted = true;
+    if (id) {
+      getProgramById(id)
+        .then(p => {
+          if (isMounted) {
+            setProgram(p || null);
+            setIsLoadingProgram(false);
+          }
+        })
+        .catch(() => {
+          if (isMounted) setIsLoadingProgram(false);
+        });
+    }
+    return () => {
+      isMounted = false;
+    };
+  }, [id]);
 
   // دانشجویی
   const [isStudent, setIsStudent] = useState<'yes' | 'no' | ''>('');
@@ -45,6 +50,15 @@ const RegistrationPage: React.FC = () => {
     setReceiptPreview(url);
     return () => URL.revokeObjectURL(url);
   }, [receiptFile]);
+
+  if (isLoadingProgram) {
+    return (
+      <div className="text-center py-20">
+        <div className="inline-block animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600 mb-4"></div>
+        <p className="text-gray-500">در حال بارگذاری اطلاعات برنامه...</p>
+      </div>
+    );
+  }
 
   if (!program) {
     return (

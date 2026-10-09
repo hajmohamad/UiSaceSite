@@ -37,7 +37,7 @@ const App: React.FC = () => {
           </Routes>
         </main>
         <Footer />
-        <FloatingActionCard />
+        {/*<FloatingActionCard />*/}
       </div>
     </BrowserRouter>
 

@@ -1,36 +1,59 @@
-import React, { useState, useMemo, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useParams, Link } from 'react-router-dom';
-import { courses } from '../constants';
+import { getCourseById } from '../services/api';
 import VideoPlayer from '../components/CourseCompnents/VideoPlayer';
 import FileList from '../components/CourseCompnents/FileList';
-import type { CourseVideo } from '../types';
+import type { Course, CourseVideo } from '../types';
 
 const CourseDetailPage: React.FC = () => {
   const { id } = useParams<{ id: string }>();
-
-  const course = useMemo(() => courses.find(c => c.id === id), [id]);
+  const [course, setCourse] = useState<Course | null>(null);
+  const [loading, setLoading] = useState(true);
 
   const [selectedVideo, setSelectedVideo] = useState<CourseVideo | null>(null);
-  const [openSectionId, setOpenSectionId] = useState<string | null>(null);
+  const [openSectionId, setOpenSectionId] = useState<number | string | null>(null);
 
   useEffect(() => {
-    if (course && course.sections.length > 0) {
-      setOpenSectionId(course.sections[0].id); // اولین فصل باز باشه
-      if (course.sections[0].videos.length > 0) {
-        setSelectedVideo(course.sections[0].videos[0]); // اولین ویدیو انتخاب بشه
-      }
+    let isMounted = true;
+    if (id) {
+      getCourseById(id).then(data => {
+        if (isMounted) {
+          if (data) {
+            setCourse(data);
+            if (data.sections && data.sections.length > 0) {
+              setOpenSectionId(data.sections[0].id);
+              if (data.sections[0].videos && data.sections[0].videos.length > 0) {
+                setSelectedVideo(data.sections[0].videos[0]);
+              }
+            }
+          }
+          setLoading(false);
+        }
+      });
     }
-  }, [course]);
+    return () => {
+      isMounted = false;
+    };
+  }, [id]);
 
-  const toggleSection = (id: string) => {
-    if (openSectionId === id) {
-    setOpenSectionId(null);
-  } else {
-    setOpenSectionId(id);
-  }
+  const toggleSection = (sId: number | string) => {
+    if (openSectionId === sId) {
+      setOpenSectionId(null);
+    } else {
+      setOpenSectionId(sId);
+    }
   };
 
   const isLoggedIn = false; // شبیه‌سازی
+
+  if (loading) {
+    return (
+      <div className="text-center py-20">
+        <div className="inline-block animate-spin rounded-full h-8 w-8 border-b-2 border-teal-500 mb-4"></div>
+        <p className="text-gray-500">در حال بارگذاری اطلاعات دوره...</p>
+      </div>
+    );
+  }
 
   if (!course) {
     return (
