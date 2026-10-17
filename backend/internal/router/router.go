@@ -31,6 +31,7 @@ func SetupRouter(db *gorm.DB, cfg *config.Config) *gin.Engine {
 	contactHandler := handlers.NewContactHandler(db)
 	statsHandler := handlers.NewStatsHandler(db)
 	uploadHandler := handlers.NewUploadHandler(cfg)
+	formHandler := handlers.NewFormHandler(db, cfg)
 
 	// API Root Route Group
 	api := r.Group("/api")
@@ -62,6 +63,12 @@ func SetupRouter(db *gorm.DB, cfg *config.Config) *gin.Engine {
 		api.GET("/jobs", jobHandler.GetJobs)
 		api.GET("/jobs/:id", jobHandler.GetJobByID)
 
+		// Porsline Public Forms
+		api.GET("/forms", formHandler.GetPublicForms)
+		api.GET("/forms/:id", formHandler.GetFormByIDOrSlug)
+		api.POST("/forms/:id/submit", formHandler.SubmitForm)
+		api.POST("/forms/upload", formHandler.UploadAttachment)
+
 		// User Submissions
 		api.POST("/registrations", registrationHandler.CreateRegistration)
 		api.POST("/contact", contactHandler.CreateContactMessage)
@@ -72,6 +79,19 @@ func SetupRouter(db *gorm.DB, cfg *config.Config) *gin.Engine {
 		{
 			admin.GET("/me", authHandler.GetMe)
 			admin.POST("/upload", uploadHandler.UploadFile)
+
+			// Admin File Management (Uploads folder)
+			admin.GET("/files", uploadHandler.ListFiles)
+			admin.POST("/files", uploadHandler.UploadMultipleFiles)
+			admin.DELETE("/files", uploadHandler.DeleteFile)
+			admin.PUT("/files/rename", uploadHandler.RenameFile)
+			admin.POST("/files/replace", uploadHandler.ReplaceFile)
+
+			// Admin Users Management
+			admin.GET("/users", authHandler.GetUsers)
+			admin.POST("/users", authHandler.CreateUser)
+			admin.DELETE("/users/:id", authHandler.DeleteUser)
+			admin.PUT("/users/:id/password", authHandler.UpdateUserPassword)
 
 			// Admin Programs CRUD
 			admin.POST("/programs", programHandler.CreateProgram)
@@ -102,6 +122,15 @@ func SetupRouter(db *gorm.DB, cfg *config.Config) *gin.Engine {
 			admin.GET("/contact", contactHandler.GetContactMessages)
 			admin.PATCH("/contact/:id/status", contactHandler.UpdateContactStatus)
 			admin.DELETE("/contact/:id", contactHandler.DeleteContactMessage)
+
+			// Admin Porsline Forms Management
+			admin.GET("/forms", formHandler.GetAdminForms)
+			admin.GET("/forms/:id", formHandler.GetAdminFormByID)
+			admin.POST("/forms", formHandler.CreateForm)
+			admin.PUT("/forms/:id", formHandler.UpdateForm)
+			admin.DELETE("/forms/:id", formHandler.DeleteForm)
+			admin.GET("/forms/:id/responses", formHandler.GetFormResponses)
+			admin.DELETE("/forms/responses/:responseId", formHandler.DeleteFormResponse)
 		}
 	}
 

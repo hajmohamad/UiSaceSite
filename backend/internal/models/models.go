@@ -146,3 +146,51 @@ type User struct {
 	CreatedAt time.Time `json:"createdAt"`
 	UpdatedAt time.Time `json:"updatedAt"`
 }
+
+// FormQuestion represents a question in a Porsline form
+type FormQuestion struct {
+	ID            string   `json:"id"`
+	Title         string   `json:"title"`
+	Type          string   `json:"type"` // text, textarea, radio, checkbox, select, rating, scale, boolean, number, email, phone, date, file
+	Required      bool     `json:"required"`
+	Description   string   `json:"description,omitempty"`
+	Placeholder   string   `json:"placeholder,omitempty"`
+	Options       []string `json:"options,omitempty"`
+	CorrectAnswer string   `json:"correctAnswer,omitempty"`
+	Points        int      `json:"points,omitempty"`
+	Order         int      `json:"order"`
+}
+
+// PorslineForm represents a survey, quiz, registration, or evaluation form
+type PorslineForm struct {
+	ID             uint           `gorm:"primaryKey" json:"id"`
+	Title          string         `gorm:"not null" json:"title"`
+	Description    string         `json:"description"`
+	Type           string         `gorm:"default:'survey'" json:"type"` // survey | quiz | registration | evaluation | general
+	Status         string         `gorm:"default:'active'" json:"status"` // active | draft | closed
+	Slug           string         `gorm:"index" json:"slug,omitempty"`
+	IsPublic       bool           `gorm:"default:true" json:"isPublic"`
+	AllowMultiple  bool           `gorm:"default:false" json:"allowMultiple"`
+	SuccessMessage string         `json:"successMessage,omitempty"`
+	TimeLimitMin   int            `gorm:"default:0" json:"timeLimitMin,omitempty"`
+	Questions      []FormQuestion `gorm:"serializer:json" json:"questions"`
+	ResponseCount  int            `gorm:"default:0" json:"responseCount"`
+	CreatedAt      time.Time      `json:"createdAt"`
+	UpdatedAt      time.Time      `json:"updatedAt"`
+}
+
+// FormResponse represents a respondent's submission to a Porsline form
+type FormResponse struct {
+	ID                uint                   `gorm:"primaryKey" json:"id"`
+	FormID            uint                   `gorm:"not null;index" json:"formId"`
+	Form              *PorslineForm          `gorm:"foreignKey:FormID;constraint:OnDelete:CASCADE" json:"form,omitempty"`
+	RespondentName    string                 `json:"respondentName,omitempty"`
+	RespondentContact string                 `json:"respondentContact,omitempty"`
+	Answers           map[string]interface{} `gorm:"serializer:json" json:"answers"`
+	Score             *int                   `json:"score,omitempty"`
+	MaxScore          *int                   `json:"maxScore,omitempty"`
+	IP                string                 `json:"ip,omitempty"`
+	CreatedAt         time.Time              `json:"createdAt"`
+	UpdatedAt         time.Time              `json:"updatedAt"`
+}
+

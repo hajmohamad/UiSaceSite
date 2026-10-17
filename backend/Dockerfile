@@ -7,6 +7,10 @@ RUN apk add --no-cache git ca-certificates
 
 # Copy dependency files
 COPY go.mod go.sum ./
+
+# حل مشکل تحریم پکیج‌های Go
+ENV GOPROXY=https://goproxy.io,https://goproxy.cn,direct
+
 RUN go mod download
 
 # Copy source code

@@ -37,6 +37,8 @@ func InitDB(cfg *config.Config) *gorm.DB {
 		&models.Job{},
 		&models.Registration{},
 		&models.ContactMessage{},
+		&models.PorslineForm{},
+		&models.FormResponse{},
 	)
 	if err != nil {
 		log.Fatalf("Failed to auto migrate database: %v", err)
