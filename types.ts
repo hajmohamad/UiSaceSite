@@ -86,3 +86,128 @@ export interface Course {
   isPaid: boolean;
   price?: number;
 }
+
+export interface AdminUser {
+  id: number;
+  username: string;
+  role: string;
+  createdAt?: string;
+  updatedAt?: string;
+}
+
+export interface Registration {
+  id: number;
+  programId: number;
+  program?: Program;
+  name: string;
+  phone: string;
+  isStudent: boolean;
+  studentNumber?: string;
+  receiptUrl?: string;
+  status: 'pending' | 'approved' | 'rejected';
+  createdAt: string;
+  updatedAt?: string;
+}
+
+export interface ContactMessage {
+  id: number;
+  name: string;
+  email: string;
+  message: string;
+  status: 'unread' | 'read' | 'replied';
+  createdAt: string;
+  updatedAt?: string;
+}
+
+export interface AdminStats {
+  membersCount: number;
+  programsCount: number;
+  upcomingProgramsCount: number;
+  coursesCount: number;
+  jobsCount: number;
+  registrationsCount: number;
+  unreadMessagesCount?: number;
+  formsCount?: number;
+  responsesCount?: number;
+  filesCount?: number;
+}
+
+// File Manager Types
+export interface UploadedFileItem {
+  name: string;
+  path: string;
+  url: string;
+  size: number;
+  modTime: string;
+  ext: string;
+  isImage: boolean;
+}
+
+// Porsline & Form Types
+export type PorslineFormType = 'survey' | 'quiz' | 'registration' | 'evaluation' | 'general';
+export type PorslineFormStatus = 'active' | 'draft' | 'closed';
+
+export type QuestionType =
+  | 'text'
+  | 'textarea'
+  | 'radio'
+  | 'checkbox'
+  | 'select'
+  | 'rating'
+  | 'scale'
+  | 'boolean'
+  | 'number'
+  | 'email'
+  | 'phone'
+  | 'date'
+  | 'file';
+
+export interface FormQuestion {
+  id: string;
+  title: string;
+  type: QuestionType;
+  required: boolean;
+  description?: string;
+  placeholder?: string;
+  options?: string[];
+  correctAnswer?: string;
+  points?: number;
+  order: number;
+}
+
+export interface PorslineForm {
+  id: number;
+  title: string;
+  description?: string;
+  type: PorslineFormType;
+  status: PorslineFormStatus;
+  slug?: string;
+  isPublic: boolean;
+  allowMultiple: boolean;
+  successMessage?: string;
+  timeLimitMin?: number;
+  questions: FormQuestion[];
+  responseCount: number;
+  createdAt: string;
+  updatedAt?: string;
+}
+
+export interface FormResponse {
+  id: number;
+  formId: number;
+  form?: PorslineForm;
+  respondentName?: string;
+  respondentContact?: string;
+  answers: Record<string, any>;
+  score?: number;
+  maxScore?: number;
+  ip?: string;
+  createdAt: string;
+  updatedAt?: string;
+}
+
+export interface FormAnalytics {
+  totalResponses: number;
+  averageScore?: number;
+  questionStats: Record<string, Record<string, number>>;
+}

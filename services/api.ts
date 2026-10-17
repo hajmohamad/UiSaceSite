@@ -1,4 +1,4 @@
-import type { Member, Program, Course, Job } from '../types';
+import type { Member, Program, Course, Job, PorslineForm } from '../types';
 import { MEMBERS, PROGRAMS, courses as initialCourses } from '../arvanconstan';
 
 const API_BASE = '/api';
@@ -246,3 +246,82 @@ export async function postContact(formData: { name: string; email: string; messa
 
   return data;
 }
+
+/**
+ * دریافت لیست پرسشنامه‌های عمومی
+ */
+export async function getPublicForms(type?: string): Promise<PorslineForm[]> {
+  const query = type && type !== 'all' ? `?type=${type}` : '';
+  const res = await fetch(`${API_BASE}/forms${query}`);
+  if (!res.ok) {
+    throw new Error('خطا در دریافت لیست پرسشنامه‌ها');
+  }
+  return res.json();
+}
+
+/**
+ * دریافت یک فرم یا پرسشنامه با شناسه یا اسلاگ
+ */
+export async function getPublicFormById(idOrSlug: string): Promise<PorslineForm> {
+  const res = await fetch(`${API_BASE}/forms/${idOrSlug}`);
+  const data = await res.json().catch(() => null);
+  if (!res.ok) {
+    throw new Error(data?.error || 'خطا در بارگذاری فرم');
+  }
+  return data;
+}
+
+/**
+ * ثبت پاسخ به پرسشنامه
+ */
+export async function submitPublicForm(
+  idOrSlug: string,
+  payload: {
+    respondentName?: string;
+    respondentContact?: string;
+    answers: Record<string, any>;
+  }
+): Promise<{
+  success: boolean;
+  message: string;
+  responseId: number;
+  score?: number;
+  maxScore?: number;
+  type: string;
+}> {
+  const res = await fetch(`${API_BASE}/forms/${idOrSlug}/submit`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(payload),
+  });
+
+  const data = await res.json().catch(() => null);
+  if (!res.ok) {
+    throw new Error(data?.error || 'خطا در ثبت پاسخ');
+  }
+
+  return data;
+}
+
+/**
+ * آپلود فایل ضمیمه در فرم
+ */
+export async function uploadFormAttachment(file: File): Promise<{ url: string; filename: string }> {
+  const formData = new FormData();
+  formData.append('file', file);
+
+  const res = await fetch(`${API_BASE}/forms/upload`, {
+    method: 'POST',
+    body: formData,
+  });
+
+  const data = await res.json().catch(() => null);
+  if (!res.ok) {
+    throw new Error(data?.error || 'خطا در آپلود فایل');
+  }
+
+  return data;
+}
+

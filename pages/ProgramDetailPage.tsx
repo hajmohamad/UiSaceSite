@@ -8,6 +8,7 @@ const ProgramDetailPage: React.FC = () => {
   const [program, setProgram] = useState<Program | null>(null);
   const [membersList, setMembersList] = useState<Member[]>([]);
   const [loading, setLoading] = useState(true);
+  const [selectedImage, setSelectedImage] = useState<string | null>(null);
 
   useEffect(() => {
     let isMounted = true;
@@ -123,20 +124,28 @@ const ProgramDetailPage: React.FC = () => {
         )}
         
         {/* Gallery Section */}
-        {program.status === 'past' && (hasImages || hasVideos) && (
+        {(hasImages || hasVideos) && (
             <div className="bg-white rounded-xl shadow-lg border border-gray-200/75 overflow-hidden">
                 <div className="p-6 md:p-8">
                     <h2 className="text-2xl font-bold text-gray-800 mb-6 flex items-center gap-3 pb-4 border-b border-gray-200">
-                        <svg xmlns="http://www.w3.org/2000/svg" className="h-7 w-7 text-gray-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2"><path strokeLinecap="round" strokeLinejoin="round" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" /></svg>
-                        <span>گالری تصاویر و ویدئوها</span>
+                        <svg xmlns="http://www.w3.org/2000/svg" className="h-7 w-7 text-blue-600" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2"><path strokeLinecap="round" strokeLinejoin="round" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" /></svg>
+                        <span>تصاویر ثانویه و گالری رویداد</span>
                     </h2>
                     {hasImages && (
                         <div className="mb-8">
-                        <h3 className="text-xl font-semibold text-gray-700 mb-4">تصاویر</h3>
+                        <h3 className="text-lg font-semibold text-gray-700 mb-4">تصاویر و عکس‌ها</h3>
                         <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
                             {program.gallery?.images.map((image, index) => (
-                            <div key={index} className="overflow-hidden rounded-lg shadow-md group aspect-w-1 aspect-h-1">
-                                <img src={image} alt={`گالری ${program.title} - ${index + 1}`} className="w-full h-full object-cover transform hover:scale-110 transition-transform duration-300" />
+                            <div
+                              key={index}
+                              onClick={() => setSelectedImage(image)}
+                              className="overflow-hidden rounded-xl shadow-sm hover:shadow-lg group aspect-w-1 aspect-h-1 cursor-pointer border border-gray-200 bg-gray-50"
+                            >
+                                <img
+                                  src={image}
+                                  alt={`گالری ${program.title} - ${index + 1}`}
+                                  className="w-full h-full object-cover transform group-hover:scale-105 transition-transform duration-300"
+                                />
                             </div>
                             ))}
                         </div>
@@ -144,7 +153,7 @@ const ProgramDetailPage: React.FC = () => {
                     )}
                     {hasVideos && (
                             <div>
-                                <h3 className="text-xl font-semibold text-gray-700 mb-4">ویدئوها</h3>
+                                <h3 className="text-lg font-semibold text-gray-700 mb-4">ویدئوها</h3>
                                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                                 {program.gallery?.videos.map((videoUrl, index) => (
                                     <div key={index} className="aspect-w-16 aspect-h-9 rounded-lg overflow-hidden shadow-lg">
@@ -164,6 +173,28 @@ const ProgramDetailPage: React.FC = () => {
 
                 </div>
             </div>
+        )}
+
+        {/* Image Lightbox Modal */}
+        {selectedImage && (
+          <div
+            onClick={() => setSelectedImage(null)}
+            className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/85 backdrop-blur-sm cursor-zoom-out animate-fade-in"
+          >
+            <div className="relative max-w-4xl max-h-[90vh]">
+              <img
+                src={selectedImage}
+                alt="نمای بزرگ تصویر"
+                className="max-h-[85vh] max-w-full rounded-2xl object-contain shadow-2xl"
+              />
+              <button
+                onClick={() => setSelectedImage(null)}
+                className="absolute top-3 right-3 p-2 rounded-full bg-black/60 text-white hover:bg-black/80"
+              >
+                ✕
+              </button>
+            </div>
+          </div>
         )}
 
       </div>

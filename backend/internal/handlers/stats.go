@@ -24,6 +24,8 @@ func (h *StatsHandler) GetStats(c *gin.Context) {
 	var coursesCount int64
 	var jobsCount int64
 	var registrationsCount int64
+	var formsCount int64
+	var responsesCount int64
 
 	h.db.Model(&models.Member{}).Count(&membersCount)
 	h.db.Model(&models.Program{}).Count(&programsCount)
@@ -31,6 +33,8 @@ func (h *StatsHandler) GetStats(c *gin.Context) {
 	h.db.Model(&models.Course{}).Count(&coursesCount)
 	h.db.Model(&models.Job{}).Count(&jobsCount)
 	h.db.Model(&models.Registration{}).Count(&registrationsCount)
+	h.db.Model(&models.PorslineForm{}).Count(&formsCount)
+	h.db.Model(&models.FormResponse{}).Count(&responsesCount)
 
 	c.JSON(http.StatusOK, gin.H{
 		"membersCount":          membersCount,
@@ -39,5 +43,7 @@ func (h *StatsHandler) GetStats(c *gin.Context) {
 		"coursesCount":          coursesCount,
 		"jobsCount":             jobsCount,
 		"registrationsCount":    registrationsCount,
+		"formsCount":            formsCount,
+		"responsesCount":        responsesCount,
 	})
 }
