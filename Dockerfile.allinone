@@ -1,0 +1,51 @@
+# ==============================================================================
+# All-In-One Dockerfile (Frontend + Backend + Nginx در یک کانتینر واحد)
+# ==============================================================================
+
+# مرحله ۱: بیلد فرانت‌اند React
+FROM node:20-alpine AS frontend-builder
+WORKDIR /app
+COPY package*.json ./
+RUN npm ci
+COPY . .
+RUN npm run build
+
+# مرحله ۲: بیلد بک‌اند Go
+FROM golang:alpine AS backend-builder
+WORKDIR /app
+COPY backend/go.mod backend/go.sum ./
+RUN go mod download
+COPY backend/ .
+RUN CGO_ENABLED=0 GOOS=linux go build -ldflags="-w -s" -o server ./cmd/server
+
+# مرحله ۳: ایمیج نهایی به همراه Nginx و اجرای همزمان فرانت و بک
+FROM alpine:3.20
+WORKDIR /app
+
+RUN apk add --no-cache nginx ca-certificates tzdata
+
+# کپی فایل اجرایی بک‌اند
+COPY --from=backend-builder /app/server /app/server
+
+# کپی فایل‌های بیلد شده فرانت‌اند به Nginx
+COPY --from=frontend-builder /app/dist /usr/share/nginx/html
+
+# کپی فایل‌های گواهی SSL دانشگاه
+COPY SSL-Linux/ /etc/nginx/ssl/
+
+# کپی کانفیگ Nginx
+COPY nginx/default.conf /etc/nginx/conf.d/default.conf
+
+# ایجاد مسیرهای مورد نیاز
+RUN mkdir -p /app/data /app/uploads/receipts /app/uploads/general /run/nginx
+
+EXPOSE 80
+EXPOSE 443
+
+ENV PORT=8080
+ENV DB_PATH=/app/data/uisace.db
+ENV UPLOAD_DIR=/app/uploads
+ENV BASE_URL=https://sace.ui.ac.ir
+
+# اسکریپت اجرای همزمان بک‌اند و Nginx
+CMD ["/bin/sh", "-c", "/app/server & nginx -g 'daemon off;'"]

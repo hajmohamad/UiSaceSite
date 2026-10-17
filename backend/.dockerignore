@@ -1,0 +1,7 @@
+data
+uploads
+server
+server_test
+.git
+.idea
+*.log

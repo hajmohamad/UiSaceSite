@@ -1,0 +1,41 @@
+services:
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: uisace-backend
+    restart: always
+    environment:
+      - PORT=8080
+      - DB_PATH=/app/data/uisace.db
+      - JWT_SECRET=${JWT_SECRET:-uisace-secret-key-change-me-in-production-2026}
+      - ADMIN_USERNAME=${ADMIN_USERNAME:-admin}
+      - ADMIN_PASSWORD=${ADMIN_PASSWORD:-admin123}
+      - UPLOAD_DIR=/app/uploads
+      - BASE_URL=https://sace.ui.ac.ir
+    volumes:
+      - ./backend/data:/app/data
+      - ./backend/uploads:/app/uploads
+    networks:
+      - uisace-net
+
+  frontend:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: uisace-frontend
+    restart: always
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./nginx/default.conf:/etc/nginx/conf.d/default.conf:ro
+      - ./SSL-Linux:/etc/nginx/ssl:ro
+    depends_on:
+      - backend
+    networks:
+      - uisace-net
+
+networks:
+  uisace-net:
+    driver: bridge
