@@ -26,6 +26,57 @@ const ProgramDetailPage: React.FC = () => {
     };
   }, [id]);
 
+  const programYear = program?.dateISO ? new Date(program.dateISO).getFullYear() : 0;
+
+  const detailedCollaborators = React.useMemo(() => {
+    if (!program) return [];
+
+    const results: Array<{
+      id?: number;
+      name: string;
+      imageUrl: string;
+      role: string;
+    }> = [];
+
+    const details = program.collaboratorDetails || [];
+    const idList = program.collaborators || [];
+
+    if (details.length > 0) {
+      details.forEach((d) => {
+        const foundMember = d.memberId ? membersList.find((m) => m.id === d.memberId) : undefined;
+        results.push({
+          id: d.memberId || foundMember?.id,
+          name: d.name || foundMember?.name || 'همکار رویداد',
+          imageUrl:
+            d.imageUrl ||
+            foundMember?.imageUrl ||
+            'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&q=80&w=250',
+          role: d.role || foundMember?.memberships?.[0]?.position || 'کادر رویداد',
+        });
+      });
+    } else if (idList.length > 0) {
+      idList.forEach((memberId) => {
+        const foundMember = membersList.find((m) => m.id === memberId);
+        if (foundMember) {
+          const membershipForYear = foundMember.memberships?.find((m) => m.year === programYear);
+          const mostRecentMembership = foundMember.memberships
+            ? [...foundMember.memberships].sort((a, b) => b.year - a.year)[0]
+            : undefined;
+          const displayPosition =
+            membershipForYear?.position || mostRecentMembership?.position || 'همکار رویداد';
+          results.push({
+            id: foundMember.id,
+            name: foundMember.name,
+            imageUrl: foundMember.imageUrl,
+            role: displayPosition,
+          });
+        }
+      });
+    }
+
+    return results;
+  }, [program, membersList, programYear]);
+
   if (loading) {
     return (
       <div className="text-center py-20">
@@ -46,18 +97,6 @@ const ProgramDetailPage: React.FC = () => {
     );
   }
 
-  const programYear = new Date(program.dateISO).getFullYear();
-
-  const collaborators = (program.collaborators || [])
-    .map(memberId => membersList.find(m => m.id === memberId))
-    .filter((member): member is NonNullable<typeof member> => member !== undefined)
-    .map(member => {
-        const membershipForYear = member.memberships?.find(m => m.year === programYear);
-        const mostRecentMembership = member.memberships ? [...member.memberships].sort((a, b) => b.year - a.year)[0] : undefined;
-        const displayPosition = membershipForYear ? membershipForYear.position : mostRecentMembership?.position || 'همکار';
-        return { ...member, displayPosition };
-    });
-    
   const hasImages = program.gallery && program.gallery.images && program.gallery.images.length > 0;
   const hasVideos = program.gallery && program.gallery.videos && program.gallery.videos.length > 0;
   const isUpcoming = program.status === 'upcoming';
@@ -80,22 +119,58 @@ const ProgramDetailPage: React.FC = () => {
             </div>
         </div>
         
-        {/* Collaborators Section */}
-        {program.status === 'past' && collaborators.length > 0 && (
-            <div className="bg-white rounded-xl shadow-lg border border-gray-200/75 overflow-hidden">
+        {/* Collaborators / Team Section */}
+        {detailedCollaborators.length > 0 && (
+            <div className="bg-white rounded-2xl shadow-lg border border-gray-200/80 overflow-hidden">
                 <div className="p-6 md:p-8">
-                    <h2 className="text-2xl font-bold text-gray-800 mb-6 flex items-center gap-3 pb-4 border-b border-gray-200">
-                        <svg xmlns="http://www.w3.org/2000/svg" className="h-7 w-7 text-gray-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2"><path strokeLinecap="round" strokeLinejoin="round" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" /></svg>
-                        <span>همکاران این برنامه</span>
-                    </h2>
-                    <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-6 text-center">
-                        {collaborators.map(member => (
-                        <Link to={`/members/${member.id}`} key={member.id} className="flex flex-col items-center group">
-                            <img src={member.imageUrl} alt={member.name} className="w-24 h-24 rounded-full mx-auto border-4 border-gray-200 object-cover group-hover:border-blue-400 group-hover:scale-105 transition-all duration-300" />
-                            <h3 className="mt-3 font-semibold text-gray-700 group-hover:text-blue-600">{member.name}</h3>
-                            <p className="text-sm text-gray-500">{member.displayPosition}</p>
-                        </Link>
-                        ))}
+                    <div className="flex items-center justify-between pb-4 mb-6 border-b border-gray-200">
+                      <h2 className="text-xl md:text-2xl font-bold text-gray-800 flex items-center gap-3">
+                        <span className="w-10 h-10 rounded-xl bg-blue-50 text-blue-600 flex items-center justify-center text-xl">👥</span>
+                        <span>تیم برگزاری و همکاران رویداد</span>
+                      </h2>
+                      <span className="text-xs font-bold px-3 py-1 bg-slate-100 text-slate-600 rounded-full">
+                        {detailedCollaborators.length} نفر
+                      </span>
+                    </div>
+
+                    <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4 sm:gap-6">
+                        {detailedCollaborators.map((collab, index) => {
+                          const content = (
+                            <div className="h-full flex flex-col items-center justify-between bg-slate-50/60 hover:bg-white rounded-2xl p-4 border border-gray-200/60 hover:border-blue-300 hover:shadow-md transition-all duration-300 group">
+                              <div className="relative mb-3">
+                                <img
+                                  src={collab.imageUrl}
+                                  alt={collab.name}
+                                  onError={(e) => {
+                                    (e.target as HTMLImageElement).src =
+                                      'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&q=80&w=250';
+                                  }}
+                                  className="w-20 h-20 sm:w-24 sm:h-24 rounded-full mx-auto border-3 border-white shadow-sm object-cover group-hover:scale-105 transition-transform duration-300 ring-2 ring-gray-200 group-hover:ring-blue-400"
+                                />
+                              </div>
+                              <div className="text-center w-full">
+                                <h3 className="font-bold text-gray-800 text-sm sm:text-base group-hover:text-blue-600 transition-colors line-clamp-1">
+                                  {collab.name}
+                                </h3>
+                                <div className="mt-2 inline-flex items-center justify-center max-w-full">
+                                  <span className="text-xs font-medium text-blue-700 bg-blue-100/70 border border-blue-200/60 px-2.5 py-1 rounded-full text-center truncate">
+                                    {collab.role}
+                                  </span>
+                                </div>
+                              </div>
+                            </div>
+                          );
+
+                          return collab.id ? (
+                            <Link to={`/members/${collab.id}`} key={`${collab.id}-${index}`} className="block">
+                              {content}
+                            </Link>
+                          ) : (
+                            <div key={`collab-${index}`}>
+                              {content}
+                            </div>
+                          );
+                        })}
                     </div>
                 </div>
             </div>

@@ -18,34 +18,31 @@ const AnimatedLogo: React.FC = () => {
 const Header: React.FC = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
-  const navLinkClasses = "text-gray-600 hover:text-blue-600 transition-colors duration-300 px-3 py-2 rounded-md text-md font-medium";
-  const activeNavLinkClasses = "text-blue-600 font-semibold";
+  const navLinkClasses = "text-gray-600 hover:text-blue-600 hover:bg-blue-50/60 transition-all duration-200 px-3.5 py-2 rounded-xl text-sm font-semibold";
+  const activeNavLinkClasses = "text-blue-600 bg-blue-50 font-bold shadow-xs";
 
   return (
-    <header className="bg-white/80 sticky top-0 z-50 backdrop-blur-sm shadow-sm">
+    <header className="bg-white/85 sticky top-0 z-50 backdrop-blur-md border-b border-gray-100 shadow-xs">
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-20">
           <div className="flex items-center">
-            <NavLink to="/" className="flex items-center gap-1 text-blue-700">
-              <div className="w-12 h-12 flex items-center justify-center">
+            <NavLink to="/" className="flex items-center gap-3 group">
+              <div className="w-12 h-12 flex items-center justify-center shrink-0 group-hover:scale-105 transition-transform">
                  <AnimatedLogo />
               </div>
               <div>
-                <div className="text-lg font-bold">انجمن علمی مهندسی کامپیوتر</div>
-                <div className="text-sm text-gray-500 hidden sm:block">دانشگاه اصفهان</div>
+                <div className="text-base sm:text-lg font-black text-gray-900 group-hover:text-blue-600 transition-colors">انجمن علمی مهندسی کامپیوتر</div>
+                <div className="text-xs text-gray-500 font-medium">دانشگاه اصفهان</div>
               </div>
             </NavLink>
           </div>
-          <div className="hidden md:block">
-            <div className="ms-10 flex items-baseline space-s-4">
-              <NavLink to="/" className={({ isActive }) => `${navLinkClasses} ${isActive ? activeNavLinkClasses : ''}`} end>خانه</NavLink>
-              <NavLink to="/programs" className={({ isActive }) => `${navLinkClasses} ${isActive ? activeNavLinkClasses : ''}`}>برنامه‌ها</NavLink>
-              <NavLink to="/courses" className={({ isActive }) => `${navLinkClasses} ${isActive ? activeNavLinkClasses : ''}`}> دوره ها </NavLink>
-              <NavLink to="/jobs" className={({ isActive }) => `${navLinkClasses} ${isActive ? activeNavLinkClasses : ''}`}> کاریابی </NavLink>
-
-              <NavLink to="/members" className={({ isActive }) => `${navLinkClasses} ${isActive ? activeNavLinkClasses : ''}`}>اعضای انجمن</NavLink>
-              <NavLink to="/contact" className={({ isActive }) => `${navLinkClasses} ${isActive ? activeNavLinkClasses : ''}`}>تماس با ما</NavLink>
-            </div>
+          <div className="hidden md:flex items-center gap-1 lg:gap-2">
+            <NavLink to="/" className={({ isActive }) => `${navLinkClasses} ${isActive ? activeNavLinkClasses : ''}`} end>خانه</NavLink>
+            <NavLink to="/programs" className={({ isActive }) => `${navLinkClasses} ${isActive ? activeNavLinkClasses : ''}`}>برنامه‌ها</NavLink>
+            <NavLink to="/courses" className={({ isActive }) => `${navLinkClasses} ${isActive ? activeNavLinkClasses : ''}`}>دوره‌ها</NavLink>
+            <NavLink to="/jobs" className={({ isActive }) => `${navLinkClasses} ${isActive ? activeNavLinkClasses : ''}`}>کاریابی</NavLink>
+            <NavLink to="/members" className={({ isActive }) => `${navLinkClasses} ${isActive ? activeNavLinkClasses : ''}`}>اعضای انجمن</NavLink>
+            <NavLink to="/contact" className={({ isActive }) => `${navLinkClasses} ${isActive ? activeNavLinkClasses : ''}`}>تماس با ما</NavLink>
           </div>
           <div className="-ms-2 flex md:hidden">
             <button

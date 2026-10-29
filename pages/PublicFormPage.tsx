@@ -9,9 +9,6 @@ const PublicFormPage: React.FC = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
-  // Respondent info
-  const [respondentName, setRespondentName] = useState('');
-  const [respondentContact, setRespondentContact] = useState('');
 
   // Answers: questionId -> value
   const [answers, setAnswers] = useState<Record<string, any>>({});
@@ -173,8 +170,6 @@ const PublicFormPage: React.FC = () => {
     try {
       setSubmitting(true);
       const res = await submitPublicForm(id!, {
-        respondentName: respondentName.trim(),
-        respondentContact: respondentContact.trim(),
         answers,
       });
       setSubmittedResult({
@@ -263,12 +258,6 @@ const PublicFormPage: React.FC = () => {
             <span className="text-gray-400">شناسه پیگیری پاسخ:</span>
             <span className="font-mono font-bold text-gray-800">#{submittedResult.responseId}</span>
           </div>
-          {respondentName && (
-            <div className="flex justify-between items-center border-b border-gray-200/60 pb-2">
-              <span className="text-gray-400">نام شرکت‌کننده:</span>
-              <span className="font-bold text-gray-800">{respondentName}</span>
-            </div>
-          )}
           <div className="flex justify-between items-center">
             <span className="text-gray-400">زمان ثبت سیستم:</span>
             <span className="font-mono text-gray-700">{new Date().toLocaleDateString('fa-IR')} - {new Date().toLocaleTimeString('fa-IR', { hour: '2-digit', minute: '2-digit' })}</span>
@@ -291,8 +280,6 @@ const PublicFormPage: React.FC = () => {
               onClick={() => {
                 setAnswers({});
                 setSubmittedResult(null);
-                setRespondentName('');
-                setRespondentContact('');
                 setCurrentQuestionIndex(0);
                 setStepError(null);
                 if (form.timeLimitMin && form.timeLimitMin > 0) {
@@ -423,30 +410,6 @@ const PublicFormPage: React.FC = () => {
           </div>
         )}
 
-        {/* Optional Respondent Information Bar */}
-        <div className="bg-slate-50/70 border-b border-gray-200/80 px-6 sm:px-8 py-3.5 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
-          <div className="flex items-center gap-1.5 text-xs font-semibold text-gray-600">
-            <span>👤</span>
-            <span>مشخصات پاسخ‌دهنده (اختیاری):</span>
-          </div>
-          <div className="flex flex-wrap items-center gap-2">
-            <input
-              type="text"
-              value={respondentName}
-              onChange={(e) => setRespondentName(e.target.value)}
-              placeholder="نام و نام خانوادگی..."
-              className="bg-white border border-gray-300 rounded-xl px-3 py-1.5 text-xs text-gray-800 focus:outline-none focus:ring-1 focus:ring-blue-500 w-full sm:w-40"
-            />
-            <input
-              type="text"
-              dir="ltr"
-              value={respondentContact}
-              onChange={(e) => setRespondentContact(e.target.value)}
-              placeholder="تماس یا ایمیل..."
-              className="bg-white border border-gray-300 rounded-xl px-3 py-1.5 text-xs text-gray-800 focus:outline-none focus:ring-1 focus:ring-blue-500 font-mono text-right w-full sm:w-40"
-            />
-          </div>
-        </div>
 
         {/* Question Area */}
         <form onSubmit={handleSubmit} className="p-6 sm:p-8 space-y-6">

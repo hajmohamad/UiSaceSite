@@ -123,16 +123,7 @@ const AdminForms: React.FC = () => {
     setAllowMultiple(true);
     setSuccessMessage('از همراهی و پاسخ‌گویی شما سپاسگزاریم!');
     setTimeLimitMin(0);
-    setQuestions([
-      {
-        id: `q_${Date.now()}_1`,
-        title: 'نام و نام خانوادگی',
-        type: 'text',
-        required: false,
-        placeholder: 'نام خود را بنویسید',
-        order: 1,
-      },
-    ]);
+    setQuestions([]);
     setBuilderTab('questions');
     setBuilderOpen(true);
   };

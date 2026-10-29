@@ -24,6 +24,7 @@ import AdminRegistrations from './pages/admin/AdminRegistrations';
 import AdminMessages from './pages/admin/AdminMessages';
 import AdminFiles from './pages/admin/AdminFiles';
 import AdminForms from './pages/admin/AdminForms';
+import AdminMembers from './pages/admin/AdminMembers';
 import PublicFormPage from './pages/PublicFormPage';
 
 const PublicLayout: React.FC = () => {
@@ -66,6 +67,7 @@ const App: React.FC = () => {
           <Route element={<AdminLayout />}>
             <Route index element={<AdminDashboard />} />
             <Route path="programs" element={<AdminPrograms />} />
+            <Route path="members" element={<AdminMembers />} />
             <Route path="files" element={<AdminFiles />} />
             <Route path="forms" element={<AdminForms />} />
             <Route path="users" element={<AdminUsers />} />

@@ -7,8 +7,9 @@ import {
   uploadMedia,
   uploadAdminFiles,
   getAdminForms,
+  getAdminMembers,
 } from '../../services/adminApi';
-import type { Program, PorslineForm } from '../../types';
+import type { Program, PorslineForm, Member, ProgramCollaborator } from '../../types';
 import FilePickerModal from '../../components/admin/FilePickerModal';
 
 interface ProgramFormData {
@@ -68,6 +69,14 @@ const AdminPrograms: React.FC = () => {
   // Available Porsline forms for registration link
   const [availableForms, setAvailableForms] = useState<PorslineForm[]>([]);
 
+  // Association Members for Collaborators
+  const [membersList, setMembersList] = useState<Member[]>([]);
+  const [programCollaborators, setProgramCollaborators] = useState<ProgramCollaborator[]>([]);
+  const [selectedMemberId, setSelectedMemberId] = useState<number | ''>('');
+  const [collabRole, setCollabRole] = useState<string>('دبیر رویداد');
+  const [customCollabName, setCustomCollabName] = useState<string>('');
+  const [isCustomCollab, setIsCustomCollab] = useState<boolean>(false);
+
   // Success Notification
   const [toastMessage, setToastMessage] = useState<string | null>(null);
 
@@ -91,15 +100,19 @@ const AdminPrograms: React.FC = () => {
 
   useEffect(() => {
     loadPrograms();
-    const loadForms = async () => {
+    const loadFormsAndMembers = async () => {
       try {
-        const forms = await getAdminForms();
+        const [forms, members] = await Promise.all([
+          getAdminForms().catch(() => []),
+          getAdminMembers().catch(() => []),
+        ]);
         setAvailableForms(forms);
+        setMembersList(members);
       } catch (e) {
         // ignore
       }
     };
-    loadForms();
+    loadFormsAndMembers();
   }, []);
 
   const openCreateModal = () => {
@@ -108,6 +121,11 @@ const AdminPrograms: React.FC = () => {
     setSecondaryImages([]);
     setNewSecondaryUrl('');
     setShowRawUrlArea(false);
+    setProgramCollaborators([]);
+    setSelectedMemberId('');
+    setCollabRole('دبیر رویداد');
+    setCustomCollabName('');
+    setIsCustomCollab(false);
     setFormError(null);
     setModalOpen(true);
   };
@@ -118,6 +136,30 @@ const AdminPrograms: React.FC = () => {
     setSecondaryImages(existingImages);
     setNewSecondaryUrl('');
     setShowRawUrlArea(false);
+
+    // Initialize collaborators
+    if (prog.collaboratorDetails && prog.collaboratorDetails.length > 0) {
+      setProgramCollaborators(prog.collaboratorDetails);
+    } else if (prog.collaborators && prog.collaborators.length > 0) {
+      const mapped = prog.collaborators.map((id) => {
+        const found = membersList.find((m) => m.id === id);
+        return {
+          memberId: id,
+          name: found?.name || 'همکار رویداد',
+          role: found?.memberships?.[0]?.position || 'همکار رویداد',
+          imageUrl: found?.imageUrl,
+        };
+      });
+      setProgramCollaborators(mapped);
+    } else {
+      setProgramCollaborators([]);
+    }
+
+    setSelectedMemberId('');
+    setCollabRole('دبیر رویداد');
+    setCustomCollabName('');
+    setIsCustomCollab(false);
+
     setFormData({
       title: prog.title || '',
       date: prog.date || '',
@@ -133,6 +175,58 @@ const AdminPrograms: React.FC = () => {
     });
     setFormError(null);
     setModalOpen(true);
+  };
+
+  const handleAddCollaborator = () => {
+    if (isCustomCollab) {
+      if (!customCollabName.trim()) {
+        alert('لطفاً نام فرد مهمان یا همکار را وارد کنید');
+        return;
+      }
+      setProgramCollaborators([
+        ...programCollaborators,
+        {
+          memberId: 0,
+          name: customCollabName.trim(),
+          role: collabRole.trim() || 'کادر رویداد',
+        },
+      ]);
+      setCustomCollabName('');
+    } else {
+      if (!selectedMemberId) {
+        alert('لطفاً یک عضو از لیست اعضای انجمن انتخاب کنید');
+        return;
+      }
+      const member = membersList.find((m) => m.id === Number(selectedMemberId));
+      if (!member) return;
+
+      const alreadyExists = programCollaborators.some((c) => c.memberId === member.id);
+      if (alreadyExists) {
+        alert('این فرد قبلاً به تیم این رویداد اضافه شده است.');
+        return;
+      }
+
+      setProgramCollaborators([
+        ...programCollaborators,
+        {
+          memberId: member.id,
+          name: member.name,
+          role: collabRole.trim() || 'همکار رویداد',
+          imageUrl: member.imageUrl,
+        },
+      ]);
+      setSelectedMemberId('');
+    }
+  };
+
+  const handleRemoveCollaborator = (index: number) => {
+    setProgramCollaborators(programCollaborators.filter((_, i) => i !== index));
+  };
+
+  const handleUpdateCollaboratorRole = (index: number, newRole: string) => {
+    const updated = [...programCollaborators];
+    updated[index].role = newRole;
+    setProgramCollaborators(updated);
   };
 
   const handleImageUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -168,7 +262,7 @@ const AdminPrograms: React.FC = () => {
 
     try {
       setUploadingSecondary(true);
-      const fileArray = Array.from(fileList);
+      const fileArray = Array.from(fileList) as File[];
       const res = await uploadAdminFiles(fileArray);
       const newUrls = res.files.map((f) => f.url);
       const updated = [...secondaryImages, ...newUrls];
@@ -251,8 +345,8 @@ const AdminPrograms: React.FC = () => {
         price: Number(formData.price) || 0,
         durationHours: Number(formData.durationHours) || 0,
         status: formData.status,
-        registrationLink: formData.registrationLink.trim(),
-        collaborators: editingProgram?.collaborators || [],
+        collaborators: programCollaborators.map((c) => c.memberId).filter((id) => id > 0),
+        collaboratorDetails: programCollaborators,
         sponsors: editingProgram?.sponsors || [],
         gallery: {
           images: parsedGalleryImages,
@@ -931,6 +1025,152 @@ const AdminPrograms: React.FC = () => {
                     ))}
                   </div>
                 )}
+              </div>
+
+              {/* Collaborators & Team in this event */}
+              <div className="bg-slate-900/60 p-4 rounded-2xl border border-slate-700/80 space-y-3">
+                <div className="flex items-center justify-between">
+                  <div>
+                    <label className="text-xs font-bold text-slate-200 flex items-center gap-2">
+                      <span>👥</span>
+                      <span>تیم برگزاری و همکاران رویداد</span>
+                    </label>
+                    <p className="text-[11px] text-slate-400 mt-0.5">
+                      افرادی که در برگزاری این رویداد حضور داشته‌اند را همراه با نقش آن‌ها مشخص کنید (عکس و وظیفه آن‌ها در صفحه رویداد نمایش می‌یابد).
+                    </p>
+                  </div>
+                  <span className="text-[11px] font-mono text-blue-400 bg-blue-500/10 border border-blue-500/30 px-2 py-0.5 rounded-lg shrink-0">
+                    {programCollaborators.length} همکار
+                  </span>
+                </div>
+
+                {/* Added Collaborators List */}
+                {programCollaborators.length === 0 ? (
+                  <div className="py-4 text-center text-xs text-slate-500 bg-slate-950/40 rounded-xl border border-dashed border-slate-800">
+                    هنوز فرد یا کادری برای این رویداد ثبت نشده است. از فرم زیر اضافه کنید.
+                  </div>
+                ) : (
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 max-h-48 overflow-y-auto">
+                    {programCollaborators.map((collab, index) => {
+                      const member = collab.memberId ? membersList.find((m) => m.id === collab.memberId) : undefined;
+                      const avatar = collab.imageUrl || member?.imageUrl || 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&q=80&w=250';
+
+                      return (
+                        <div
+                          key={`${collab.memberId}-${index}`}
+                          className="flex items-center justify-between gap-2 bg-slate-800 p-2.5 rounded-xl border border-slate-700"
+                        >
+                          <div className="flex items-center gap-2.5 min-w-0">
+                            <img
+                              src={avatar}
+                              alt={collab.name}
+                              className="w-8 h-8 rounded-full object-cover shrink-0 border border-slate-600"
+                              onError={(e) => {
+                                (e.target as HTMLImageElement).src = 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&q=80&w=250';
+                              }}
+                            />
+                            <div className="min-w-0">
+                              <span className="block text-xs font-bold text-white truncate">
+                                {collab.name || member?.name || 'همکار'}
+                              </span>
+                              <input
+                                type="text"
+                                value={collab.role}
+                                onChange={(e) => handleUpdateCollaboratorRole(index, e.target.value)}
+                                placeholder="وظیفه در رویداد..."
+                                className="mt-0.5 bg-slate-900 border border-slate-700/80 rounded px-1.5 py-0.5 text-[10px] text-blue-300 w-full focus:outline-none focus:border-blue-500"
+                              />
+                            </div>
+                          </div>
+                          <button
+                            type="button"
+                            onClick={() => handleRemoveCollaborator(index)}
+                            className="text-slate-400 hover:text-rose-400 p-1 text-xs shrink-0"
+                            title="حذف از تیم این رویداد"
+                          >
+                            ✕
+                          </button>
+                        </div>
+                      );
+                    })}
+                  </div>
+                )}
+
+                {/* Add Collaborator Row */}
+                <div className="pt-2 border-t border-slate-800 space-y-2">
+                  <div className="flex items-center justify-between">
+                    <span className="text-[11px] font-semibold text-slate-300">افزودن همکار / کادر جدید:</span>
+                    <button
+                      type="button"
+                      onClick={() => setIsCustomCollab(!isCustomCollab)}
+                      className="text-[10px] text-blue-400 hover:underline"
+                    >
+                      {isCustomCollab ? '← انتخاب از اعضای انجمن' : '+ افزودن فرد آزاد / مهمان (خارج از انجمن)'}
+                    </button>
+                  </div>
+
+                  <div className="grid grid-cols-1 sm:grid-cols-12 gap-2">
+                    <div className="sm:col-span-5">
+                      {isCustomCollab ? (
+                        <input
+                          type="text"
+                          value={customCollabName}
+                          onChange={(e) => setCustomCollabName(e.target.value)}
+                          placeholder="نام و نام خانوادگی فرد مهمان..."
+                          className="w-full bg-slate-800 border border-slate-700 rounded-xl p-2 text-xs text-white focus:outline-none focus:ring-1 focus:ring-blue-500"
+                        />
+                      ) : (
+                        <select
+                          value={selectedMemberId}
+                          onChange={(e) => setSelectedMemberId(e.target.value ? Number(e.target.value) : '')}
+                          className="w-full bg-slate-800 border border-slate-700 rounded-xl p-2 text-xs text-white focus:outline-none focus:ring-1 focus:ring-blue-500"
+                        >
+                          <option value="">-- انتخاب عضو انجمن --</option>
+                          {membersList.map((m) => (
+                            <option key={m.id} value={m.id}>
+                              {m.name} ({m.memberships?.[0]?.position || 'عضو'})
+                            </option>
+                          ))}
+                        </select>
+                      )}
+                    </div>
+
+                    <div className="sm:col-span-4">
+                      <input
+                        type="text"
+                        value={collabRole}
+                        onChange={(e) => setCollabRole(e.target.value)}
+                        placeholder="وظیفه در رویداد (مثلاً دبیر، مدرس)..."
+                        className="w-full bg-slate-800 border border-slate-700 rounded-xl p-2 text-xs text-white focus:outline-none focus:ring-1 focus:ring-blue-500"
+                      />
+                    </div>
+
+                    <div className="sm:col-span-3">
+                      <button
+                        type="button"
+                        onClick={handleAddCollaborator}
+                        className="w-full h-full py-2 px-3 bg-blue-600 hover:bg-blue-500 text-white rounded-xl text-xs font-bold transition-colors flex items-center justify-center gap-1"
+                      >
+                        <span>+ افزودن به رویداد</span>
+                      </button>
+                    </div>
+                  </div>
+
+                  {/* Quick role suggestions */}
+                  <div className="flex flex-wrap items-center gap-1 pt-1">
+                    <span className="text-[10px] text-slate-500">پیشنهادات وظیفه:</span>
+                    {['دبیر رویداد', 'مدرس کارگاه', 'سخنران', 'منتور', 'مدیر اجرایی', 'کادر اجرایی', 'طراح گرافیک', 'عکاس'].map((r) => (
+                      <button
+                        key={r}
+                        type="button"
+                        onClick={() => setCollabRole(r)}
+                        className="text-[10px] bg-slate-800 hover:bg-slate-700 text-slate-300 px-2 py-0.5 rounded-lg border border-slate-700/80 transition-colors"
+                      >
+                        {r}
+                      </button>
+                    ))}
+                  </div>
+                </div>
               </div>
 
               {/* Submit Buttons */}

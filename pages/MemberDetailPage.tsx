@@ -20,7 +20,8 @@ const MemberDetailPage: React.FC = () => {
               const programYear = new Date(program.dateISO).getFullYear();
               const membershipForYear = data.member.memberships?.find(m => m.year === programYear);
               const mostRecentMembership = data.member.memberships ? [...data.member.memberships].sort((a, b) => b.year - a.year)[0] : undefined;
-              const displayPosition = membershipForYear?.position || mostRecentMembership?.position || 'همکار';
+              const specificRole = program.collaboratorDetails?.find((d: any) => d.memberId === data.member.id)?.role;
+              const displayPosition = specificRole || membershipForYear?.position || mostRecentMembership?.position || 'همکار رویداد';
               return { ...program, displayPosition };
             }).sort((a: any, b: any) => new Date(b.dateISO).getTime() - new Date(a.dateISO).getTime());
             setCollaboratedPrograms(progs);

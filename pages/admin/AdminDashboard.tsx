@@ -7,8 +7,9 @@ import {
   getAdminUsers,
   getAdminForms,
   getAdminFiles,
+  getAdminMembers,
 } from '../../services/adminApi';
-import type { Program, Registration, ContactMessage, AdminUser, PorslineForm } from '../../types';
+import type { Program, Registration, ContactMessage, AdminUser, PorslineForm, Member } from '../../types';
 
 const AdminDashboard: React.FC = () => {
   const [loading, setLoading] = useState(true);
@@ -17,19 +18,21 @@ const AdminDashboard: React.FC = () => {
   const [messages, setMessages] = useState<ContactMessage[]>([]);
   const [users, setUsers] = useState<AdminUser[]>([]);
   const [forms, setForms] = useState<PorslineForm[]>([]);
+  const [members, setMembers] = useState<Member[]>([]);
   const [filesCount, setFilesCount] = useState<number>(0);
 
   useEffect(() => {
     async function loadData() {
       try {
         setLoading(true);
-        const [programsData, regsData, msgsData, usersData, formsData, filesData] = await Promise.all([
+        const [programsData, regsData, msgsData, usersData, formsData, filesData, membersData] = await Promise.all([
           getAdminPrograms().catch(() => []),
           getAdminRegistrations().catch(() => []),
           getAdminContactMessages().catch(() => []),
           getAdminUsers().catch(() => []),
           getAdminForms().catch(() => []),
           getAdminFiles().catch(() => ({ files: [], total: 0 })),
+          getAdminMembers().catch(() => []),
         ]);
 
         setPrograms(programsData);
@@ -37,6 +40,7 @@ const AdminDashboard: React.FC = () => {
         setMessages(msgsData);
         setUsers(usersData);
         setForms(formsData);
+        setMembers(membersData);
         setFilesCount(filesData.total || (filesData.files && filesData.files.length) || 0);
       } catch (err) {
         console.error('Error loading dashboard data:', err);
@@ -116,7 +120,7 @@ const AdminDashboard: React.FC = () => {
       </div>
 
       {/* Metric Cards */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-6 gap-4">
+      <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-7 gap-4">
         {/* Card 1: Programs */}
         <div className="bg-slate-800/80 border border-slate-700/60 rounded-2xl p-4 shadow-lg flex flex-col justify-between">
           <div>
@@ -251,16 +255,37 @@ const AdminDashboard: React.FC = () => {
               <span className="text-2xl font-black text-white">{messages.length}</span>
               {unreadMessagesCount > 0 ? (
                 <span className="text-[10px] text-rose-400 font-semibold bg-rose-500/10 px-1.5 py-0.5 rounded">
-                  {unreadMessagesCount} خوانده نشده
+                  {unreadMessagesCount} جدید
                 </span>
               ) : (
-                <span className="text-[10px] text-emerald-400">بدون پیام جدید</span>
+                <span className="text-[10px] text-emerald-400">بدون پیام</span>
               )}
             </div>
           </div>
           <div className="mt-3 pt-2.5 border-t border-slate-700/50">
             <Link to="/admin/messages" className="text-xs text-emerald-400 hover:text-emerald-300">
-              مشاهده صندوق پیام ←
+              صندوق پیام ←
+            </Link>
+          </div>
+        </div>
+
+        {/* Card 7: Members & Councils */}
+        <div className="bg-slate-800/80 border border-slate-700/60 rounded-2xl p-4 shadow-lg flex flex-col justify-between">
+          <div>
+            <div className="flex items-center justify-between">
+              <span className="text-slate-400 text-xs font-medium">اعضای انجمن</span>
+              <div className="w-8 h-8 rounded-lg bg-pink-500/10 text-pink-400 flex items-center justify-center text-xs">
+                👥
+              </div>
+            </div>
+            <div className="mt-3 flex items-baseline gap-1.5">
+              <span className="text-2xl font-black text-white">{members.length}</span>
+              <span className="text-[10px] text-slate-400">عضو فعال</span>
+            </div>
+          </div>
+          <div className="mt-3 pt-2.5 border-t border-slate-700/50">
+            <Link to="/admin/members" className="text-xs text-pink-400 hover:text-pink-300">
+              مدیریت اعضا و دوره‌ها ←
             </Link>
           </div>
         </div>

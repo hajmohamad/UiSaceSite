@@ -67,11 +67,23 @@ func (h *MemberHandler) GetMemberByID(c *gin.Context) {
 
 	var collaboratedPrograms []models.Program
 	for _, p := range allPrograms {
+		isCollab := false
 		for _, colId := range p.Collaborators {
 			if colId == id {
-				collaboratedPrograms = append(collaboratedPrograms, p)
+				isCollab = true
 				break
 			}
+		}
+		if !isCollab {
+			for _, detail := range p.CollaboratorDetails {
+				if detail.MemberID == id {
+					isCollab = true
+					break
+				}
+			}
+		}
+		if isCollab {
+			collaboratedPrograms = append(collaboratedPrograms, p)
 		}
 	}
 

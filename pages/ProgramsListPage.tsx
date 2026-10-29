@@ -5,147 +5,315 @@ import type { Program } from '../types';
 
 const ProgramCard: React.FC<{ program: Program }> = ({ program }) => {
   const isUpcoming = program.status === 'upcoming';
+  const hasCollabs = (program.collaboratorDetails?.length || 0) > 0 || (program.collaborators?.length || 0) > 0;
+  const collabCount = program.collaboratorDetails?.length || program.collaborators?.length || 0;
 
-return (
-  <Link 
-    to={`/programs/${program.id}`} 
-    className="flex flex-col group bg-white/30 backdrop-blur-lg rounded-xl shadow-md overflow-hidden transition-all duration-300 ease-in-out hover:shadow-xl hover:-translate-y-1.5 border border-white/40"
-  >
-    {/* قسمت تصویر بزرگ‌تر */}
-  <div className="relative aspect-[4/3] overflow-hidden bg-gray-50 flex items-center justify-center">
-  <img 
-    className="w-full h-full object-contain transition-transform duration-500 group-hover:scale-105" 
-    src={program.imageUrl} 
-    alt={program.title} 
-  />
-  <div className={`absolute top-3 right-3 text-xs font-bold px-3 py-1.5 rounded-full text-white shadow-lg ${isUpcoming ? 'bg-green-500' : 'bg-gray-500'}`}>
-    {isUpcoming ? 'در پیش رو' : 'پایان یافته'}
-  </div>
-</div>
+  return (
+    <Link
+      to={`/programs/${program.id}`}
+      className="flex flex-col group bg-white rounded-2xl shadow-md border border-gray-200/80 overflow-hidden hover:shadow-2xl hover:-translate-y-1.5 transition-all duration-300 relative"
+    >
+      {/* Image Banner */}
+      <div className="relative aspect-[16/10] overflow-hidden bg-slate-900 flex items-center justify-center">
+        <img
+          className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+          src={program.imageUrl || 'https://images.unsplash.com/photo-1517694712202-14dd9538aa97?auto=format&fit=crop&q=80&w=600'}
+          alt={program.title}
+          onError={(e) => {
+            (e.target as HTMLImageElement).src =
+              'https://images.unsplash.com/photo-1517694712202-14dd9538aa97?auto=format&fit=crop&q=80&w=600';
+          }}
+        />
 
-    
-    <div className="p-6 flex flex-col flex-grow"> {/* کمی padding بیشتر */}
-      <h3 className="text-lg font-bold text-gray-800 leading-tight mb-2 h-14 line-clamp-2" title={program.title}>{program.title}</h3>
-      <p className="text-sm text-gray-500 mb-4 font-semibold">{program.date}</p>
-      <p className="text-gray-600 flex-grow mb-5 text-sm line-clamp-3">{program.shortDescription}</p>
-      
-      <div className="mt-auto pt-4 border-t border-gray-100 flex justify-end items-center">
-        <div className="text-sm font-bold text-blue-600 group-hover:text-blue-700 transition-colors duration-300 flex items-center gap-2">
-          <span>مشاهده جزئیات</span>
-          <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 transition-transform duration-300 group-hover:-translate-x-1" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2.5">
-            <path strokeLinecap="round" strokeLinejoin="round" d="M15 19l-7-7 7-7" />
-          </svg>
+        {/* Top Badges */}
+        <div className="absolute top-3 right-3 flex items-center gap-1.5 z-10">
+          <span
+            className={`text-[11px] font-bold px-3 py-1 rounded-full shadow-md backdrop-blur-md ${
+              isUpcoming
+                ? 'bg-emerald-500/90 text-white border border-emerald-400/40'
+                : 'bg-slate-800/80 text-slate-200 border border-slate-700'
+            }`}
+          >
+            {isUpcoming ? 'در پیش رو' : 'پایان یافته'}
+          </span>
+        </div>
+
+        {/* Price Tag if available */}
+        <div className="absolute bottom-3 left-3 z-10">
+          <span className="text-[11px] font-bold px-2.5 py-1 rounded-lg bg-black/60 text-white backdrop-blur-md border border-white/20">
+            {program.price && program.price > 0
+              ? `${program.price.toLocaleString('fa-IR')} تومان`
+              : 'رایگان'}
+          </span>
         </div>
       </div>
-    </div>
-  </Link>
-);
 
+      {/* Card Content */}
+      <div className="p-6 flex flex-col flex-grow">
+        {/* Date & Duration */}
+        <div className="flex items-center justify-between text-xs text-gray-500 font-semibold mb-2.5">
+          <span className="flex items-center gap-1 text-blue-600 bg-blue-50 px-2.5 py-1 rounded-lg">
+            <span>🗓️</span>
+            <span>{program.date}</span>
+          </span>
+          {program.durationHours && program.durationHours > 0 && (
+            <span className="flex items-center gap-1 text-gray-500">
+              <span>⏱️</span>
+              <span>{program.durationHours} ساعت</span>
+            </span>
+          )}
+        </div>
+
+        {/* Title */}
+        <h3
+          className="text-base sm:text-lg font-bold text-gray-900 leading-snug mb-3 group-hover:text-blue-600 transition-colors line-clamp-2"
+          title={program.title}
+        >
+          {program.title}
+        </h3>
+
+        {/* Short Description */}
+        <p className="text-gray-600 text-xs sm:text-sm line-clamp-2 leading-relaxed flex-grow mb-4">
+          {program.shortDescription}
+        </p>
+
+        {/* Card Footer: Collaborators & Read more */}
+        <div className="mt-auto pt-3.5 border-t border-gray-100 flex items-center justify-between">
+          <div>
+            {hasCollabs && (
+              <span className="text-[11px] font-medium text-slate-500 flex items-center gap-1 bg-slate-100 px-2.5 py-1 rounded-full">
+                <span>👥</span>
+                <span>{collabCount} همکار</span>
+              </span>
+            )}
+          </div>
+
+          <div className="text-xs font-bold text-blue-600 group-hover:text-blue-700 flex items-center gap-1 transition-all">
+            <span>مشاهده جزئیات</span>
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              className="h-3.5 w-3.5 transition-transform duration-300 group-hover:-translate-x-1"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+              strokeWidth="2.5"
+            >
+              <path strokeLinecap="round" strokeLinejoin="round" d="M15 19l-7-7 7-7" />
+            </svg>
+          </div>
+        </div>
+      </div>
+    </Link>
+  );
 };
 
 const ProgramsListPage: React.FC = () => {
   const [programsList, setProgramsList] = useState<Program[]>([]);
   const [selectedYear, setSelectedYear] = useState<number | 'all'>('all');
+  const [statusFilter, setStatusFilter] = useState<'all' | 'upcoming' | 'past'>('all');
   const [searchQuery, setSearchQuery] = useState('');
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     let isMounted = true;
-    getPrograms().then(data => {
-      if (isMounted) setProgramsList(data);
+    setLoading(true);
+    getPrograms().then((data) => {
+      if (isMounted) {
+        setProgramsList(data || []);
+        setLoading(false);
+      }
     });
     return () => {
       isMounted = false;
     };
   }, []);
-  
-  const sortedPrograms = useMemo(() => 
-    [...programsList].sort((a, b) => new Date(b.dateISO).getTime() - new Date(a.dateISO).getTime()), 
-  [programsList]);
 
+  const sortedPrograms = useMemo(() => {
+    return [...programsList].sort(
+      (a, b) => new Date(b.dateISO).getTime() - new Date(a.dateISO).getTime()
+    );
+  }, [programsList]);
+
+  // Extract years from dateISO and Jalali date text
   const programYears = useMemo(() => {
-    const years = new Set(programsList.map(p => new Date(p.dateISO).getFullYear()).filter(Boolean));
+    const years = new Set<number>();
+    programsList.forEach((p) => {
+      if (p.dateISO) {
+        const y = new Date(p.dateISO).getFullYear();
+        if (y) years.add(y);
+      }
+    });
     return Array.from(years).sort((a, b) => b - a);
   }, [programsList]);
 
   const filteredPrograms = useMemo(() => {
-    let programs = sortedPrograms;
+    let list = sortedPrograms;
+
+    if (statusFilter !== 'all') {
+      list = list.filter((p) => p.status === statusFilter);
+    }
 
     if (selectedYear !== 'all') {
-      programs = programs.filter(p => new Date(p.dateISO).getFullYear() === selectedYear);
+      list = list.filter((p) => {
+        if (!p.dateISO) return false;
+        return new Date(p.dateISO).getFullYear() === selectedYear;
+      });
     }
 
     if (searchQuery.trim() !== '') {
-      const lowercasedQuery = searchQuery.toLowerCase();
-      programs = programs.filter(p =>
-        p.title.toLowerCase().includes(lowercasedQuery) ||
-        p.shortDescription.toLowerCase().includes(lowercasedQuery)
+      const q = searchQuery.toLowerCase();
+      list = list.filter(
+        (p) =>
+          p.title.toLowerCase().includes(q) ||
+          p.shortDescription.toLowerCase().includes(q) ||
+          (p.date && p.date.includes(q))
       );
     }
 
-    return programs;
-  }, [selectedYear, sortedPrograms, searchQuery]);
+    return list;
+  }, [selectedYear, statusFilter, sortedPrograms, searchQuery]);
 
   return (
-    <div>
-      <h1 className="text-3xl font-extrabold text-gray-900 mb-2 border-b-4 border-blue-500 pb-2 inline-block">
-        برنامه‌ها و رویدادها
-      </h1>
-      <p className="text-lg text-gray-600 mb-8">
-        لیست کارگاه‌ها، سمینارها و مسابقات برگزار شده توسط انجمن.
-      </p>
-
-      {/* Filters Section */}
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-8">
-        {/* Search Bar */}
-        <div className="relative">
-          <input
-            type="text"
-            placeholder="جستجو در عنوان یا توضیحات..."
-            value={searchQuery}
-            onChange={(e) => setSearchQuery(e.target.value)}
-            className="w-full px-4 py-3 pl-10 rounded-lg shadow-sm border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500"
-          />
-          <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-            <svg className="h-5 w-5 text-gray-400" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
-            </svg>
+    <div className="space-y-8">
+      {/* Header */}
+      <div className="flex flex-col md:flex-row md:items-end justify-between gap-4 pb-6 border-b border-gray-200">
+        <div>
+          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-blue-50 text-blue-700 text-xs font-bold mb-3">
+            <span>🚀</span>
+            <span>رویدادهای علمی، کارگاه‌ها و مسابقات</span>
           </div>
+          <h1 className="text-3xl md:text-4xl font-black text-gray-900 tracking-tight">
+            برنامه‌ها و رویدادهای انجمن
+          </h1>
+          <p className="text-sm md:text-base text-gray-600 mt-2 max-w-2xl">
+            آرشیو کامل رویدادها، بوت‌کمپ‌ها، دوره‌های تخصصی و کارگاه‌های عملی برگزار شده در دانشگاه اصفهان.
+          </p>
         </div>
-        {/* Year Filter */}
-        <div className="bg-white p-2 rounded-lg shadow-sm border border-gray-200 flex items-center justify-center space-s-1 flex-wrap">
-          <button
-            onClick={() => setSelectedYear('all')}
-            className={`px-3 py-2 text-sm font-medium rounded-md transition-colors duration-200 flex-grow ${
-              selectedYear === 'all' ? 'bg-blue-600 text-white shadow' : 'text-gray-600 hover:bg-gray-100'
-            }`}
-          >
-            همه
-          </button>
-          {programYears.map(year => (
-            <button
-              key={year}
-              onClick={() => setSelectedYear(year)}
-              className={`px-3 py-2 text-sm font-medium rounded-md transition-colors duration-200 flex-grow ${
-                selectedYear === year ? 'bg-blue-600 text-white shadow' : 'text-gray-600 hover:bg-gray-100'
-              }`}
-            >
-              {year}
-            </button>
-          ))}
+
+        <div className="flex items-center gap-2 shrink-0">
+          <span className="text-xs font-bold text-gray-500 bg-gray-100 px-3.5 py-1.5 rounded-full">
+            {programsList.length} برنامه ثبت‌شده
+          </span>
+          <span className="text-xs font-bold text-emerald-600 bg-emerald-50 px-3.5 py-1.5 rounded-full">
+            {programsList.filter((p) => p.status === 'upcoming').length} در پیش‌رو
+          </span>
         </div>
       </div>
 
+      {/* Filter and Search Bar */}
+      <div className="bg-white p-4 rounded-2xl shadow-sm border border-gray-200/80 space-y-3">
+        {/* Status Filter Tabs & Search */}
+        <div className="flex flex-col md:flex-row items-center justify-between gap-3">
+          {/* Status Tabs */}
+          <div className="flex items-center gap-1.5 bg-gray-100 p-1 rounded-xl w-full md:w-auto">
+            <button
+              onClick={() => setStatusFilter('all')}
+              className={`flex-1 md:flex-initial px-4 py-2 rounded-lg text-xs font-bold transition-all ${
+                statusFilter === 'all'
+                  ? 'bg-white text-gray-900 shadow-xs'
+                  : 'text-gray-600 hover:text-gray-900'
+              }`}
+            >
+              همه رویدادها ({programsList.length})
+            </button>
+            <button
+              onClick={() => setStatusFilter('upcoming')}
+              className={`flex-1 md:flex-initial px-4 py-2 rounded-lg text-xs font-bold transition-all ${
+                statusFilter === 'upcoming'
+                  ? 'bg-emerald-500 text-white shadow-xs'
+                  : 'text-gray-600 hover:text-gray-900'
+              }`}
+            >
+              پیش‌رو ({programsList.filter((p) => p.status === 'upcoming').length})
+            </button>
+            <button
+              onClick={() => setStatusFilter('past')}
+              className={`flex-1 md:flex-initial px-4 py-2 rounded-lg text-xs font-bold transition-all ${
+                statusFilter === 'past'
+                  ? 'bg-slate-800 text-white shadow-xs'
+                  : 'text-gray-600 hover:text-gray-900'
+              }`}
+            >
+              آرشیو گذشته ({programsList.filter((p) => p.status === 'past').length})
+            </button>
+          </div>
 
-      {filteredPrograms.length > 0 ? (
+          {/* Search Box */}
+          <div className="relative w-full md:w-80">
+            <input
+              type="text"
+              placeholder="جستجو در عنوان یا توضیحات..."
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              className="w-full bg-slate-50 border border-gray-200 rounded-xl py-2.5 pr-10 pl-4 text-xs text-gray-800 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500"
+            />
+            <svg
+              className="h-4 w-4 text-gray-400 absolute right-3.5 top-3.5"
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
+              />
+            </svg>
+          </div>
+        </div>
+
+        {/* Years Filter Row */}
+        {programYears.length > 0 && (
+          <div className="flex items-center gap-1.5 overflow-x-auto pt-2 border-t border-gray-100">
+            <span className="text-xs font-bold text-gray-400 px-2 shrink-0">فیلتر سال:</span>
+            <button
+              onClick={() => setSelectedYear('all')}
+              className={`px-3 py-1.5 rounded-xl text-xs font-bold transition-all shrink-0 ${
+                selectedYear === 'all'
+                  ? 'bg-blue-600 text-white shadow-sm'
+                  : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+              }`}
+            >
+              همه سال‌ها
+            </button>
+            {programYears.map((year) => (
+              <button
+                key={year}
+                onClick={() => setSelectedYear(year)}
+                className={`px-3 py-1.5 rounded-xl text-xs font-bold transition-all shrink-0 ${
+                  selectedYear === year
+                    ? 'bg-blue-600 text-white shadow-sm'
+                    : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                }`}
+              >
+                سال {year}
+              </button>
+            ))}
+          </div>
+        )}
+      </div>
+
+      {/* Programs Grid */}
+      {loading ? (
+        <div className="py-20 text-center">
+          <div className="w-10 h-10 border-4 border-blue-600 border-t-transparent rounded-full animate-spin mx-auto mb-3"></div>
+          <p className="text-xs text-gray-500 font-medium">در حال دریافت رویدادها...</p>
+        </div>
+      ) : filteredPrograms.length > 0 ? (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
           {filteredPrograms.map((program) => (
             <ProgramCard key={program.id} program={program} />
           ))}
         </div>
       ) : (
-        <div className="text-center py-16 bg-white rounded-lg shadow-md border">
-            <h3 className="text-xl font-bold text-gray-700">نتیجه‌ای یافت نشد</h3>
-            <p className="text-gray-500 mt-2">هیچ برنامه‌ای با این مشخصات یافت نشد. لطفا جستجوی خود را تغییر دهید.</p>
+        <div className="text-center py-16 bg-white rounded-2xl shadow-sm border border-gray-200 p-8">
+          <span className="text-4xl block mb-2">🔍</span>
+          <h3 className="text-lg font-bold text-gray-800">هیچ رویدادی یافت نشد</h3>
+          <p className="text-gray-500 text-xs mt-1">
+            با فیلترهای انتخابی برنامه‌ای پیدا نشد. لطفاً فیلتر سال یا کلمه جستجو را تغییر دهید.
+          </p>
         </div>
       )}
     </div>
