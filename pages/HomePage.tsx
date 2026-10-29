@@ -1,11 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { getPrograms, getMembers, getStats } from '../services/api';
-import type { Program, Member } from '../types';
+import { getPrograms, getMembers, getStats, getCourses } from '../services/api';
+import type { Program, Member, Course } from '../types';
 
 const HomePage: React.FC = () => {
   const [programs, setPrograms] = useState<Program[]>([]);
   const [members, setMembers] = useState<Member[]>([]);
+  const [courses, setCourses] = useState<Course[]>([]);
   const [stats, setStats] = useState({
     membersCount: 0,
     programsCount: 0,
@@ -17,10 +18,13 @@ const HomePage: React.FC = () => {
   useEffect(() => {
     let isMounted = true;
     getPrograms().then(data => {
-      if (isMounted) setPrograms(data);
+      if (isMounted) setPrograms(data || []);
     });
     getMembers().then(data => {
-      if (isMounted) setMembers(data);
+      if (isMounted) setMembers(data || []);
+    });
+    getCourses().then(data => {
+      if (isMounted) setCourses(data || []);
     });
     getStats().then(data => {
       if (isMounted) setStats(data);
@@ -40,23 +44,41 @@ const HomePage: React.FC = () => {
     .flatMap(p => p.gallery!.images)
     .slice(0, 8);
 
+  const topCourses = courses.slice(0, 3);
+
   return (
     <div className="space-y-24">
       {/* Hero Section */}
       <div
-        className="relative bg-cover bg-center rounded-2xl shadow-xl overflow-hidden"
-        style={{ backgroundImage: `url('http://storage.ghavishomard.ir/programs_gallery/2025-09-27%2004.45.46.jpg')`, minHeight: '500px' }}
+        className="relative bg-cover bg-center rounded-3xl shadow-2xl overflow-hidden border border-slate-200/50"
+        style={{
+          backgroundImage: `linear-gradient(to bottom, rgba(15, 23, 42, 0.75), rgba(15, 23, 42, 0.92)), url('http://storage.ghavishomard.ir/programs_gallery/2025-09-27%2004.45.46.jpg')`,
+          minHeight: '520px',
+        }}
       >
-        <div className="absolute inset-0 bg-gradient-to-t from-black/80 to-black/30 flex flex-col items-center justify-center text-center p-6">
-          <h1 className="text-4xl md:text-5xl lg:text-6xl font-extrabold text-white leading-tight mb-4 animate-fade-in-down">
-            به انجمن علمی مهندسی کامپیوتر خوش آمدید
+        <div className="absolute inset-0 flex flex-col items-center justify-center text-center p-6 md:p-12">
+          {/* Badge */}
+
+
+          <h1 className="text-3xl sm:text-5xl lg:text-6xl font-black text-white leading-tight mb-5 max-w-4xl tracking-tight">
+            انجمن علمی مهندسی کامپیوتر
           </h1>
-          <p className="text-lg md:text-xl text-gray-200 max-w-3xl mb-8 animate-fade-in-up" style={{ animationDelay: '0.3s' }}>
-            مکانی برای رشد، یادگیری و همکاری دانشجویان علاقه‌مند به دنیای کامپیوتر و فناوری.
+          <p className="text-base sm:text-xl text-slate-200 max-w-2xl mb-10 leading-relaxed font-normal">
+            بزرگ‌ترین بستر دانشجویی برای یادگیری برنامه‌نویسی، شبکه‌سازی، کارگاه‌های صنعتی و پروژه‌های نوآورانه.
           </p>
-          <div className="animate-fade-in-up" style={{ animationDelay: '0.6s' }}>
-             <Link to="/programs" className="bg-blue-600 text-white font-bold py-3 px-8 rounded-lg hover:bg-blue-700 transition-transform transform hover:scale-105 duration-300 shadow-lg">
-                مشاهده آخرین برنامه‌ها
+
+          <div className="flex flex-wrap items-center justify-center gap-4">
+             <Link
+               to="/programs"
+               className="bg-blue-600 hover:bg-blue-500 text-white font-bold py-3.5 px-8 rounded-2xl transition-all transform hover:-translate-y-0.5 duration-200 shadow-xl shadow-blue-600/30 text-sm"
+             >
+                مشاهده رویدادها و کارگاه‌ها
+             </Link>
+             <Link
+               to="/courses"
+               className="bg-white/10 hover:bg-white/20 text-white font-bold py-3.5 px-7 rounded-2xl backdrop-blur-md transition-all border border-white/20 text-sm hover:border-white/40"
+             >
+                دوره‌های آموزشی
              </Link>
           </div>
         </div>
@@ -125,7 +147,7 @@ const HomePage: React.FC = () => {
               <div className="bg-slate-50 p-8 rounded-xl border border-gray-200/80">
                   <p className="text-gray-700 italic mb-6">"عضویت در انجمن علمی یکی از بهترین تصمیمات دوران دانشجویی من بود. اینجا نه تنها مهارت‌های فنی خودم رو تقویت کردم، بلکه یاد گرفتم چطور در یک تیم کار کنم و یک رویداد بزرگ رو از صفر تا صد مدیریت کنم."</p>
                   <div className="flex items-center">
-                      <img className="w-14 h-14 rounded-full object-cover border-2 border-blue-200" src="http://storage.ghavishomard.ir/members/photo_2025-09-27 04.15.21.jpeg" alt="محمد"/>
+                      <img className="w-14 h-14 rounded-full object-cover border-2 border-blue-200" src="http://storage.ghavishomard.ir/members/photo_2025-09-27%2004.15.21.jpeg" alt="محمد"/>
                       <div className="mr-4">
                           <p className="font-bold text-gray-800">محمد</p>
                           <p className="text-sm text-gray-500">دبیر انجمن - ۱۴۰۳</p>
@@ -135,16 +157,15 @@ const HomePage: React.FC = () => {
               <div className="bg-slate-50 p-8 rounded-xl border border-gray-200/80">
                   <p className="text-gray-700 italic mb-6">"فضای دوستانه و علمی انجمن به من انگیزه داد تا از محدوده‌ی کلاس‌های درس فراتر برم. آشنایی با افراد متخصص و شرکت در پروژه‌های گروهی، دید من رو نسبت به آینده شغلی‌ام کاملا تغییر داد."</p>
                   <div className="flex items-center">
-                      <img className="w-14 h-14 rounded-full object-cover border-2 border-blue-200" src="http://storage.ghavishomard.ir/members/24-10-18_10-53-30-603.jpg" alt="سارا احمدی"/>
+                      <img className="w-14 h-14 rounded-full object-cover border-2 border-blue-200" src="http://storage.ghavishomard.ir/members/24-10-18_10-53-30-603.jpg" alt="امیرعلی گلی"/>
                       <div className="mr-4">
-                          <p className="font-bold text-gray-800">امیر  علی گلی</p>
+                          <p className="font-bold text-gray-800">امیرعلی گلی</p>
                           <p className="text-sm text-gray-500">عضو سابق</p>
                       </div>
                   </div>
               </div>
           </div>
       </div>
-
 
       {/* Upcoming Programs Section */}
       {upcomingPrograms.length > 0 && (
@@ -169,6 +190,67 @@ const HomePage: React.FC = () => {
           ))}
         </div>
       </div>
+      )}
+
+      {/* Courses Showcase Section */}
+      {topCourses.length > 0 && (
+        <div className="text-center">
+          <div className="flex flex-col sm:flex-row items-center justify-between gap-4 max-w-6xl mx-auto mb-10">
+            <div className="text-right">
+              <h2 className="text-3xl font-bold text-gray-900 mb-2">دوره‌های آموزشی و تخصصی</h2>
+              <p className="text-gray-500 text-sm">مهارت‌های برنامه‌نویسی و مهندسی نرم‌افزار را با برترین مدرسین یاد بگیرید.</p>
+            </div>
+            <Link
+              to="/courses"
+              className="px-5 py-2.5 rounded-xl bg-slate-900 hover:bg-blue-600 text-white text-xs font-bold transition-all shadow-md shrink-0"
+            >
+              مشاهده همه دوره‌ها ←
+            </Link>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-6xl mx-auto text-right">
+            {topCourses.map((c) => (
+              <Link
+                key={c.id}
+                to={`/course/${c.id}`}
+                className="group bg-white rounded-2xl shadow-md border border-gray-200/80 overflow-hidden hover:shadow-xl hover:-translate-y-1.5 transition-all flex flex-col"
+              >
+                <div className="aspect-video w-full bg-slate-100 overflow-hidden relative">
+                  <img
+                    src={c.imageUrl}
+                    alt={c.title}
+                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                  />
+                  <span className={`absolute top-3 right-3 text-[10px] font-bold px-2.5 py-1 rounded-full shadow-sm ${
+                    c.isPaid ? 'bg-amber-400 text-amber-900' : 'bg-emerald-500 text-white'
+                  }`}>
+                    {c.isPaid ? 'دوره ویژه' : 'رایگان'}
+                  </span>
+                </div>
+                <div className="p-5 flex flex-col flex-1">
+                  <h3 className="font-bold text-gray-900 text-base group-hover:text-blue-600 transition-colors line-clamp-1 mb-2">
+                    {c.title}
+                  </h3>
+                  <p className="text-xs text-gray-500 mb-3 flex items-center gap-1.5">
+                    <span>👨‍🏫 مدرس:</span>
+                    <span className="font-semibold text-gray-700">{c.instructor}</span>
+                  </p>
+                  <p className="text-xs text-gray-600 line-clamp-2 leading-relaxed flex-1 mb-4">
+                    {c.shortDescription}
+                  </p>
+                  <div className="pt-3 border-t border-gray-100 flex items-center justify-between text-xs">
+                    <span className="font-bold text-emerald-600">
+                      {c.isPaid ? `${c.price?.toLocaleString('fa-IR')} تومان` : 'کاملاً رایگان'}
+                    </span>
+                    <span className="text-blue-600 font-semibold group-hover:underline">
+                      مشاهده جلسات ←
+                    </span>
+                  </div>
+                </div>
+              </Link>
+            ))}
+          </div>
+        </div>
       )}
       
       {/* Enhanced Gallery Section */}

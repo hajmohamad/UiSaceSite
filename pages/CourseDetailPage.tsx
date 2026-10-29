@@ -74,12 +74,12 @@ const CourseDetailPage: React.FC = () => {
   return (
     <div className="max-w-7xl mx-auto">
       <Link
-        to="/"
-        className="inline-flex items-center text-teal-600 hover:text-teal-800 mb-6 group"
+        to="/courses"
+        className="inline-flex items-center text-teal-600 hover:text-teal-800 mb-6 font-medium group transition-colors"
       >
         <svg
           xmlns="http://www.w3.org/2000/svg"
-          className="h-5 w-5 ml-2 transform group-hover:-translate-x-1 transition-transform"
+          className="h-5 w-5 ml-2 transform group-hover:translate-x-1 transition-transform"
           fill="none"
           viewBox="0 0 24 24"
           stroke="currentColor"
@@ -88,7 +88,7 @@ const CourseDetailPage: React.FC = () => {
             strokeLinecap="round"
             strokeLinejoin="round"
             strokeWidth={2}
-            d="M13 5l7 7-7 7M5 5l7 7-7 7"
+            d="M9 5l7 7-7 7"
           />
         </svg>
         بازگشت به لیست دوره‌ها

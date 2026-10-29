@@ -16,10 +16,17 @@ const JobCard: React.FC<JobCardProps> = ({ job, onViewDetails }) => {
       <div className="p-6 flex-grow">
         <div className="flex items-start justify-between">
             <div className="flex items-center">
-                <img src={job.logo} alt={`${job.company} logo`} className="w-16 h-16 rounded-full object-cover" />
-                <div className="mr-4">
-                    <h2 className="text-xl font-bold text-slate-800">{job.title}</h2>
-                    <p className="text-md text-slate-600">{job.company}</p>
+                <img 
+                  src={job.logo || 'https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?w=100&h=100&fit=crop'} 
+                  alt={`${job.company} logo`} 
+                  onError={(e) => {
+                    (e.target as HTMLImageElement).src = 'https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?w=100&h=100&fit=crop';
+                  }}
+                  className="w-14 h-14 rounded-xl object-cover border border-slate-200 shadow-sm" 
+                />
+                <div className="mr-3">
+                    <h2 className="text-lg font-bold text-slate-800 leading-snug">{job.title}</h2>
+                    <p className="text-sm text-slate-500 font-medium">{job.company}</p>
                 </div>
             </div>
             {isExpired && (

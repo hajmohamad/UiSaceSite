@@ -34,25 +34,34 @@ type ProgramGallery struct {
 	Videos []string `json:"videos"`
 }
 
+// ProgramCollaborator represents a member's role in a specific program
+type ProgramCollaborator struct {
+	MemberID int    `json:"memberId"`
+	Name     string `json:"name,omitempty"`
+	Role     string `json:"role"`
+	ImageURL string `json:"imageUrl,omitempty"`
+}
+
 // Program represents an event or program organized by the association
 type Program struct {
-	ID               uint           `gorm:"primaryKey" json:"id"`
-	Title            string         `gorm:"not null" json:"title"`
-	Date             string         `json:"date"`
-	DateISO          string         `json:"dateISO"`
-	ShortDescription string         `json:"shortDescription"`
-	FullDescription  string         `json:"fullDescription"`
-	ImageURL         string         `json:"imageUrl"`
-	Price            *float64       `json:"price,omitempty"`
-	Status           string         `gorm:"default:'upcoming'" json:"status"` // upcoming | past
-	RegistrationLink string         `json:"registrationLink,omitempty"`
-	Collaborators    []int          `gorm:"serializer:json" json:"collaborators"`
-	Sponsors         []Sponsor      `gorm:"serializer:json" json:"sponsors"`
-	Gallery          ProgramGallery `gorm:"serializer:json" json:"gallery"`
-	RegisteredCount  int            `gorm:"default:0" json:"registeredCount"`
-	DurationHours    int            `gorm:"default:0" json:"durationHours"`
-	CreatedAt        time.Time      `json:"createdAt"`
-	UpdatedAt        time.Time      `json:"updatedAt"`
+	ID                  uint                  `gorm:"primaryKey" json:"id"`
+	Title               string                `gorm:"not null" json:"title"`
+	Date                string                `json:"date"`
+	DateISO             string                `json:"dateISO"`
+	ShortDescription    string                `json:"shortDescription"`
+	FullDescription     string                `json:"fullDescription"`
+	ImageURL            string                `json:"imageUrl"`
+	Price               *float64              `json:"price,omitempty"`
+	Status              string                `gorm:"default:'upcoming'" json:"status"` // upcoming | past
+	RegistrationLink    string                `json:"registrationLink,omitempty"`
+	Collaborators       []int                 `gorm:"serializer:json" json:"collaborators"`
+	CollaboratorDetails []ProgramCollaborator `gorm:"serializer:json" json:"collaboratorDetails"`
+	Sponsors            []Sponsor             `gorm:"serializer:json" json:"sponsors"`
+	Gallery             ProgramGallery        `gorm:"serializer:json" json:"gallery"`
+	RegisteredCount     int                   `gorm:"default:0" json:"registeredCount"`
+	DurationHours       int                   `gorm:"default:0" json:"durationHours"`
+	CreatedAt           time.Time             `json:"createdAt"`
+	UpdatedAt           time.Time             `json:"updatedAt"`
 }
 
 // CourseVideo represents a video item in a course section

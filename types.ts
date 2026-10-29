@@ -18,6 +18,13 @@ export interface Sponsor {
   logoUrl: string;
 }
 
+export interface ProgramCollaborator {
+  memberId: number;
+  name?: string;
+  role: string;
+  imageUrl?: string;
+}
+
 export interface Program {
    price?: number;  
   id: number;
@@ -28,6 +35,7 @@ export interface Program {
   fullDescription: string;
   imageUrl: string;
   collaborators: number[]; // Array of member IDs
+  collaboratorDetails?: ProgramCollaborator[]; // Detailed collaborators with specific roles
   sponsors: Sponsor[];
   status: 'upcoming' | 'past';
   registrationLink?: string; // Kept for potential external links

@@ -50,7 +50,7 @@ const FilePickerModal: React.FC<FilePickerModalProps> = ({
 
     try {
       setUploading(true);
-      const fileArray = Array.from(fileList);
+      const fileArray = Array.from(fileList) as File[];
       const res = await uploadAdminFiles(fileArray);
       await loadFiles();
       if (res.files && res.files.length > 0) {
