@@ -11,6 +11,7 @@ import {
 } from '../../services/adminApi';
 import type { Program, PorslineForm, Member, ProgramCollaborator } from '../../types';
 import FilePickerModal from '../../components/admin/FilePickerModal';
+import { JalaliDatePicker } from '../../components/common/JalaliDatePicker';
 
 interface ProgramFormData {
   title: string;
@@ -21,6 +22,8 @@ interface ProgramFormData {
   imageUrl: string;
   price: number;
   durationHours: number;
+  showRegisteredCount: boolean;
+  registeredCount: number;
   status: 'upcoming' | 'past';
   registrationLink: string;
   galleryImages: string; // comma or newline separated
@@ -35,6 +38,8 @@ const initialFormData: ProgramFormData = {
   imageUrl: '',
   price: 0,
   durationHours: 2,
+  showRegisteredCount: false,
+  registeredCount: 0,
   status: 'upcoming',
   registrationLink: '',
   galleryImages: '',
@@ -169,6 +174,8 @@ const AdminPrograms: React.FC = () => {
       imageUrl: prog.imageUrl || '',
       price: prog.price || 0,
       durationHours: prog.durationHours || 0,
+      showRegisteredCount: Boolean(prog.showRegisteredCount),
+      registeredCount: prog.registeredCount || 0,
       status: prog.status || 'upcoming',
       registrationLink: prog.registrationLink || '',
       galleryImages: existingImages.join('\n'),
@@ -344,6 +351,8 @@ const AdminPrograms: React.FC = () => {
         imageUrl: formData.imageUrl.trim(),
         price: Number(formData.price) || 0,
         durationHours: Number(formData.durationHours) || 0,
+        showRegisteredCount: Boolean(formData.showRegisteredCount),
+        registeredCount: Number(formData.registeredCount) || 0,
         status: formData.status,
         collaborators: programCollaborators.map((c) => c.memberId).filter((id) => id > 0),
         collaboratorDetails: programCollaborators,
@@ -540,8 +549,18 @@ const AdminPrograms: React.FC = () => {
                       </span>
                     </td>
 
-                    <td className="py-4 px-4 whitespace-nowrap text-xs text-slate-300 font-mono">
-                      {prog.registeredCount || 0} نفر
+                    <td className="py-4 px-4 whitespace-nowrap text-xs">
+                      {prog.showRegisteredCount ? (
+                        <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-semibold bg-blue-500/15 text-blue-300 border border-blue-500/30">
+                          <span className="w-1.5 h-1.5 rounded-full bg-blue-400"></span>
+                          نمایش: {prog.registeredCount || 0} نفر
+                        </span>
+                      ) : (
+                        <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-medium bg-slate-800 text-slate-400 border border-slate-700">
+                          <span className="w-1.5 h-1.5 rounded-full bg-slate-500"></span>
+                          کارت مخفی
+                        </span>
+                      )}
                     </td>
 
                     <td className="py-4 px-6 whitespace-nowrap text-left">
@@ -628,8 +647,25 @@ const AdminPrograms: React.FC = () => {
               {/* Row 2: Date & DateISO */}
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div>
+                  <JalaliDatePicker
+                    label="تقویم شمسی رویداد"
+                    required
+                    value={formData.dateISO || formData.date}
+                    placeholder="انتخاب تاریخ از تقویم شمسی..."
+                    onChange={(shamsiNum, gregorianISO, displayLong) => {
+                      setFormData({
+                        ...formData,
+                        date: displayLong,
+                        dateISO: gregorianISO,
+                      });
+                    }}
+                    helperText={formData.dateISO ? `معادل میلادی جهت مرتب‌سازی: ${formData.dateISO}` : undefined}
+                  />
+                </div>
+
+                <div>
                   <label className="block text-xs font-semibold text-slate-300 mb-1.5">
-                    تاریخ نمایشی (شمسی) *
+                    متن نمایشی تاریخ در سایت *
                   </label>
                   <input
                     type="text"
@@ -639,19 +675,9 @@ const AdminPrograms: React.FC = () => {
                     placeholder="مثال: ۲۵ آبان ۱۴۰۳"
                     className="w-full bg-slate-900/70 border border-slate-700 rounded-xl px-4 py-2.5 text-sm text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
                   />
-                </div>
-
-                <div>
-                  <label className="block text-xs font-semibold text-slate-300 mb-1.5">
-                    تاریخ میلادی برای مرتب‌سازی (dateISO)
-                  </label>
-                  <input
-                    type="date"
-                    dir="ltr"
-                    value={formData.dateISO}
-                    onChange={(e) => setFormData({ ...formData, dateISO: e.target.value })}
-                    className="w-full bg-slate-900/70 border border-slate-700 rounded-xl px-4 py-2.5 text-sm text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
-                  />
+                  <p className="text-[11px] text-slate-400 mt-1">
+                    با انتخاب از تقویم خودکار پر می‌شود؛ در صورت نیاز به افزودن ساعت قابل ویرایش است.
+                  </p>
                 </div>
               </div>
 
@@ -684,6 +710,44 @@ const AdminPrograms: React.FC = () => {
                     onChange={(e) => setFormData({ ...formData, durationHours: Number(e.target.value) })}
                     className="w-full bg-slate-900/70 border border-slate-700 rounded-xl px-4 py-2.5 text-sm text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
                   />
+                </div>
+
+                {/* Control Registered Count Card (Requirement) */}
+                <div className="sm:col-span-2 bg-slate-900/40 p-4 rounded-xl border border-slate-700/70 space-y-3">
+                  <div className="flex items-center justify-between">
+                    <div>
+                      <span className="block text-sm font-bold text-white">نمایش کارت نفرات ثبت‌نامی</span>
+                      <p className="text-xs text-slate-400 mt-0.5">
+                        به صورت پیش‌فرض غیرفعال است. در صورت فعال‌سازی، کارت آمار ثبت‌نامی در صفحه رویداد نمایش داده می‌شود.
+                      </p>
+                    </div>
+                    <label className="relative inline-flex items-center cursor-pointer">
+                      <input
+                        type="checkbox"
+                        checked={formData.showRegisteredCount}
+                        onChange={(e) => setFormData({ ...formData, showRegisteredCount: e.target.checked })}
+                        className="sr-only peer"
+                      />
+                      <div className="w-11 h-6 bg-slate-700 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:right-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-blue-600"></div>
+                    </label>
+                  </div>
+
+                  {formData.showRegisteredCount && (
+                    <div className="pt-2 border-t border-slate-800 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+                      <label className="text-xs font-semibold text-slate-300">
+                        تعداد نفرات ثبت‌نامی (ورود دستی):
+                      </label>
+                      <input
+                        type="number"
+                        min="0"
+                        dir="ltr"
+                        placeholder="مثلاً ۱۲۰"
+                        value={formData.registeredCount}
+                        onChange={(e) => setFormData({ ...formData, registeredCount: Number(e.target.value) })}
+                        className="w-full sm:w-48 bg-slate-900/90 border border-slate-600 rounded-xl px-4 py-2 text-sm text-white focus:outline-none focus:ring-2 focus:ring-blue-500 font-mono"
+                      />
+                    </div>
+                  )}
                 </div>
               </div>
 

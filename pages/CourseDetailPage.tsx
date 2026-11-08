@@ -118,7 +118,7 @@ const CourseDetailPage: React.FC = () => {
                 <h2 className="text-2xl font-bold">محتوای دوره قفل است</h2>
               </div>
               <p className="mb-6">
-                این یک دوره پولی است. برای دسترسی به محتوای دوره، لطفاً ابتدا وارد حساب کاربری خود شوید.
+                این یک دوره غیر رایگان است. برای دسترسی به محتوای دوره، لطفاً ابتدا وارد حساب کاربری خود شوید.
               </p>
               <button className="bg-teal-500 text-white font-semibold py-2 px-6 rounded-full hover:bg-teal-600 transition-colors duration-300">
                 ورود به حساب کاربری

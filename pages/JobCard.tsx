@@ -9,51 +9,82 @@ interface JobCardProps {
 }
 
 const JobCard: React.FC<JobCardProps> = ({ job, onViewDetails }) => {
-  const isExpired = new Date(job.expiryDate) < new Date();
+  const isExpired = Boolean(job.expiryDate && new Date(job.expiryDate) < new Date());
+  const isStopped = Boolean(job.isStopped || job.status === 'stopped');
 
   return (
-    <div className={`bg-white rounded-lg shadow-lg overflow-hidden transform transition-all duration-300 hover:-translate-y-2 hover:shadow-2xl flex flex-col ${isExpired ? 'opacity-60' : ''}`}>
+    <div
+      className={`bg-white rounded-2xl shadow-md overflow-hidden transform transition-all duration-300 hover:-translate-y-1.5 hover:shadow-xl flex flex-col border border-slate-200/80 ${
+        isStopped ? 'opacity-75 grayscale-[20%]' : isExpired ? 'opacity-60' : ''
+      }`}
+    >
       <div className="p-6 flex-grow">
-        <div className="flex items-start justify-between">
-            <div className="flex items-center">
-                <img 
-                  src={job.logo || 'https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?w=100&h=100&fit=crop'} 
-                  alt={`${job.company} logo`} 
-                  onError={(e) => {
-                    (e.target as HTMLImageElement).src = 'https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?w=100&h=100&fit=crop';
-                  }}
-                  className="w-14 h-14 rounded-xl object-cover border border-slate-200 shadow-sm" 
-                />
-                <div className="mr-3">
-                    <h2 className="text-lg font-bold text-slate-800 leading-snug">{job.title}</h2>
-                    <p className="text-sm text-slate-500 font-medium">{job.company}</p>
-                </div>
+        <div className="flex items-start justify-between gap-3">
+          <div className="flex items-center gap-3">
+            <img
+              src={job.logo || 'https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?w=100&h=100&fit=crop'}
+              alt={`${job.company} logo`}
+              onError={(e) => {
+                (e.target as HTMLImageElement).src =
+                  'https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?w=100&h=100&fit=crop';
+              }}
+              className="w-14 h-14 rounded-2xl object-cover border border-slate-200 shadow-xs flex-shrink-0"
+            />
+            <div className="min-w-0">
+              <h2 className="text-base sm:text-lg font-bold text-slate-900 leading-snug line-clamp-1">
+                {job.title}
+              </h2>
+              <p className="text-xs sm:text-sm text-teal-600 font-semibold mt-0.5">{job.company}</p>
             </div>
-            {isExpired && (
-                <span className="bg-red-100 text-red-800 text-xs font-semibold px-2.5 py-1 rounded-full">
-                    منقضی شده
-                </span>
-            )}
-        </div>
-        
-        <div className="mt-6 space-y-3 text-slate-700">
-          <div className="flex items-center">
-            <LocationIcon className="w-5 h-5 text-teal-600 ml-2" />
-            <span>{job.location}</span>
           </div>
-          <div className="flex items-center">
-            <BriefcaseIcon className="w-5 h-5 text-teal-600 ml-2" />
+
+          <div className="flex flex-col items-end gap-1 flex-shrink-0">
+            {isStopped ? (
+              <span className="bg-amber-100 text-amber-800 text-[11px] font-bold px-2.5 py-0.5 rounded-full border border-amber-200">
+                متوقف شده
+              </span>
+            ) : isExpired ? (
+              <span className="bg-red-100 text-red-800 text-[11px] font-bold px-2.5 py-0.5 rounded-full">
+                منقضی شده
+              </span>
+            ) : (
+              <span className="bg-emerald-50 text-emerald-700 text-[11px] font-bold px-2.5 py-0.5 rounded-full border border-emerald-200">
+                فعال
+              </span>
+            )}
+          </div>
+        </div>
+
+        <div className="mt-6 space-y-2.5 text-xs text-slate-600 font-medium">
+          <div className="flex items-center gap-2">
+            <LocationIcon className="w-4 h-4 text-teal-600 flex-shrink-0" />
+            <span>{job.location || 'مشخص نشده'}</span>
+          </div>
+          <div className="flex items-center gap-2">
+            <BriefcaseIcon className="w-4 h-4 text-teal-600 flex-shrink-0" />
             <span>{job.type}</span>
           </div>
+          {job.salary && (
+            <div className="flex items-center gap-2 text-slate-500">
+              <span className="text-xs">💰</span>
+              <span>{job.salary}</span>
+            </div>
+          )}
         </div>
       </div>
-      <div className="bg-slate-50 p-4">
+
+      <div className="bg-slate-50 p-4 border-t border-slate-100">
         <button
           onClick={() => onViewDetails(job)}
-          disabled={isExpired}
-          className="w-full bg-teal-600 text-white font-bold py-2 px-4 rounded-md hover:bg-teal-700 transition-colors duration-300 disabled:bg-slate-300 disabled:cursor-not-allowed"
+          className={`w-full font-bold py-2.5 px-4 rounded-xl text-xs sm:text-sm transition-all duration-300 shadow-xs ${
+            isStopped
+              ? 'bg-amber-600 hover:bg-amber-700 text-white'
+              : isExpired
+              ? 'bg-slate-200 text-slate-500 cursor-not-allowed'
+              : 'bg-teal-600 hover:bg-teal-700 text-white'
+          }`}
         >
-          {isExpired ? 'مشاهده ممکن نیست' : 'مشاهده جزئیات'}
+          {isStopped ? 'مشاهده جزئیات (فرصت متوقف شده)' : isExpired ? 'منقضی شده' : 'مشاهده جزئیات و شرایط'}
         </button>
       </div>
     </div>

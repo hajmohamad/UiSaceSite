@@ -1,4 +1,4 @@
-import type { Member, Program, Course, Job, PorslineForm } from '../types';
+import type { Member, Program, Course, Job, JobFeatureSettings, PorslineForm, CustomPage, Certificate, ValidatePromoResponse } from '../types';
 import { MEMBERS, PROGRAMS, courses as initialCourses } from '../arvanconstan';
 
 const API_BASE = '/api';
@@ -207,6 +207,25 @@ export async function getJobById(id: string): Promise<Job | undefined> {
 }
 
 /**
+ * دریافت تنظیمات فیچر کاریابی (وضعیت فعال یا متوقف شده)
+ */
+export async function getJobSettings(): Promise<JobFeatureSettings> {
+  try {
+    const res = await fetch(`${API_BASE}/jobs/settings`);
+    if (res.ok) {
+      return await res.json();
+    }
+  } catch (err) {
+    console.warn('Backend unavailable, using fallback job settings:', err);
+  }
+
+  return {
+    enabled: true,
+    stoppedMessage: 'سامانه کاریابی و ثبت فرصت‌های شغلی موقتاً متوقف شده است. به زودی با موقعیت‌های جدید بازمی‌گردیم.',
+  };
+}
+
+/**
  * ثبت نام در رویداد (با ارسال فرم و فایل رسید)
  */
 export async function postRegistration(formData: FormData) {
@@ -324,4 +343,65 @@ export async function uploadFormAttachment(file: File): Promise<{ url: string; f
 
   return data;
 }
+
+/**
+ * دریافت صفحه HTML سفارشی با استفاده از آدرس / slug
+ */
+export async function getCustomPageBySlug(slug: string): Promise<CustomPage | null> {
+  try {
+    const clean = slug.replace(/^\/+|\/+$/g, '');
+    const res = await fetch(`${API_BASE}/custom-pages/by-slug?path=${encodeURIComponent(clean)}`);
+    if (res.ok) {
+      return await res.json();
+    }
+  } catch (err) {
+    console.warn('Failed to fetch custom page:', err);
+  }
+  return null;
+}
+
+/**
+ * بررسی و اعتبارسنجی کد تخفیف
+ */
+export async function validatePromoCode(
+  code: string,
+  programId: number,
+  price: number
+): Promise<ValidatePromoResponse> {
+  const res = await fetch(`${API_BASE}/promo-codes/validate`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ code, programId, price }),
+  });
+  const data = await res.json().catch(() => null);
+  if (!res.ok) {
+    return { valid: false, error: data?.error || 'خطا در بررسی کد تخفیف' };
+  }
+  return data;
+}
+
+/**
+ * استعلام گواهینامه دیجیتال بر اساس کد، کد ملی یا شماره دانشجویی
+ */
+export async function verifyCertificate(query: string): Promise<Certificate[]> {
+  const res = await fetch(`${API_BASE}/certificates/verify?q=${encodeURIComponent(query.trim())}`);
+  const data = await res.json().catch(() => null);
+  if (!res.ok) {
+    throw new Error(data?.error || 'گواهینامه‌ای یافت نشد');
+  }
+  return data;
+}
+
+/**
+ * دریافت جزئیات یک گواهینامه بر اساس شناسه
+ */
+export async function getCertificateById(id: string): Promise<Certificate> {
+  const res = await fetch(`${API_BASE}/certificates/${encodeURIComponent(id.trim())}`);
+  const data = await res.json().catch(() => null);
+  if (!res.ok) {
+    throw new Error(data?.error || 'گواهینامه مورد نظر یافت نشد');
+  }
+  return data;
+}
+
 

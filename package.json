@@ -9,9 +9,17 @@
     "preview": "vite preview",
     "server": "cd backend && ./server",
     "backend:dev": "cd backend && go run ./cmd/server",
-    "backend:build": "cd backend && go build -o server ./cmd/server"
+    "backend:build": "cd backend && go build -o server ./cmd/server",
+    "deploy": "./deploy.sh",
+    "deploy:dry": "./deploy.sh --dry-run"
   },
   "dependencies": {
+    "@types/jalaali-js": "^1.2.0",
+    "@types/qrcode": "^1.5.6",
+    "html2canvas": "^1.4.1",
+    "jalaali-js": "^2.0.1",
+    "jspdf": "^4.2.1",
+    "qrcode": "^1.5.4",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
     "react-router-dom": "^7.9.2"

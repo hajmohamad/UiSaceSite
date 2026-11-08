@@ -3,12 +3,14 @@ import {
   getAdminRegistrations,
   updateRegistrationStatus,
   deleteRegistration,
+  downloadRegistrationsCSV,
 } from '../../services/adminApi';
 import type { Registration } from '../../types';
 
 const AdminRegistrations: React.FC = () => {
   const [registrations, setRegistrations] = useState<Registration[]>([]);
   const [loading, setLoading] = useState(true);
+  const [isExporting, setIsExporting] = useState(false);
   const [statusFilter, setStatusFilter] = useState<'all' | 'pending' | 'approved' | 'rejected'>('all');
   const [search, setSearch] = useState('');
   const [viewReceiptUrl, setViewReceiptUrl] = useState<string | null>(null);
@@ -64,6 +66,19 @@ const AdminRegistrations: React.FC = () => {
     }
   };
 
+  const handleExportCSV = async () => {
+    try {
+      setIsExporting(true);
+      await downloadRegistrationsCSV(undefined, statusFilter === 'all' ? undefined : statusFilter);
+      showToast('فایل اکسل با موفقیت دانلود شد');
+    } catch (err: any) {
+      console.error(err);
+      alert(err?.message || 'خطا در خروجی اکسل');
+    } finally {
+      setIsExporting(false);
+    }
+  };
+
   const filteredRegistrations = registrations.filter((r) => {
     const matchesStatus = statusFilter === 'all' || r.status === statusFilter;
     const query = search.toLowerCase().trim();
@@ -72,6 +87,7 @@ const AdminRegistrations: React.FC = () => {
       r.name?.toLowerCase().includes(query) ||
       r.phone?.includes(query) ||
       r.studentNumber?.includes(query) ||
+      r.promoCode?.toLowerCase().includes(query) ||
       r.program?.title?.toLowerCase().includes(query);
 
     return matchesStatus && matchesSearch;
@@ -90,11 +106,28 @@ const AdminRegistrations: React.FC = () => {
       )}
 
       {/* Header */}
-      <div>
-        <h1 className="text-2xl font-black text-white">مدیریت ثبت‌نام‌های رویدادها</h1>
-        <p className="text-sm text-slate-400 mt-1">
-          بررسی فیش‌های واریزی، تایید یا رد درخواست شرکت در رویدادها و کارگاه‌ها
-        </p>
+      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+        <div>
+          <h1 className="text-2xl font-black text-white">مدیریت ثبت‌نام‌های رویدادها</h1>
+          <p className="text-sm text-slate-400 mt-1">
+            بررسی فیش‌های واریزی، کدهای تخفیف، تایید یا رد درخواست شرکت در رویدادها
+          </p>
+        </div>
+
+        <button
+          onClick={handleExportCSV}
+          disabled={isExporting || registrations.length === 0}
+          className="inline-flex items-center justify-center gap-2 px-5 py-2.5 bg-emerald-600 hover:bg-emerald-500 text-white font-semibold rounded-xl shadow-lg shadow-emerald-600/20 transition-all disabled:opacity-50 cursor-pointer"
+        >
+          {isExporting ? (
+            <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
+          ) : (
+            <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+            </svg>
+          )}
+          <span>دانلود خروجی اکسل / CSV</span>
+        </button>
       </div>
 
       {/* Filter and Search */}
@@ -158,6 +191,7 @@ const AdminRegistrations: React.FC = () => {
                   <th className="py-4 px-4">رویداد انتخابی</th>
                   <th className="py-4 px-4">وضعیت دانشجو</th>
                   <th className="py-4 px-4">رسید پرداخت</th>
+                  <th className="py-4 px-4">مبلغ و تخفیف</th>
                   <th className="py-4 px-4">وضعیت</th>
                   <th className="py-4 px-6 text-left">اقدامات</th>
                 </tr>
@@ -191,7 +225,7 @@ const AdminRegistrations: React.FC = () => {
                       {reg.receiptUrl ? (
                         <button
                           onClick={() => setViewReceiptUrl(reg.receiptUrl || null)}
-                          className="text-xs text-blue-400 hover:text-blue-300 bg-blue-500/10 hover:bg-blue-500/20 px-2.5 py-1.5 rounded-lg flex items-center gap-1 transition-colors border border-blue-500/20"
+                          className="text-xs text-blue-400 hover:text-blue-300 bg-blue-500/10 hover:bg-blue-500/20 px-2.5 py-1.5 rounded-lg flex items-center gap-1 transition-colors border border-blue-500/20 cursor-pointer"
                         >
                           <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
@@ -201,6 +235,30 @@ const AdminRegistrations: React.FC = () => {
                         </button>
                       ) : (
                         <span className="text-xs text-slate-500">ندارد (رایگان)</span>
+                      )}
+                    </td>
+
+                    <td className="py-4 px-4 whitespace-nowrap text-xs">
+                      {reg.promoCode ? (
+                        <div className="space-y-0.5">
+                          <div className="flex items-center gap-1.5">
+                            <span className="font-mono font-bold text-amber-400 bg-amber-500/10 px-2 py-0.5 rounded border border-amber-500/20">
+                              {reg.promoCode}
+                            </span>
+                            <span className="text-emerald-400">
+                              -{new Intl.NumberFormat('fa-IR').format(reg.discountAmount || 0)}
+                            </span>
+                          </div>
+                          <div className="text-slate-400">
+                            نهایی: {reg.finalPrice === 0 ? 'رایگان' : `${new Intl.NumberFormat('fa-IR').format(reg.finalPrice || 0)} ت`}
+                          </div>
+                        </div>
+                      ) : reg.finalPrice && reg.finalPrice > 0 ? (
+                        <span className="text-slate-300 font-medium">
+                          {new Intl.NumberFormat('fa-IR').format(reg.finalPrice)} تومان
+                        </span>
+                      ) : (
+                        <span className="text-slate-500">رایگان</span>
                       )}
                     </td>
 

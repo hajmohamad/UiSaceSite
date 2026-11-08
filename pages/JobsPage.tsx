@@ -7,7 +7,7 @@ import { useJobs } from '../hooks/useJobs';
 import type { Job } from './../types';
 
 const JobsPage: React.FC = () => {
-  const { jobs, loading } = useJobs();
+  const { jobs, loading, settings, isFeatureStopped } = useJobs();
   const [selectedJob, setSelectedJob] = useState<Job | null>(null);
   const [search, setSearch] = useState('');
   const [filterType, setFilterType] = useState('ALL');
@@ -38,6 +38,28 @@ const JobsPage: React.FC = () => {
 
   return (
     <div className="flex-grow container mx-auto px-4 py-12 max-w-7xl">
+      {/* Feature Stopped Banner (when paused by admin) */}
+      {isFeatureStopped && (
+        <div className="mb-8 p-6 bg-gradient-to-r from-amber-50 to-orange-50 border-2 border-amber-300/80 rounded-2xl shadow-sm text-right animate-fade-in">
+          <div className="flex items-start gap-4">
+            <div className="w-12 h-12 rounded-2xl bg-amber-100 text-amber-700 flex items-center justify-center text-2xl flex-shrink-0">
+              ⏸️
+            </div>
+            <div>
+              <h2 className="text-base sm:text-lg font-bold text-amber-900">
+                فیچر کاریابی در حال حاضر متوقف است
+              </h2>
+              <p className="text-sm text-amber-800/90 mt-1.5 leading-relaxed">
+                {settings?.stoppedMessage || 'سامانه کاریابی و ثبت فرصت‌های شغلی موقتاً متوقف شده است. به زودی با موقعیت‌های جدید بازمی‌گردیم.'}
+              </p>
+              <div className="mt-3 text-xs text-amber-700 font-medium">
+                * موقعیت‌های ثبت‌شده قبلی صرفاً جهت آرشیو و مشاهده برای شما قابل دیدن هستند.
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
       {/* Hero Header */}
       <div className="text-center max-w-3xl mx-auto mb-10">
         <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-teal-50 text-teal-700 border border-teal-200 mb-4">
@@ -47,7 +69,7 @@ const JobsPage: React.FC = () => {
           فرصت‌های شغلی و کارآموزی
         </h1>
         <p className="text-slate-600 text-lg leading-relaxed">
-          فرصت‌های برتر شغلی و دوره‌های کارآموزی مهندسی عمران معرفی‌شده توسط انجمن علمی دانشگاه اصفهان
+          فرصت‌های برتر شغلی و دوره‌های کارآموزی مهندسی کامپیوتر معرفی‌شده توسط انجمن علمی دانشگاه اصفهان
         </p>
       </div>
 

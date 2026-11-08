@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, Link } from 'react-router-dom';
-import { getProgramById, postRegistration } from '../services/api';
-import type { Program } from '../types';
+import { getProgramById, postRegistration, validatePromoCode } from '../services/api';
+import type { Program, ValidatePromoResponse } from '../types';
 
 const RegistrationPage: React.FC = () => {
   const { id } = useParams<{ id: string }>();
@@ -12,6 +12,12 @@ const RegistrationPage: React.FC = () => {
   const [phone, setPhone] = useState('');
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [error, setError] = useState('');
+
+  // کد تخفیف
+  const [promoInput, setPromoInput] = useState('');
+  const [isValidatingPromo, setIsValidatingPromo] = useState(false);
+  const [promoResult, setPromoResult] = useState<ValidatePromoResponse | null>(null);
+  const [promoError, setPromoError] = useState('');
 
   useEffect(() => {
     let isMounted = true;
@@ -50,6 +56,43 @@ const RegistrationPage: React.FC = () => {
     setReceiptPreview(url);
     return () => URL.revokeObjectURL(url);
   }, [receiptFile]);
+
+  const handleApplyPromo = async () => {
+    if (!promoInput.trim() || !program) return;
+    setPromoError('');
+    setIsValidatingPromo(true);
+
+    try {
+      const res = await validatePromoCode(
+        promoInput.trim(),
+        program.id,
+        program.price ? Number(program.price) : 0
+      );
+
+      if (res.valid) {
+        setPromoResult(res);
+        setPromoError('');
+      } else {
+        setPromoResult(null);
+        setPromoError(res.error || 'کد تخفیف نامعتبر است');
+      }
+    } catch (e: any) {
+      setPromoResult(null);
+      setPromoError(e?.message || 'خطا در اعتبارسنجی کد تخفیف');
+    } finally {
+      setIsValidatingPromo(false);
+    }
+  };
+
+  const handleRemovePromo = () => {
+    setPromoResult(null);
+    setPromoInput('');
+    setPromoError('');
+  };
+
+  const rawPrice = program?.price ? Number(program.price) : 0;
+  const currentFinalPrice = promoResult?.finalPrice !== undefined ? promoResult.finalPrice : rawPrice;
+  const requiresPayment = currentFinalPrice > 0;
 
   if (isLoadingProgram) {
     return (
@@ -113,23 +156,23 @@ const RegistrationPage: React.FC = () => {
       return;
     }
 
-    if (program.price && Number(program.price) > 0 && !receiptFile) {
-      setError('این دوره نیازمند پرداخت هزینس است؛ لطفاً عکس رسید تراکنش را آپلود کنید.');
+    if (requiresPayment && !receiptFile) {
+      setError('این دوره نیازمند پرداخت هزینه است؛ لطفاً عکس رسید تراکنش را آپلود کنید.');
       return;
     }
 
-    // ساختن FormData برای ارسال شامل فایل
+    // ساختن FormData برای ارسال شامل فایل و کد تخفیف
     const formData = new FormData();
     formData.append('name', name.trim());
     formData.append('phone', phone.trim());
     formData.append('programId', String(program.id));
     formData.append('isStudent', String(isStudent === 'yes'));
     if (isStudent === 'yes') formData.append('studentNumber', studentNumber.trim());
-    if (receiptFile) formData.append('receipt', receiptFile);
+    if (promoResult?.code) formData.append('promoCode', promoResult.code);
+    if (receiptFile && requiresPayment) formData.append('receipt', receiptFile);
 
     try {
       setIsSubmitting(true);
-      // استفاده از تابع API که بالاتر صادر شده
       await postRegistration(formData);
       setIsSubmitted(true);
     } catch (err: any) {
@@ -155,7 +198,7 @@ const RegistrationPage: React.FC = () => {
           <p className="text-gray-600 mb-8">
             از اینکه در رویداد <span className="font-semibold text-gray-900">{program.title}</span> ثبت‌نام کردید متشکریم. جزئیات بیشتر به شماره شما ارسال خواهد شد.
           </p>
-          <div className="flex justify-center items-center space-s-4">
+          <div className="flex justify-center items-center space-s-4 gap-3">
             <Link
               to="/"
               className="bg-gray-200 text-gray-800 font-semibold py-2 px-6 rounded-lg hover:bg-gray-300 transition-colors duration-300"
@@ -250,25 +293,112 @@ const RegistrationPage: React.FC = () => {
               </div>
             )}
 
-            {program.price && Number(program.price) > 0 && (
-              <div className="bg-yellow-50 p-4 rounded-lg border border-yellow-100">
-                <p className="text-sm font-medium text-yellow-800">این دوره پولی است.</p>
-                <p className="mt-1 font-semibold text-gray-900">مبلغ: {new Intl.NumberFormat('fa-IR').format(Number(program.price))} تومان</p>
-
-                <div className="mt-4">
-                  <label className="block text-sm font-medium text-gray-700">آپلود عکس رسید تراکنش</label>
-                  <div className="mt-2 flex items-center gap-4">
-                    <input
-                      type="file"
-                      accept="image/*"
-                      onChange={(e) => setReceiptFile(e.target.files ? e.target.files[0] : null)}
-                      className="text-sm"
-                    />
-                    {receiptPreview && (
-                      <img src={receiptPreview} alt="preview" className="h-16 w-24 object-cover rounded-md border" />
-                    )}
-                  </div>
+            {/* بخش کد تخفیف */}
+            {rawPrice > 0 && (
+              <div className="bg-slate-50 p-4 rounded-xl border border-slate-200">
+                <label htmlFor="promoCode" className="block text-sm font-semibold text-gray-800 mb-2">
+                  کد تخفیف (در صورت داشتن)
+                </label>
+                <div className="flex gap-2">
+                  <input
+                    type="text"
+                    id="promoCode"
+                    value={promoInput}
+                    onChange={(e) => setPromoInput(e.target.value.toUpperCase())}
+                    placeholder="مثلاً: SACE_STUDENT"
+                    disabled={!!promoResult || isValidatingPromo}
+                    className="block flex-1 px-4 py-2.5 border border-gray-300 rounded-lg shadow-sm placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 font-mono tracking-wider text-sm uppercase"
+                  />
+                  {promoResult ? (
+                    <button
+                      type="button"
+                      onClick={handleRemovePromo}
+                      className="px-4 py-2.5 text-sm font-medium text-red-600 bg-red-50 hover:bg-red-100 border border-red-200 rounded-lg transition-colors cursor-pointer"
+                    >
+                      حذف کد
+                    </button>
+                  ) : (
+                    <button
+                      type="button"
+                      onClick={handleApplyPromo}
+                      disabled={!promoInput.trim() || isValidatingPromo}
+                      className="px-5 py-2.5 text-sm font-semibold text-white bg-blue-600 hover:bg-blue-700 disabled:opacity-50 rounded-lg transition-colors shadow-sm cursor-pointer"
+                    >
+                      {isValidatingPromo ? 'بررسی...' : 'اعمال کد'}
+                    </button>
+                  )}
                 </div>
+
+                {promoError && (
+                  <p className="mt-2 text-xs font-medium text-red-600 flex items-center gap-1">
+                    <span>⚠️</span> {promoError}
+                  </p>
+                )}
+
+                {promoResult && (
+                  <div className="mt-3 p-3 bg-emerald-50 border border-emerald-200 rounded-lg text-emerald-800 text-xs flex items-center justify-between">
+                    <span className="font-medium">✓ {promoResult.message || 'کد تخفیف با موفقیت اعمال شد'}</span>
+                    <span className="font-bold">
+                      - {new Intl.NumberFormat('fa-IR').format(promoResult.discountAmount || 0)} تومان
+                    </span>
+                  </div>
+                )}
+              </div>
+            )}
+
+            {/* جعبه هزینه و رسید */}
+            {rawPrice > 0 && (
+              <div className="bg-amber-50/70 p-5 rounded-xl border border-amber-200">
+                <div className="flex items-center justify-between pb-3 border-b border-amber-200/60">
+                  <span className="text-sm text-gray-700">مبلغ اولیه رویداد:</span>
+                  <span className={`text-sm ${promoResult ? 'line-through text-gray-400' : 'font-bold text-gray-900'}`}>
+                    {new Intl.NumberFormat('fa-IR').format(rawPrice)} تومان
+                  </span>
+                </div>
+
+                {promoResult && (
+                  <div className="flex items-center justify-between py-2 text-sm text-emerald-700 border-b border-amber-200/60">
+                    <span>میزان تخفیف:</span>
+                    <span className="font-semibold">
+                      - {new Intl.NumberFormat('fa-IR').format(promoResult.discountAmount || 0)} تومان
+                    </span>
+                  </div>
+                )}
+
+                <div className="flex items-center justify-between pt-3">
+                  <span className="font-bold text-gray-900">مبلغ نهایی قابل پرداخت:</span>
+                  <span className="text-lg font-extrabold text-blue-700">
+                    {currentFinalPrice === 0
+                      ? 'رایگان 🎉'
+                      : `${new Intl.NumberFormat('fa-IR').format(currentFinalPrice)} تومان`}
+                  </span>
+                </div>
+
+                {requiresPayment ? (
+                  <div className="mt-4 pt-3 border-t border-amber-200/60">
+                    <label className="block text-sm font-medium text-gray-700 mb-1">
+                      آپلود عکس فیش / رسید تراکنش <span className="text-red-500">*</span>
+                    </label>
+                    <p className="text-xs text-gray-500 mb-2">
+                      لطفاً تصویر رسید واریزی را بارگذاری فرمایید.
+                    </p>
+                    <div className="flex items-center gap-4">
+                      <input
+                        type="file"
+                        accept="image/*"
+                        onChange={(e) => setReceiptFile(e.target.files ? e.target.files[0] : null)}
+                        className="text-sm"
+                      />
+                      {receiptPreview && (
+                        <img src={receiptPreview} alt="رسید پرداخت" className="h-16 w-24 object-cover rounded-md border border-gray-300 shadow-sm" />
+                      )}
+                    </div>
+                  </div>
+                ) : (
+                  <div className="mt-3 p-2 bg-blue-50 text-blue-700 text-xs rounded-lg font-medium text-center">
+                    به دلیل اعمال تخفیف کامل یا رایگان بودن، نیازی به واریز وجه و آپلود رسید نیست.
+                  </div>
+                )}
               </div>
             )}
 
@@ -283,7 +413,7 @@ const RegistrationPage: React.FC = () => {
               <button
                 type="submit"
                 disabled={isSubmitting}
-                className="w-full flex justify-center py-3 px-4 border border-transparent rounded-lg shadow-lg text-lg font-medium text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-transform transform hover:scale-105 disabled:opacity-60"
+                className="w-full flex justify-center py-3 px-4 border border-transparent rounded-lg shadow-lg text-lg font-medium text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-transform transform hover:scale-105 disabled:opacity-60 cursor-pointer"
               >
                 {isSubmitting ? 'در حال ارسال...' : 'تایید و ثبت‌نام'}
               </button>

@@ -2,10 +2,29 @@
 <html lang="fa" dir="rtl">
   <head>
     <meta charset="UTF-8" />
-    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
+    <link rel="icon" type="image/svg+xml" href="/icon.svg" />
+    <link rel="apple-touch-icon" href="/icon.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#2563eb" />
     <meta name="enamad" content="58568106" />
-    <title>انجمن علمی مهندسی کامپیوتر دانشگاه اصفهان</title>
+    <link rel="manifest" href="/manifest.json" />
+
+    <!-- SEO & Social OpenGraph Tags (Telegram, Bale, Eitaa, LinkedIn) -->
+    <title>انجمن علمی مهندسی کامپیوتر دانشگاه اصفهان (UI SACE)</title>
+    <meta name="description" content="سامانه رسمی انجمن علمی مهندسی کامپیوتر دانشگاه اصفهان - ثبت‌نام رویدادها، استعلام اصالت گواهینامه‌ها، دوره‌های آموزشی و فرصت‌های شغلی" />
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="انجمن علمی مهندسی کامپیوتر دانشگاه اصفهان" />
+    <meta property="og:title" content="انجمن علمی مهندسی کامپیوتر دانشگاه اصفهان (UI SACE)" />
+    <meta property="og:description" content="سامانه رسمی رویدادها، دوره‌های تخصصی، سامانه استعلام گواهینامه‌ها و فرصت‌های شغلی دانشجویان کامپیوتر دانشگاه اصفهان" />
+    <meta property="og:image" content="http://storage.ghavishomard.ir/programs_gallery/big.png" />
+    <meta property="og:locale" content="fa_IR" />
+
+    <!-- Twitter / X Meta -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="انجمن علمی مهندسی کامپیوتر دانشگاه اصفهان" />
+    <meta name="twitter:description" content="ثبت‌نام رویدادها و دوره‌های تخصصی کامپیوتر دانشگاه اصفهان" />
+    <meta name="twitter:image" content="http://storage.ghavishomard.ir/programs_gallery/big.png" />
+
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@300;400;500;600;700&display=swap" rel="stylesheet">
@@ -30,5 +49,17 @@
   <body>
     <div id="root"></div>
     <script type="module" src="/index.tsx"></script>
+    <script>
+      // Register Service Worker for PWA
+      if ('serviceWorker' in navigator) {
+        window.addEventListener('load', () => {
+          navigator.serviceWorker.register('/sw.js').then((reg) => {
+            console.log('UI SACE ServiceWorker registered:', reg.scope);
+          }).catch((err) => {
+            console.log('UI SACE ServiceWorker registration failed:', err);
+          });
+        });
+      }
+    </script>
   </body>
 </html>

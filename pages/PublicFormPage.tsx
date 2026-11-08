@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { getPublicFormById, submitPublicForm, uploadFormAttachment } from '../services/api';
 import type { PorslineForm } from '../types';
+import { JalaliDatePicker } from '../components/common/JalaliDatePicker';
 
 const PublicFormPage: React.FC = () => {
   const { id } = useParams<{ id: string }>();
@@ -712,14 +713,13 @@ const PublicFormPage: React.FC = () => {
                     />
                   )}
 
-                  {/* Mode 12: Date */}
+                  {/* Mode 12: Date (Shamsi) */}
                   {currentQ.type === 'date' && (
-                    <input
-                      type="date"
-                      dir="ltr"
+                    <JalaliDatePicker
+                      theme="light"
                       value={currentVal || ''}
-                      onChange={(e) => setAnswer(currentQ.id, e.target.value)}
-                      className="w-full bg-gray-50 border border-gray-300 rounded-xl px-4 py-3 text-sm text-gray-800 focus:bg-white focus:outline-none focus:ring-2 focus:ring-blue-500"
+                      placeholder={currentQ.placeholder || 'انتخاب تاریخ از تقویم شمسی...'}
+                      onChange={(shamsiNum) => setAnswer(currentQ.id, shamsiNum)}
                     />
                   )}
 

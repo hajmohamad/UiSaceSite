@@ -273,27 +273,30 @@ const mockJobs: Job[] =[
 
 export const useJobs = () => {
   const [jobs, setJobs] = useState<Job[]>([]);
+  const [settings, setSettings] = useState<{ enabled: boolean; stoppedMessage: string }>({
+    enabled: true,
+    stoppedMessage: 'سامانه کاریابی و ثبت فرصت‌های شغلی موقتاً متوقف شده است. به زودی با موقعیت‌های جدید بازمی‌گردیم.',
+  });
   const [loading, setLoading] = useState<boolean>(true);
 
   useEffect(() => {
     let isMounted = true;
-    fetch('/api/jobs')
-      .then((res) => {
-        if (!res.ok) throw new Error('API failed');
-        return res.json();
-      })
-      .then((data: Job[]) => {
-        if (isMounted) {
-          if (Array.isArray(data) && data.length > 0) {
-            setJobs(data);
-          } else {
-            setJobs(mockJobs);
-          }
-        }
-      })
-      .catch(() => {
-        if (isMounted) {
+
+    Promise.all([
+      fetch('/api/jobs').then((res) => (res.ok ? res.json() : null)).catch(() => null),
+      fetch('/api/jobs/settings').then((res) => (res.ok ? res.json() : null)).catch(() => null),
+    ])
+      .then(([jobsData, settingsData]) => {
+        if (!isMounted) return;
+
+        if (Array.isArray(jobsData) && jobsData.length > 0) {
+          setJobs(jobsData);
+        } else {
           setJobs(mockJobs);
+        }
+
+        if (settingsData && typeof settingsData.enabled === 'boolean') {
+          setSettings(settingsData);
         }
       })
       .finally(() => {
@@ -307,5 +310,10 @@ export const useJobs = () => {
     };
   }, []);
 
-  return { jobs, loading };
+  return {
+    jobs,
+    loading,
+    settings,
+    isFeatureStopped: settings.enabled === false,
+  };
 };

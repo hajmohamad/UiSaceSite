@@ -44,6 +44,7 @@ export interface Program {
     videos: string[]; // URLs for video embeds
   };
   registeredCount?: number; // New property for number of registered participants
+  showRegisteredCount?: boolean; // Control visibility from admin panel
   durationHours?: number; // New property for program duration in hours
 }
 
@@ -53,12 +54,22 @@ export interface Job {
   company: string;
   logo: string;
   location: string;
-  type: string
+  type: string;
   salary?: string;
   description: string;
   responsibilities: string[];
   qualifications: string[];
   expiryDate: string; // ISO string format
+  status?: 'active' | 'stopped' | 'paused';
+  isStopped?: boolean;
+  createdAt?: string;
+  updatedAt?: string;
+}
+
+export interface JobFeatureSettings {
+  enabled: boolean;
+  stoppedMessage: string;
+  contactEmail?: string;
 }
 
 
@@ -113,6 +124,9 @@ export interface Registration {
   studentNumber?: string;
   receiptUrl?: string;
   status: 'pending' | 'approved' | 'rejected';
+  promoCode?: string;
+  discountAmount?: number;
+  finalPrice?: number;
   createdAt: string;
   updatedAt?: string;
 }
@@ -218,4 +232,126 @@ export interface FormAnalytics {
   totalResponses: number;
   averageScore?: number;
   questionStats: Record<string, Record<string, number>>;
+}
+
+// Custom HTML Pages
+export interface CustomPage {
+  id: number;
+  title: string;
+  slug: string;
+  htmlContent: string;
+  isActive: boolean;
+  withLayout: boolean;
+  createdAt: string;
+  updatedAt?: string;
+}
+
+// Media Links Manager & Replacement
+export interface MediaLinkItem {
+  url: string;
+  occurrences: number;
+  sources: string[];
+  isLocal: boolean;
+}
+
+export interface MediaStats {
+  totalOccurrences: number;
+  uniqueLinks: number;
+  storageLinks: number;
+  localLinks: number;
+}
+
+export interface MediaLinksResponse {
+  linksText: string;
+  links: MediaLinkItem[];
+  stats: MediaStats;
+}
+
+export interface ReplaceMediaRequest {
+  mode: 'line_by_line' | 'find_replace' | 'mappings';
+  originalText?: string;
+  newText?: string;
+  find?: string;
+  replace?: string;
+  mappings?: Record<string, string>;
+  updateStaticFiles?: boolean;
+}
+
+export interface ReplaceMediaResponse {
+  message: string;
+  replacedCount: number;
+  affected: Record<string, number>;
+  mappingsCount?: number;
+}
+
+// Certificate Verification Types
+export interface Certificate {
+  id: string; // e.g. "CERT-UI-1001"
+  studentName: string;
+  gender?: 'male' | 'female' | 'other' | '';
+  titlePrefix?: string; // "جناب آقای" | "سرکار خانم"
+  nationalId: string;
+  studentNumber: string;
+  programTitle: string;
+  programDate?: string;
+  durationHours: number;
+  instructor?: string;
+  associationHead?: string;
+  grade?: string;
+  issueDate: string;
+  customText?: string;
+  status: 'valid' | 'revoked';
+  description?: string;
+  createdAt: string;
+  updatedAt?: string;
+}
+
+export interface BatchCertificateItem {
+  studentName: string;
+  gender?: string;
+  titlePrefix?: string;
+  nationalId?: string;
+  studentNumber?: string;
+  grade?: string;
+  customText?: string;
+}
+
+export interface BatchCertificateRequest {
+  programTitle: string;
+  programDate?: string;
+  durationHours?: number;
+  instructor?: string;
+  associationHead?: string;
+  issueDate?: string;
+  customText?: string;
+  items: BatchCertificateItem[];
+}
+
+// Promo Code Types
+export interface PromoCode {
+  id: number;
+  code: string;
+  discountType: 'percent' | 'fixed';
+  discountValue: number;
+  maxDiscount?: number;
+  maxUses: number;
+  usedCount: number;
+  programId?: number;
+  expiryDate?: string;
+  isActive: boolean;
+  description?: string;
+  createdAt: string;
+  updatedAt?: string;
+}
+
+export interface ValidatePromoResponse {
+  valid: boolean;
+  code?: string;
+  discountType?: 'percent' | 'fixed';
+  discountValue?: number;
+  discountAmount?: number;
+  originalPrice?: number;
+  finalPrice?: number;
+  message?: string;
+  error?: string;
 }

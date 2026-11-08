@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { NavLink } from 'react-router-dom';
 
@@ -28,22 +27,41 @@ const Header: React.FC = () => {
           <div className="flex items-center">
             <NavLink to="/" className="flex items-center gap-3 group">
               <div className="w-12 h-12 flex items-center justify-center shrink-0 group-hover:scale-105 transition-transform">
-                 <AnimatedLogo />
+                <AnimatedLogo />
               </div>
               <div>
-                <div className="text-base sm:text-lg font-black text-gray-900 group-hover:text-blue-600 transition-colors">انجمن علمی مهندسی کامپیوتر</div>
+                <div className="text-base sm:text-lg font-black text-gray-900 group-hover:text-blue-600 transition-colors">
+                  انجمن علمی مهندسی کامپیوتر
+                </div>
                 <div className="text-xs text-gray-500 font-medium">دانشگاه اصفهان</div>
               </div>
             </NavLink>
           </div>
+
           <div className="hidden md:flex items-center gap-1 lg:gap-2">
-            <NavLink to="/" className={({ isActive }) => `${navLinkClasses} ${isActive ? activeNavLinkClasses : ''}`} end>خانه</NavLink>
-            <NavLink to="/programs" className={({ isActive }) => `${navLinkClasses} ${isActive ? activeNavLinkClasses : ''}`}>برنامه‌ها</NavLink>
-            <NavLink to="/courses" className={({ isActive }) => `${navLinkClasses} ${isActive ? activeNavLinkClasses : ''}`}>دوره‌ها</NavLink>
-            <NavLink to="/jobs" className={({ isActive }) => `${navLinkClasses} ${isActive ? activeNavLinkClasses : ''}`}>کاریابی</NavLink>
-            <NavLink to="/members" className={({ isActive }) => `${navLinkClasses} ${isActive ? activeNavLinkClasses : ''}`}>اعضای انجمن</NavLink>
-            <NavLink to="/contact" className={({ isActive }) => `${navLinkClasses} ${isActive ? activeNavLinkClasses : ''}`}>تماس با ما</NavLink>
+            <NavLink to="/" className={({ isActive }) => `${navLinkClasses} ${isActive ? activeNavLinkClasses : ''}`} end>
+              خانه
+            </NavLink>
+            <NavLink to="/programs" className={({ isActive }) => `${navLinkClasses} ${isActive ? activeNavLinkClasses : ''}`}>
+              برنامه‌ها
+            </NavLink>
+            <NavLink to="/courses" className={({ isActive }) => `${navLinkClasses} ${isActive ? activeNavLinkClasses : ''}`}>
+              دوره‌ها
+            </NavLink>
+            <NavLink to="/certificates" className={({ isActive }) => `${navLinkClasses} ${isActive ? activeNavLinkClasses : ''}`}>
+              استعلام گواهینامه
+            </NavLink>
+            <NavLink to="/jobs" className={({ isActive }) => `${navLinkClasses} ${isActive ? activeNavLinkClasses : ''}`}>
+              کاریابی
+            </NavLink>
+            <NavLink to="/members" className={({ isActive }) => `${navLinkClasses} ${isActive ? activeNavLinkClasses : ''}`}>
+              اعضای انجمن
+            </NavLink>
+            <NavLink to="/contact" className={({ isActive }) => `${navLinkClasses} ${isActive ? activeNavLinkClasses : ''}`}>
+              تماس با ما
+            </NavLink>
           </div>
+
           <div className="-ms-2 flex md:hidden">
             <button
               onClick={() => setIsMenuOpen(!isMenuOpen)}
@@ -54,12 +72,12 @@ const Header: React.FC = () => {
             >
               <span className="sr-only">باز کردن منو</span>
               {isMenuOpen ? (
-                <svg className="block h-6 w-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12" />
+                <svg className="block h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
                 </svg>
               ) : (
-                <svg className="block h-6 w-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 6h16M4 12h16m-7 6h7" />
+                <svg className="block h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16m-7 6h7" />
                 </svg>
               )}
             </button>
@@ -69,15 +87,58 @@ const Header: React.FC = () => {
 
       {isMenuOpen && (
         <div className="md:hidden" id="mobile-menu">
-         <div className="px-2 pt-2 pb-3 space-y-1 sm:px-3">
-  <NavLink to="/" className={({ isActive }) => `block ${navLinkClasses} ${isActive ? activeNavLinkClasses : ''}`} end onClick={() => setIsMenuOpen(false)}>خانه</NavLink>
-  <NavLink to="/programs" className={({ isActive }) => `block ${navLinkClasses} ${isActive ? activeNavLinkClasses : ''}`} onClick={() => setIsMenuOpen(false)}>برنامه‌ها</NavLink>
-  <NavLink to="/members" className={({ isActive }) => `block ${navLinkClasses} ${isActive ? activeNavLinkClasses : ''}`} onClick={() => setIsMenuOpen(false)}>اعضای انجمن</NavLink>
-  <NavLink to="/jobs" className={({ isActive }) => `block ${navLinkClasses} ${isActive ? activeNavLinkClasses : ''}`} onClick={() => setIsMenuOpen(false)}>کاریابی</NavLink>
-  <NavLink to="/courses" className={({ isActive }) => `block ${navLinkClasses} ${isActive ? activeNavLinkClasses : ''}`} onClick={() => setIsMenuOpen(false)}>دوره‌ها</NavLink>
-  <NavLink to="/contact" className={({ isActive }) => `block ${navLinkClasses} ${isActive ? activeNavLinkClasses : ''}`} onClick={() => setIsMenuOpen(false)}>تماس با ما</NavLink>
-</div>
-
+          <div className="px-2 pt-2 pb-3 space-y-1 sm:px-3">
+            <NavLink
+              to="/"
+              className={({ isActive }) => `block ${navLinkClasses} ${isActive ? activeNavLinkClasses : ''}`}
+              end
+              onClick={() => setIsMenuOpen(false)}
+            >
+              خانه
+            </NavLink>
+            <NavLink
+              to="/programs"
+              className={({ isActive }) => `block ${navLinkClasses} ${isActive ? activeNavLinkClasses : ''}`}
+              onClick={() => setIsMenuOpen(false)}
+            >
+              برنامه‌ها
+            </NavLink>
+            <NavLink
+              to="/members"
+              className={({ isActive }) => `block ${navLinkClasses} ${isActive ? activeNavLinkClasses : ''}`}
+              onClick={() => setIsMenuOpen(false)}
+            >
+              اعضای انجمن
+            </NavLink>
+            <NavLink
+              to="/jobs"
+              className={({ isActive }) => `block ${navLinkClasses} ${isActive ? activeNavLinkClasses : ''}`}
+              onClick={() => setIsMenuOpen(false)}
+            >
+              کاریابی
+            </NavLink>
+            <NavLink
+              to="/courses"
+              className={({ isActive }) => `block ${navLinkClasses} ${isActive ? activeNavLinkClasses : ''}`}
+              onClick={() => setIsMenuOpen(false)}
+            >
+              دوره‌ها
+            </NavLink>
+            <NavLink
+              to="/certificates"
+              className={({ isActive }) => `block ${navLinkClasses} ${isActive ? activeNavLinkClasses : ''}`}
+              onClick={() => setIsMenuOpen(false)}
+            >
+              استعلام گواهینامه
+            </NavLink>
+            <NavLink
+              to="/contact"
+              className={({ isActive }) => `block ${navLinkClasses} ${isActive ? activeNavLinkClasses : ''}`}
+              onClick={() => setIsMenuOpen(false)}
+            >
+              تماس با ما
+            </NavLink>
+          </div>
         </div>
       )}
     </header>

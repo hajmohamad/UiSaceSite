@@ -31,6 +31,8 @@ func SeedData(db *gorm.DB, cfg *config.Config) {
 	seedCourses(db)
 	seedJobs(db)
 	seedForms(db)
+	seedPromoCodes(db)
+	seedCertificates(db)
 }
 
 func seedAdmin(db *gorm.DB, cfg *config.Config) {
@@ -267,6 +269,82 @@ func seedForms(db *gorm.DB) {
 		log.Printf("Failed to seed sample forms: %v", err)
 	} else {
 		log.Printf("Seeded %d sample Porsline forms", len(sampleForms))
+	}
+}
+
+func seedPromoCodes(db *gorm.DB) {
+	var count int64
+	db.Model(&models.PromoCode{}).Count(&count)
+	if count == 0 {
+		samplePromos := []models.PromoCode{
+			{
+				Code:          "SACE_STUDENT",
+				DiscountType:  "percent",
+				DiscountValue: 20,
+				MaxUses:       100,
+				UsedCount:     4,
+				IsActive:      true,
+				Description:   "تخفیف ۲۰ درصدی ویژه دانشجویان دانشگاه اصفهان",
+			},
+			{
+				Code:          "WELCOME",
+				DiscountType:  "fixed",
+				DiscountValue: 20000,
+				MaxUses:       50,
+				UsedCount:     2,
+				IsActive:      true,
+				Description:   "تخفیف بیست هزار تومانی ثبت‌نام اعضای جدید",
+			},
+		}
+		if err := db.Create(&samplePromos).Error; err != nil {
+			log.Printf("Failed to seed promo codes: %v", err)
+		} else {
+			log.Printf("Seeded %d sample promo codes", len(samplePromos))
+		}
+	}
+}
+
+func seedCertificates(db *gorm.DB) {
+	var count int64
+	db.Model(&models.Certificate{}).Count(&count)
+	if count == 0 {
+		sampleCerts := []models.Certificate{
+			{
+				ID:              "CERT-UI-1001",
+				StudentName:     "علی محمدی",
+				NationalID:      "1270123456",
+				StudentNumber:   "40112345",
+				ProgramTitle:    "کارگاه تخصصی پایتون و هوش مصنوعی در صنعت",
+				ProgramDate:     "۱۴۰۳/۰۸/۱۵",
+				DurationHours:   16,
+				Instructor:      "دکتر احمدی",
+				AssociationHead: "دبیر انجمن علمی مهندسی کامپیوتر",
+				Grade:           "عالی (رتبه ۱ دوره)",
+				IssueDate:       "1403/08/20",
+				Status:          "valid",
+				Description:     "با موفقیت دوره را به اتمام رسانده و پروژه پایانی را ارائه داده است.",
+			},
+			{
+				ID:              "CERT-UI-1002",
+				StudentName:     "سارا کریمی",
+				NationalID:      "1289876543",
+				StudentNumber:   "40298765",
+				ProgramTitle:    "دوره جامع توسعه وب مدرن (React & Node.js)",
+				ProgramDate:     "۱۴۰۳/۰۷/۱۰",
+				DurationHours:   24,
+				Instructor:      "مهندس رضایی",
+				AssociationHead: "دبیر انجمن علمی مهندسی کامپیوتر",
+				Grade:           "بسیار خوب",
+				IssueDate:       "1403/07/25",
+				Status:          "valid",
+				Description:     "پایان موفقیت‌آمیز تمامی پروژه‌ها و کارگاه‌های عملی.",
+			},
+		}
+		if err := db.Create(&sampleCerts).Error; err != nil {
+			log.Printf("Failed to seed certificates: %v", err)
+		} else {
+			log.Printf("Seeded %d sample certificates", len(sampleCerts))
+		}
 	}
 }
 

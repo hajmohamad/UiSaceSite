@@ -10,6 +10,15 @@ import type {
   FormResponse,
   FormAnalytics,
   AdminStats,
+  CustomPage,
+  MediaLinksResponse,
+  ReplaceMediaRequest,
+  ReplaceMediaResponse,
+  Job,
+  JobFeatureSettings,
+  Certificate,
+  BatchCertificateRequest,
+  PromoCode,
 } from '../types';
 
 const API_BASE = '/api';
@@ -402,4 +411,203 @@ export async function getAdminStats(): Promise<AdminStats> {
   if (!res.ok) throw new Error('خطا در دریافت آمار');
   return res.json();
 }
+
+// --- Custom HTML Pages Endpoints ---
+
+export async function getAdminCustomPages(search?: string): Promise<CustomPage[]> {
+  const url = search ? `${API_BASE}/admin/custom-pages?q=${encodeURIComponent(search)}` : `${API_BASE}/admin/custom-pages`;
+  return authFetch(url);
+}
+
+export async function getAdminCustomPageById(id: number): Promise<CustomPage> {
+  return authFetch(`${API_BASE}/admin/custom-pages/${id}`);
+}
+
+export async function createAdminCustomPage(data: FormData | Partial<CustomPage>): Promise<CustomPage> {
+  const isForm = data instanceof FormData;
+  return authFetch(`${API_BASE}/admin/custom-pages`, {
+    method: 'POST',
+    body: isForm ? data : JSON.stringify(data),
+  });
+}
+
+export async function updateAdminCustomPage(id: number, data: FormData | Partial<CustomPage>): Promise<CustomPage> {
+  const isForm = data instanceof FormData;
+  return authFetch(`${API_BASE}/admin/custom-pages/${id}`, {
+    method: 'PUT',
+    body: isForm ? data : JSON.stringify(data),
+  });
+}
+
+export async function deleteAdminCustomPage(id: number): Promise<{ message: string }> {
+  return authFetch(`${API_BASE}/admin/custom-pages/${id}`, {
+    method: 'DELETE',
+  });
+}
+
+// --- Media Links Management & Replacement Endpoints ---
+
+export async function getAdminMediaLinks(): Promise<MediaLinksResponse> {
+  return authFetch(`${API_BASE}/admin/media-links`);
+}
+
+export async function replaceAdminMediaLinks(req: ReplaceMediaRequest): Promise<ReplaceMediaResponse> {
+  return authFetch(`${API_BASE}/admin/media-links/replace`, {
+    method: 'POST',
+    body: JSON.stringify(req),
+  });
+}
+
+// --- Jobs & Career Management Endpoints ---
+
+export async function getAdminJobs(): Promise<Job[]> {
+  return authFetch(`${API_BASE}/jobs`);
+}
+
+export async function getAdminJobById(id: string): Promise<Job> {
+  return authFetch(`${API_BASE}/jobs/${id}`);
+}
+
+export async function createAdminJob(job: Partial<Job>): Promise<Job> {
+  return authFetch(`${API_BASE}/admin/jobs`, {
+    method: 'POST',
+    body: JSON.stringify(job),
+  });
+}
+
+export async function updateAdminJob(id: string, job: Partial<Job>): Promise<Job> {
+  return authFetch(`${API_BASE}/admin/jobs/${id}`, {
+    method: 'PUT',
+    body: JSON.stringify(job),
+  });
+}
+
+export async function toggleAdminJobStatus(id: string): Promise<Job> {
+  return authFetch(`${API_BASE}/admin/jobs/${id}/toggle`, {
+    method: 'PUT',
+  });
+}
+
+export async function deleteAdminJob(id: string): Promise<{ message: string }> {
+  return authFetch(`${API_BASE}/admin/jobs/${id}`, {
+    method: 'DELETE',
+  });
+}
+
+export async function getAdminJobSettings(): Promise<JobFeatureSettings> {
+  return authFetch(`${API_BASE}/admin/jobs/settings`);
+}
+
+export async function updateAdminJobSettings(settings: JobFeatureSettings): Promise<JobFeatureSettings> {
+  return authFetch(`${API_BASE}/admin/jobs/settings`, {
+    method: 'PUT',
+    body: JSON.stringify(settings),
+  });
+}
+
+// --- Registrations Export ---
+
+export async function downloadRegistrationsCSV(programId?: string, status?: string): Promise<void> {
+  const params = new URLSearchParams();
+  if (programId) params.set('programId', programId);
+  if (status) params.set('status', status);
+  const url = `${API_BASE}/admin/registrations/export${params.toString() ? '?' + params.toString() : ''}`;
+  const token = getToken();
+
+  const res = await fetch(url, {
+    headers: token ? { Authorization: `Bearer ${token}` } : {},
+  });
+  if (!res.ok) {
+    throw new Error('خطا در دانلود خروجی فایل اکسل');
+  }
+
+  const blob = await res.blob();
+  const downloadUrl = window.URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = downloadUrl;
+  a.download = `registrations_${new Date().toISOString().slice(0, 10)}.csv`;
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+  window.URL.revokeObjectURL(downloadUrl);
+}
+
+// --- Digital Certificates Management Endpoints ---
+
+export async function getAdminCertificates(search?: string, program?: string): Promise<Certificate[]> {
+  const params = new URLSearchParams();
+  if (search) params.set('search', search);
+  if (program) params.set('program', program);
+  const url = `${API_BASE}/admin/certificates${params.toString() ? '?' + params.toString() : ''}`;
+  return authFetch(url);
+}
+
+export async function createAdminCertificate(cert: Partial<Certificate>): Promise<Certificate> {
+  return authFetch(`${API_BASE}/admin/certificates`, {
+    method: 'POST',
+    body: JSON.stringify(cert),
+  });
+}
+
+export async function batchCreateAdminCertificates(
+  req: BatchCertificateRequest
+): Promise<{ message: string; count: number; items: Certificate[] }> {
+  return authFetch(`${API_BASE}/admin/certificates/batch`, {
+    method: 'POST',
+    body: JSON.stringify(req),
+  });
+}
+
+export async function updateAdminCertificate(id: string, cert: Partial<Certificate>): Promise<Certificate> {
+  return authFetch(`${API_BASE}/admin/certificates/${encodeURIComponent(id)}`, {
+    method: 'PUT',
+    body: JSON.stringify(cert),
+  });
+}
+
+export async function toggleAdminCertificateStatus(id: string): Promise<Certificate> {
+  return authFetch(`${API_BASE}/admin/certificates/${encodeURIComponent(id)}/toggle`, {
+    method: 'PUT',
+  });
+}
+
+export async function deleteAdminCertificate(id: string): Promise<{ message: string }> {
+  return authFetch(`${API_BASE}/admin/certificates/${encodeURIComponent(id)}`, {
+    method: 'DELETE',
+  });
+}
+
+// --- Promo Codes Management Endpoints ---
+
+export async function getAdminPromoCodes(): Promise<PromoCode[]> {
+  return authFetch(`${API_BASE}/admin/promo-codes`);
+}
+
+export async function createAdminPromoCode(promo: Partial<PromoCode>): Promise<PromoCode> {
+  return authFetch(`${API_BASE}/admin/promo-codes`, {
+    method: 'POST',
+    body: JSON.stringify(promo),
+  });
+}
+
+export async function updateAdminPromoCode(id: number, promo: Partial<PromoCode>): Promise<PromoCode> {
+  return authFetch(`${API_BASE}/admin/promo-codes/${id}`, {
+    method: 'PUT',
+    body: JSON.stringify(promo),
+  });
+}
+
+export async function toggleAdminPromoCode(id: number): Promise<PromoCode> {
+  return authFetch(`${API_BASE}/admin/promo-codes/${id}/toggle`, {
+    method: 'PUT',
+  });
+}
+
+export async function deleteAdminPromoCode(id: number): Promise<{ message: string }> {
+  return authFetch(`${API_BASE}/admin/promo-codes/${id}`, {
+    method: 'DELETE',
+  });
+}
+
+
 

@@ -11,7 +11,12 @@ const Footer: React.FC = () => {
           <div className="md:col-span-1 space-y-3">
             <div className="flex items-center gap-2">
               <span className="w-9 h-9 rounded-xl bg-blue-600 text-white flex items-center justify-center font-black text-sm">
-                UI
+               <img
+                   src="/icon.svg"
+                   alt="مهر رسمی انجمن علمی مهندسی کامپیوتر دانشگاه اصفهان"
+                   className="w-full h-full object-contain filter drop-shadow-xs"
+                   crossOrigin="anonymous"
+               />
               </span>
               <div>
                 <h4 className="font-bold text-gray-900 text-sm">انجمن علمی مهندسی کامپیوتر</h4>
@@ -29,6 +34,7 @@ const Footer: React.FC = () => {
             <ul className="space-y-1.5 text-xs text-gray-600">
               <li><Link to="/programs" className="hover:text-blue-600 transition-colors">برنامه‌ها و رویدادها</Link></li>
               <li><Link to="/courses" className="hover:text-blue-600 transition-colors">دوره‌ها و کارگاه‌ها</Link></li>
+              <li><Link to="/certificates" className="hover:text-blue-600 transition-colors">استعلام اصالت گواهینامه</Link></li>
               <li><Link to="/jobs" className="hover:text-blue-600 transition-colors">فرصت‌های شغلی و کاریابی</Link></li>
               <li><Link to="/members" className="hover:text-blue-600 transition-colors">اعضای شورای مرکزی و همکاران</Link></li>
             </ul>
@@ -78,14 +84,7 @@ const Footer: React.FC = () => {
                 <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path fillRule="evenodd" d="M16.338 16.338H13.67V12.16c0-.995-.017-2.277-1.387-2.277-1.388 0-1.601 1.086-1.601 2.206v4.248H8.014v-8.59h2.559v1.174h.037c.356-.675 1.227-1.387 2.526-1.387 2.703 0 3.203 1.778 3.203 4.092v4.71zM5.337 7.433a2.062 2.062 0 01-2.063-2.065 2.064 2.064 0 112.063 2.065zm1.336 8.905H4.002v-8.59h2.671v8.59zM17.638 2H6.362A4.362 4.362 0 002 6.362v11.276A4.362 4.362 0 006.362 22h11.276A4.362 4.362 0 0022 17.638V6.362A4.362 4.362 0 0017.638 2z" clipRule="evenodd" /></svg>
               </a>
             </div>
-            <div className="pt-2">
-              <Link
-                to="/admin"
-                className="text-[11px] text-gray-400 hover:text-blue-600 transition-colors inline-flex items-center gap-1"
-              >
-                <span>🔒 ورود به سامانه مدیریت (Admin)</span>
-              </Link>
-            </div>
+
           </div>
         </div>
 
@@ -95,7 +94,7 @@ const Footer: React.FC = () => {
             © {new Date().toLocaleDateString('fa-IR', { year: 'numeric' })} انجمن علمی مهندسی کامپیوتر دانشگاه اصفهان. تمامی حقوق محفوظ است.
           </p>
           <p className="text-[11px] text-gray-400">
-            توسعه داده شده با ❤️ برای دانشجویان دانشگاه اصفهان
+            توسعه داده شده برای دانشجویان دانشگاه اصفهان
           </p>
         </div>
       </div>

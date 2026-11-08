@@ -59,6 +59,7 @@ type Program struct {
 	Sponsors            []Sponsor             `gorm:"serializer:json" json:"sponsors"`
 	Gallery             ProgramGallery        `gorm:"serializer:json" json:"gallery"`
 	RegisteredCount     int                   `gorm:"default:0" json:"registeredCount"`
+	ShowRegisteredCount bool                  `gorm:"default:false" json:"showRegisteredCount"`
 	DurationHours       int                   `gorm:"default:0" json:"durationHours"`
 	CreatedAt           time.Time             `json:"createdAt"`
 	UpdatedAt           time.Time             `json:"updatedAt"`
@@ -116,8 +117,24 @@ type Job struct {
 	Responsibilities []string  `gorm:"serializer:json" json:"responsibilities"`
 	Qualifications   []string  `gorm:"serializer:json" json:"qualifications"`
 	ExpiryDate       string    `json:"expiryDate"`
+	Status           string    `gorm:"default:'active'" json:"status"` // active | stopped
+	IsStopped        bool      `gorm:"default:false" json:"isStopped"`
 	CreatedAt        time.Time `json:"createdAt"`
 	UpdatedAt        time.Time `json:"updatedAt"`
+}
+
+// SiteSetting represents general key-value site configurations
+type SiteSetting struct {
+	Key       string    `gorm:"primaryKey" json:"key"`
+	Value     string    `gorm:"type:text" json:"value"`
+	UpdatedAt time.Time `json:"updatedAt"`
+}
+
+// JobFeatureSettings represents configuration for the jobs feature
+type JobFeatureSettings struct {
+	Enabled        bool   `json:"enabled"`
+	StoppedMessage string `json:"stoppedMessage"`
+	ContactEmail   string `json:"contactEmail"`
 }
 
 // Registration represents participant sign up for a program
@@ -129,10 +146,13 @@ type Registration struct {
 	Phone         string    `gorm:"not null" json:"phone"`
 	IsStudent     bool      `json:"isStudent"`
 	StudentNumber string    `json:"studentNumber,omitempty"`
-	ReceiptURL    string    `json:"receiptUrl,omitempty"`
-	Status        string    `gorm:"default:'pending'" json:"status"` // pending | approved | rejected
-	CreatedAt     time.Time `json:"createdAt"`
-	UpdatedAt     time.Time `json:"updatedAt"`
+	ReceiptURL     string    `json:"receiptUrl,omitempty"`
+	Status         string    `gorm:"default:'pending'" json:"status"` // pending | approved | rejected
+	PromoCode      string    `json:"promoCode,omitempty"`
+	DiscountAmount float64   `gorm:"default:0" json:"discountAmount,omitempty"`
+	FinalPrice     float64   `gorm:"default:0" json:"finalPrice,omitempty"`
+	CreatedAt      time.Time `json:"createdAt"`
+	UpdatedAt      time.Time `json:"updatedAt"`
 }
 
 // ContactMessage represents a message sent from the contact form
@@ -202,4 +222,57 @@ type FormResponse struct {
 	CreatedAt         time.Time              `json:"createdAt"`
 	UpdatedAt         time.Time              `json:"updatedAt"`
 }
+
+// CustomPage represents an uploaded/configured custom HTML page served at a custom URL
+type CustomPage struct {
+	ID          uint      `gorm:"primaryKey" json:"id"`
+	Title       string    `gorm:"not null" json:"title"`
+	Slug        string    `gorm:"uniqueIndex;not null" json:"slug"` // Normalized path, e.g. "landing" or "workshop"
+	HTMLContent string    `gorm:"type:text;not null" json:"htmlContent"`
+	IsActive    bool      `gorm:"default:true" json:"isActive"`
+	WithLayout  bool      `gorm:"default:false" json:"withLayout"` // true: inside site layout, false: standalone full page
+	CreatedAt   time.Time `json:"createdAt"`
+	UpdatedAt   time.Time `json:"updatedAt"`
+}
+
+// Certificate represents an official verifiable digital certificate
+type Certificate struct {
+	ID              string    `gorm:"primaryKey" json:"id"` // Unique code, e.g. "CERT-SACE-98214"
+	StudentName     string    `gorm:"not null" json:"studentName"`
+	Gender          string    `json:"gender,omitempty"` // male | female | other
+	TitlePrefix     string    `json:"titlePrefix,omitempty"` // e.g. "جناب آقای" or "سرکار خانم"
+	NationalID      string    `gorm:"index" json:"nationalId"` // کد ملی
+	StudentNumber   string    `gorm:"index" json:"studentNumber"` // شماره دانشجویی
+	ProgramTitle    string    `gorm:"not null" json:"programTitle"` // عنوان دوره یا رویداد
+	ProgramDate     string    `json:"programDate"` // تاریخ برگزاری
+	DurationHours   int       `gorm:"default:0" json:"durationHours"` // ساعت دوره
+	Instructor      string    `json:"instructor"` // نام مدرس
+	AssociationHead string    `json:"associationHead"` // دبیر انجمن
+	Grade           string    `json:"grade,omitempty"` // رتبه یا نمره
+	IssueDate       string    `json:"issueDate"` // تاریخ صدور گواهی
+	CustomText      string    `gorm:"type:text" json:"customText,omitempty"` // متن اختصاصی گواهینامه
+	Status          string    `gorm:"default:'valid'" json:"status"` // valid | revoked
+	Description     string    `json:"description,omitempty"`
+	CreatedAt       time.Time `json:"createdAt"`
+	UpdatedAt       time.Time `json:"updatedAt"`
+}
+
+// PromoCode represents a promotional discount code for registrations
+type PromoCode struct {
+	ID            uint      `gorm:"primaryKey" json:"id"`
+	Code          string    `gorm:"uniqueIndex;not null" json:"code"` // e.g. "SACE_STUDENT"
+	DiscountType  string    `gorm:"default:'percent'" json:"discountType"` // percent | fixed
+	DiscountValue float64   `gorm:"not null" json:"discountValue"` // e.g. 20 (for 20%) or 50000 (toman)
+	MaxDiscount   *float64  `json:"maxDiscount,omitempty"` // سقف تخفیف برای درصدی
+	MaxUses       int       `gorm:"default:0" json:"maxUses"` // 0 = unlimited
+	UsedCount     int       `gorm:"default:0" json:"usedCount"`
+	ProgramID     *uint     `json:"programId,omitempty"` // null = all programs
+	ExpiryDate    string    `json:"expiryDate,omitempty"`
+	IsActive      bool      `gorm:"default:true" json:"isActive"`
+	Description   string    `json:"description,omitempty"`
+	CreatedAt     time.Time `json:"createdAt"`
+	UpdatedAt     time.Time `json:"updatedAt"`
+}
+
+
 
